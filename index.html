@@ -215,6 +215,13 @@ a,button{-webkit-tap-highlight-color:transparent}
 .call{margin:34px 0 0;color:#b9c6da;font-size:15px}
 .call a{display:block;margin-top:6px;font-family:"Cormorant Garamond",Georgia,serif;font-size:32px;letter-spacing:.04em;color:var(--gold2);text-decoration:none}
 small a{color:inherit;text-decoration:none}
+.perks{background:#fff;border-top:1px solid rgba(184,147,74,.3);border-bottom:1px solid rgba(184,147,74,.3);padding:30px 20px}
+.perks-in{max-width:1000px;margin:0 auto;display:grid;gap:22px 18px;grid-template-columns:repeat(4,1fr)}
+@media(max-width:820px){.perks-in{grid-template-columns:repeat(2,1fr)}}
+.perk{text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px}
+.perk svg{width:30px;height:30px;stroke:var(--gold);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;margin-bottom:6px}
+.perk b{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:21px;line-height:1.15;color:var(--deep)}
+.perk span{font-size:13px;line-height:1.4;color:var(--mute)}
 </style>
 </head>
 <body>
@@ -287,12 +294,19 @@ small a{color:inherit;text-decoration:none}
 <h2 class="split">Trois talents, un seul show</h2>
 <p class="lead rv">Une équipe qui travaille ensemble, de l'installation au dernier rappel.</p>
 <div class="grid">
-<div class="card rv"><div class="avatar"><img src="assets/avatar-alex.jpg" alt="Alex Juan"></div><h3>Alex Juan</h3><p>Chanteur, ancien candidat de The Voice France. Il porte le show et construit le répertoire avec vous.</p></div>
+<div class="card rv"><div class="avatar"><img src="assets/avatar-alex.jpg" alt="Alex Juan"></div><h3>Alex Juan</h3><p>Chanteur et voix du show. Il porte le spectacle et construit le répertoire avec vous.</p></div>
 <div class="card rv"><div class="avatar">C</div><h3>Camille</h3><p>Choriste. Elle apporte de la profondeur aux voix et chante en duo sur certains morceaux.</p></div>
 <div class="card rv"><div class="avatar">A</div><h3>Anthonin</h3><p>Sonorisateur. Il installe, règle et veille à ce que chaque invité entende parfaitement.</p></div>
 </div>
 </div>
 </section>
+
+<div class="perks" aria-label="Nos engagements"><div class="perks-in">
+<div class="perk rv"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="14" y="6" width="20" height="36" rx="3"/><circle cx="24" cy="30" r="6"/><circle cx="24" cy="15" r="3"/></svg><b>Sonorisation incluse</b><span>Installée et réglée par notre ingénieur son</span></div>
+<div class="perk rv"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M18 36V10l20-4v26"/><circle cx="13" cy="36" r="5"/><circle cx="33" cy="32" r="5"/></svg><b>Répertoire sur mesure</b><span>Chanson française, avec une touche d'anglais</span></div>
+<div class="perk rv"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="7" y="10" width="34" height="30" rx="2"/><path d="M7 18h34M16 6v8M32 6v8M18 29l4 4 8-8"/></svg><b>Date bloquée en ligne</b><span>Avec un acompte de 100 €</span></div>
+<div class="perk rv"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 43s-13-12-13-23a13 13 0 0 1 26 0c0 11-13 23-13 23z"/><circle cx="24" cy="20" r="5"/></svg><b>Partout en France</b><span>Et à l'international</span></div>
+</div></div>
 
 <section class="book" id="reserver">
 <div class="wrap center">
