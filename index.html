@@ -236,6 +236,11 @@ small a{color:inherit;text-decoration:none}
 .alive::before{content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;z-index:1;pointer-events:none;background:linear-gradient(100deg,transparent,rgba(255,240,215,.22),transparent);transform:skewX(-16deg);animation:sweep 6s ease-in-out 1.5s infinite}
 .alive.on img{animation-play-state:running}
 @media(prefers-reduced-motion:reduce){.alive img,.alive::before{animation:none}}
+.ac{position:relative}
+.ac ul{position:absolute;left:0;right:0;top:100%;z-index:20;margin:4px 0 0;padding:4px 0;list-style:none;background:#fff;border:1px solid rgba(184,147,74,.6);box-shadow:0 18px 40px -18px rgba(0,0,0,.55);max-height:280px;overflow-y:auto;text-align:left}
+.ac li{padding:10px 16px;color:var(--txt);cursor:pointer;line-height:1.35}
+.ac li small{display:block;margin:2px 0 0;color:var(--mute);font-size:12px}
+.ac li[aria-selected="true"],.ac li:active{background:var(--sky)}
 </style>
 </head>
 <body>
@@ -344,7 +349,7 @@ small a{color:inherit;text-decoration:none}
 <div class="fields">
 <input id="f-nom" placeholder="Votre nom" aria-label="Votre nom">
 <label class="dt" id="dt-wrap"><span>Date de l'événement</span><input id="f-date" type="date" aria-label="Date de l'événement"></label>
-<input id="f-lieu" placeholder="Lieu (ville, salle…)" aria-label="Lieu de l'événement" autocomplete="off">
+<div class="ac"><input id="f-lieu" placeholder="Lieu (ville, salle…)" aria-label="Lieu de l'événement" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="lieu-list"><ul id="lieu-list" role="listbox" hidden></ul></div>
 <select id="f-type" aria-label="Type d'événement"><option>Mariage</option><option>Séminaire / entreprise</option><option>Événement privé</option></select>
 <textarea id="f-msg" rows="10" placeholder="Un mot sur votre projet" aria-label="Votre message"></textarea>
 </div>
@@ -385,6 +390,26 @@ function isTpl(v){v=v.trim();if(!v)return true;for(var k in tpl)if(tpl[k]===v)re
 // Untouched or emptied text follows the event type; text the visitor wrote is only replaced if they confirm.
 function fill(){if(edited&&!isTpl(msg.value)&&!confirm('Remplacer votre message par le modèle « '+typ.value+' » ?'))return;msg.value=tpl[typ.value]||'';edited=false}
 msg.addEventListener('input',function(){edited=true});typ.addEventListener('change',fill);fill();
+// Place suggestions from the French government address service (IGN Geoplateforme), with the former BAN address as fallback.
+// Visitors can still type any place freely (a venue name, a place abroad).
+(function(){var inp=document.getElementById('f-lieu'),ul=document.getElementById('lieu-list'),timer,ctrl,items=[],cur=-1;
+var URLS=['https://data.geopf.fr/geocodage/search','https://api-adresse.data.gouv.fr/search/'];
+function close(){ul.hidden=true;inp.setAttribute('aria-expanded','false');cur=-1}
+function pick(i){if(!items[i])return;inp.value=items[i].label;close()}
+function render(){ul.innerHTML='';items.forEach(function(it,i){var li=document.createElement('li');li.id='lieu-'+i;li.setAttribute('role','option');li.textContent=it.label;
+if(it.sub){var sm=document.createElement('small');sm.textContent=it.sub;li.appendChild(sm)}
+li.addEventListener('mousedown',function(e){e.preventDefault();pick(i)});li.addEventListener('click',function(){pick(i)});ul.appendChild(li)});
+ul.hidden=!items.length;inp.setAttribute('aria-expanded',items.length?'true':'false')}
+function query(q,k){if(k>=URLS.length)return;if(ctrl)ctrl.abort();ctrl=window.AbortController?new AbortController():null;
+fetch(URLS[k]+'?autocomplete=1&limit=6&q='+encodeURIComponent(q),ctrl?{signal:ctrl.signal}:{}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){
+if(inp.value.trim()!==q)return;var seen={};items=(d.features||[]).map(function(f){var p=f.properties||{};
+var sub=p.type==='municipality'?(p.postcode?p.postcode+' · ':'')+(p.context||''):(p.context||'');return{label:p.label||'',sub:sub}}).filter(function(it){if(!it.label||seen[it.label])return false;return seen[it.label]=true});
+cur=-1;render()}).catch(function(e){if(e&&e.name==='AbortError')return;query(q,k+1)})}
+inp.addEventListener('input',function(){clearTimeout(timer);var q=inp.value.trim();if(q.length<3){items=[];close();return}timer=setTimeout(function(){query(q,0)},250)});
+inp.addEventListener('keydown',function(e){if(ul.hidden)return;if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();cur=(cur+(e.key==='ArrowDown'?1:-1)+items.length)%items.length;
+[].forEach.call(ul.children,function(li,i){li.setAttribute('aria-selected',i===cur?'true':'false')});inp.setAttribute('aria-activedescendant','lieu-'+cur)}
+else if(e.key==='Enter'&&cur>=0){e.preventDefault();pick(cur)}else if(e.key==='Escape')close()});
+inp.addEventListener('blur',function(){setTimeout(close,150)})})();
 document.getElementById('send').onclick=function(){
 var v=function(i){return document.getElementById(i).value};
 var d=v('f-date'),dd=d?new Date(d+'T12:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}):'';
