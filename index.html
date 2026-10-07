@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="loading">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -183,9 +183,19 @@ h2.split.on::after{width:96px}
 .rv{opacity:0;transform:translateY(26px);transition:opacity .9s ease,transform .9s ease}
 .rv.on{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv,.hero h1,.hero p,.hero .btn,.lg-in{opacity:1;transform:none}.ring{stroke-dashoffset:0}}
+#loader{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;padding:24px;background:radial-gradient(ellipse at 50% 100%,rgba(226,198,130,.16),transparent 60%),var(--deep);transition:opacity .8s ease,visibility .8s ease}
+#loader.done{opacity:0;visibility:hidden}
+#loader .ld-name{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:clamp(30px,7vw,52px);line-height:1.1;text-align:center;color:#fff;letter-spacing:.01em}
+#loader .ld-name span{display:block;font-family:Jost,sans-serif;font-weight:400;font-size:clamp(12px,2.6vw,15px);letter-spacing:.32em;text-transform:uppercase;color:var(--gold2);margin-top:12px}
+#loader .ld-bar{width:min(280px,70vw);height:2px;background:rgba(226,198,130,.22);overflow:hidden}
+#loader .ld-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .3s ease}
+#loader .ld-pct{font-size:13px;letter-spacing:.2em;color:#b9c6da;margin-top:-12px}
+html.loading{overflow:hidden}
+html.loading .hero *{animation-play-state:paused!important}
 </style>
 </head>
 <body>
+<div id="loader" role="status" aria-live="polite"><div class="ld-name">Alex Juan<span>Live Événement</span></div><div class="ld-bar"><i id="ld-fill"></i></div><div class="ld-pct" id="ld-pct">0 %</div></div>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
 <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b8934a"/><stop offset=".5" stop-color="#e2c682"/><stop offset="1" stop-color="#b8934a"/></linearGradient>
 <symbol id="mono" viewBox="0 0 120 120">
@@ -201,7 +211,7 @@ h2.split.on::after{width:96px}
 
 <main id="top">
 <div class="hero" id="hero">
-<video class="vbg" id="vbg" autoplay muted loop playsinline preload="auto" aria-hidden="true"><source src="assets/hero.mp4" type="video/mp4"></video><div class="shade"></div>
+<video class="vbg" id="vbg" autoplay muted loop playsinline preload="auto" poster="assets/hero-poster.jpg" aria-hidden="true"><source src="assets/hero.mp4" type="video/mp4"></video><div class="shade"></div>
 <svg class="logo" viewBox="0 0 300 250" role="img" aria-label="Logo Alex Juan Live événement">
 <use href="#mono" x="90" y="0" width="120" height="120"/>
 <g class="lg-in" style="animation-delay:1s">
@@ -310,10 +320,25 @@ location.href='mailto:contact@alexjuan.com?subject='+encodeURIComponent('Demande
 })();
 </script>
 <script>
-(function(){var v=document.getElementById('vbg');if(!v)return;v.muted=true;
-if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches){v.removeAttribute('autoplay');v.pause();return}
-var p=v.play();if(p&&p.catch)p.catch(function(){});
-document.addEventListener('touchstart',function f(){v.play().catch(function(){});document.removeEventListener('touchstart',f)},{once:true});
+(function(){
+var v=document.getElementById('vbg'),root=document.documentElement,fill=document.getElementById('ld-fill'),pct=document.getElementById('ld-pct'),loader=document.getElementById('loader');
+var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+function play(){if(!v||reduce)return;v.muted=true;var p=v.play();if(p&&p.catch)p.catch(function(){})}
+// Keep nudging the video until it actually runs: some browsers ignore the first autoplay attempt.
+if(v){if(reduce){v.removeAttribute('autoplay');v.pause()}else{['loadedmetadata','loadeddata','canplay','canplaythrough'].forEach(function(e){v.addEventListener(e,play)});
+['touchstart','pointerdown','pointermove','scroll','keydown'].forEach(function(e){addEventListener(e,function f(){if(v.paused)play();else removeEventListener(e,f)},{passive:true})});
+document.addEventListener('visibilitychange',function(){if(!document.hidden)play()});play()}}
+// Loading screen: progress follows how much of the video is buffered, with a time floor so it keeps moving.
+var start=Date.now(),shown=0,finished=false;
+function real(){if(!v||!v.duration||!v.buffered.length)return 0;return Math.min(1,v.buffered.end(v.buffered.length-1)/v.duration)}
+function ready(){return !v||reduce||v.readyState>=4||v.networkState===3}
+function tick(){if(finished)return;var t=(Date.now()-start)/1000;var target=Math.max(real(),Math.min(.9,t/4));if(ready()&&t>1.2)target=1;
+shown+=(target-shown)*.18;if(target===1&&shown>.985)shown=1;
+fill.style.width=(shown*100).toFixed(1)+'%';pct.textContent=Math.round(shown*100)+' %';
+if(shown>=1||t>8)return finish();requestAnimationFrame(tick)}
+function finish(){if(finished)return;finished=true;fill.style.width='100%';pct.textContent='100 %';play();
+setTimeout(function(){loader.classList.add('done');root.classList.remove('loading');document.dispatchEvent(new Event('siteready'));play()},250)}
+requestAnimationFrame(tick);
 })();
 </script>
 <script>
@@ -322,7 +347,7 @@ function split(el){var n=0;(function walk(node){Array.prototype.slice.call(node.
 if(c.nodeType===3){var f=document.createDocumentFragment();c.textContent.split(/(\s+)/).forEach(function(t){if(!t)return;if(/^\s+$/.test(t)){f.appendChild(document.createTextNode(' '));return}var w=document.createElement('span');w.className='w';w.style.setProperty('--i',n++);w.textContent=t;f.appendChild(w)});node.replaceChild(f,c)}
 else if(c.nodeType===1){walk(c)}})})(el)}
 var sp=document.querySelectorAll('.split');sp.forEach(split);
-var h1=document.querySelector('.hero h1.split');if(h1)setTimeout(function(){h1.classList.add('on')},1100);
+var h1=document.querySelector('.hero h1.split');if(h1)document.addEventListener('siteready',function(){setTimeout(function(){h1.classList.add('on')},400)});
 var tg=document.querySelectorAll('.split:not(.hero h1),.pic');
 // A fully clipped .pic never reports as intersecting, so watch its parent and reveal the photo from there.
 if('IntersectionObserver' in window){var watch=new Map();var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){(watch.get(e.target)||[]).forEach(function(el){el.classList.add('on')});io.unobserve(e.target)}})},{threshold:.1});tg.forEach(function(e){var t=e.classList.contains('pic')?e.parentNode:e;if(!watch.has(t)){watch.set(t,[]);io.observe(t)}watch.get(t).push(e)})}else{tg.forEach(function(e){e.classList.add('on')})}
