@@ -343,6 +343,11 @@ small a{color:inherit;text-decoration:none}
 .faq-list details[open] summary::after{transform:rotate(-135deg);margin-top:-2px}
 .faq-list details p{margin:0;padding:0 20px 18px;color:var(--mute)}
 .faq-more{margin:22px auto 0;color:var(--mute);font-size:15px}
+#wa{position:fixed;left:16px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:40;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:#25d366;color:#fff;box-shadow:0 10px 24px -8px rgba(0,0,0,.45);opacity:0;visibility:hidden;transform:translateY(10px);transition:opacity .4s ease,transform .4s ease,visibility .4s}
+#wa.show{opacity:1;visibility:visible;transform:none}
+#wa svg{width:28px;height:28px;fill:currentColor}
+#wa:active{transform:scale(.92)}
+@media(hover:hover) and (pointer:fine){#wa:hover{background:#1ebe5b}}
 </style>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":["MusicGroup","LocalBusiness"],"name":"Alex Juan Live Événement","description":"Chant live en solo ou en duo, son et lumière inclus, pour mariages, séminaires et soirées privées.","url":"https://live.alexjuan.com/","email":"contact@alexjuan.com","telephone":"+33627330380","address":{"@type":"PostalAddress","streetAddress":"6 avenue Maryse Bastié","addressLocality":"Bruges","postalCode":"33520","addressRegion":"Gironde","addressCountry":"FR"},"sameAs":["https://www.instagram.com/alexjuanoff/","https://www.tiktok.com/@alexjuanoff","https://www.youtube.com/@alexjuanofficiel","https://open.spotify.com/artist/4G3rz3swIwkBHNyaX5E4CF"],"image":"https://live.alexjuan.com/assets/og-image.jpg?v=2","areaServed":[{"@type":"City","name":"Bordeaux"},{"@type":"AdministrativeArea","name":"Gironde"},{"@type":"AdministrativeArea","name":"Nouvelle-Aquitaine"},{"@type":"Country","name":"France"}],"genre":["Chanson française","Variété"]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Combien de temps dure une prestation ?","acceptedAnswer":{"@type":"Answer","text":"De 1 h à la soirée entière, selon vos besoins."}},{"@type":"Question","name":"Vous déplacez-vous loin ?","acceptedAnswer":{"@type":"Answer","text":"Partout en France et à l'étranger. Les frais de déplacement sont inclus dans le devis."}},{"@type":"Question","name":"Combien de temps à l'avance faut-il réserver ?","acceptedAnswer":{"@type":"Answer","text":"Le plus tôt possible : les samedis de mai à septembre partent vite, souvent 6 à 12 mois avant."}},{"@type":"Question","name":"De quoi avez-vous besoin sur place ?","acceptedAnswer":{"@type":"Answer","text":"D'une prise électrique et d'un espace d'environ 3 × 3 m. Nous apportons tout le son et la lumière."}},{"@type":"Question","name":"Pouvez-vous chanter une chanson qui n'est pas dans votre répertoire ?","acceptedAnswer":{"@type":"Answer","text":"Oui, sur demande, si vous nous la donnez au moins 1 mois avant l'événement."}},{"@type":"Question","name":"Jouez-vous en extérieur ?","acceptedAnswer":{"@type":"Answer","text":"Oui, à condition d'avoir un abri en cas de pluie."}},{"@type":"Question","name":"Faut-il prévoir un repas pour l'équipe ?","acceptedAnswer":{"@type":"Answer","text":"Pour une prestation qui couvre le dîner, nous vous demandons de prévoir un repas pour l'équipe."}}]}</script>
@@ -630,11 +635,13 @@ v.addEventListener('pointermove',function(e){if(!drag)return;x+=e.clientX-lastX;
 v.addEventListener('contextmenu',function(e){e.preventDefault()});
 v.addEventListener('dragstart',function(e){e.preventDefault()})})})();
 </script>
+<a id="wa" href="https://wa.me/33627330380?text=Bonjour%20Alex%2C%20je%20vous%20contacte%20depuis%20votre%20site%20pour%20un%20%C3%A9v%C3%A9nement%20%3A%20" target="_blank" rel="noopener" aria-label="Nous écrire sur WhatsApp"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.2A12.7 12.7 0 0 0 5.1 22.4L3.3 28.8l6.6-1.7A12.7 12.7 0 1 0 16 3.2Zm0 23.2c-2 0-3.9-.5-5.6-1.5l-.4-.2-3.9 1 1-3.8-.3-.4A10.5 10.5 0 1 1 16 26.4Zm5.8-7.9c-.3-.2-1.9-.9-2.2-1s-.5-.2-.7.2-.8 1-1 1.2-.4.2-.7.1a8.6 8.6 0 0 1-4.3-3.8c-.3-.6.3-.5.9-1.7.1-.2 0-.4 0-.5l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6a1.2 1.2 0 0 0-.9.4 3.6 3.6 0 0 0-1.1 2.7 6.3 6.3 0 0 0 1.3 3.3 14.4 14.4 0 0 0 5.5 4.9c2.1.9 2.9 1 3.9.8a3.3 3.3 0 0 0 2.2-1.5 2.7 2.7 0 0 0 .2-1.5c-.1-.2-.3-.3-.6-.4Z"/></svg></a>
 <button type="button" id="totop" aria-label="Revenir en haut de la page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
 <script>
 (function(){var t=document.getElementById('totop'),ck=document.getElementById('ckbar'),tick=false;
 // Shown once the visitor has scrolled past most of the first screen, kept out of the way while the cookie bar is open.
-function upd(){tick=false;t.classList.toggle('show',scrollY>innerHeight*.6&&(!ck||ck.hidden))}
+var wa=document.getElementById('wa');
+function upd(){tick=false;var sh=scrollY>innerHeight*.6&&(!ck||ck.hidden);t.classList.toggle('show',sh);if(wa)wa.classList.toggle('show',sh)}
 addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(upd)}},{passive:true});
 document.getElementById('ckok').addEventListener('click',upd);
 t.onclick=function(){scrollTo({top:0,behavior:'smooth'})};upd()})();
