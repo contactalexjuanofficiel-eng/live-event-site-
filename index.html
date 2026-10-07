@@ -376,12 +376,14 @@ if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es
 var fd=document.getElementById('f-date'),dw=document.getElementById('dt-wrap'),now=new Date();
 fd.min=new Date(now.getTime()-now.getTimezoneOffset()*6e4).toISOString().slice(0,10);
 function syncDate(){dw.classList.toggle('has',!!fd.value)}fd.addEventListener('input',syncDate);fd.addEventListener('change',syncDate);
-// Editable starter message, matched to the event type until the visitor types their own text.
+// Editable starter message, matched to the chosen event type.
 var msg=document.getElementById('f-msg'),typ=document.getElementById('f-type'),edited=false;
 var tpl={'Mariage':"Bonjour,\n\nNous nous marions et aimerions votre show live pour notre journée.\nNous serons environ ___ invités.\nMoments souhaités : cérémonie, vin d'honneur, dîner, ouverture de bal.\n\nMerci de nous faire une proposition !",
 'Séminaire / entreprise':"Bonjour,\n\nNous organisons un événement d'entreprise (soirée de gala, séminaire, lancement…) et souhaitons votre show live.\nNombre de participants : environ ___.\n\nMerci de nous faire une proposition !",
 'Événement privé':"Bonjour,\n\nJ'organise un événement privé (anniversaire, réception…) et j'aimerais votre show live.\nNombre d'invités : environ ___.\n\nMerci de me faire une proposition !"};
-function fill(){if(!edited)msg.value=tpl[typ.value]||''}
+function isTpl(v){v=v.trim();if(!v)return true;for(var k in tpl)if(tpl[k]===v)return true;return false}
+// Untouched or emptied text follows the event type; text the visitor wrote is only replaced if they confirm.
+function fill(){if(edited&&!isTpl(msg.value)&&!confirm('Remplacer votre message par le modèle « '+typ.value+' » ?'))return;msg.value=tpl[typ.value]||'';edited=false}
 msg.addEventListener('input',function(){edited=true});typ.addEventListener('change',fill);fill();
 document.getElementById('send').onclick=function(){
 var v=function(i){return document.getElementById(i).value};
