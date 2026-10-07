@@ -25,3 +25,6 @@ tr{margin:0 0 16px;padding:12px 14px;background:#fff;border:1px solid rgba(184,1
 td{border:0;padding:4px 0}
 td::before{content:attr(data-label);display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
 }
+footer .foot-soc{display:flex;justify-content:center;gap:18px;margin:0 0 10px}
+footer .foot-soc a{margin:0;display:inline-grid;place-items:center;width:34px;height:34px;color:var(--mute)}
+footer .foot-soc svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
