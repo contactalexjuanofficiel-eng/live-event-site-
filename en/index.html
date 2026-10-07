@@ -321,6 +321,20 @@ small a{color:inherit;text-decoration:none}
 .artists.bad .art-in{border-color:#e8a0a0}
 .art-note{margin:10px 0 0;color:#9fb0c9;font-size:13px;text-align:center}
 @media(max-width:380px){.art-pics img{width:38px;height:38px}.art-in b{font-size:14px}}
+.repertoire{background:var(--sky)}
+.rep-tabs{display:inline-flex;margin:34px auto 0;border:1px solid rgba(184,147,74,.6)}
+.rep-tabs button{padding:11px 22px;background:transparent;border:0;font:400 15px Jost,sans-serif;color:var(--mute);cursor:pointer;letter-spacing:.03em}
+.rep-tabs button[aria-selected="true"]{background:var(--deep);color:#fff}
+.rep-list{list-style:none;margin:26px auto 0;padding:0;max-width:880px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px 14px;text-align:left;counter-reset:song}
+@media(min-width:760px){.rep-list{grid-template-columns:repeat(3,1fr)}}
+.rep-list[hidden]{display:none}
+.rep-list li{counter-increment:song;position:relative;padding:11px 12px 11px 40px;background:#fff;border:1px solid rgba(184,147,74,.28);line-height:1.3}
+.rep-list li::before{content:counter(song,decimal-leading-zero);position:absolute;left:12px;top:12px;font:500 14px "Cormorant Garamond",serif;color:var(--gold)}
+.rep-list b{display:block;font-weight:400;font-size:15px;color:var(--deep)}
+.rep-list span{display:block;font-size:12.5px;color:var(--mute)}
+@media(max-width:380px){.rep-list{grid-template-columns:1fr}}
+.rep-cta{max-width:640px;margin:36px auto 0;padding:28px 22px;border:1px solid rgba(184,147,74,.5);background:linear-gradient(135deg,#fff,var(--sky2))}
+.rep-cta h3{font-size:28px;margin-bottom:8px}.rep-cta p{color:var(--mute);margin:0 0 20px}
 </style>
 </head>
 <body>
@@ -335,7 +349,7 @@ small a{color:inherit;text-decoration:none}
 
 <header>
 <a href="#top" aria-label="Home"><svg viewBox="0 0 120 120"><use href="#mono"/></svg></a>
-<nav><a href="#formules">Events</a><a href="#deroule">The evening</a><a href="#reserver">Book</a><a href="#videos">Videos</a><a href="#equipe">The team</a><a href="../" class="lang" hreflang="fr" lang="fr" aria-label="Version française">FR</a><a href="#contact" class="btn">Free quote</a></nav>
+<nav><a href="#formules">Events</a><a href="#deroule">The evening</a><a href="#reserver">Book</a><a href="#videos">Videos</a><a href="#repertoire">Repertoire</a><a href="#equipe">The team</a><a href="../" class="lang" hreflang="fr" lang="fr" aria-label="Version française">FR</a><a href="#contact" class="btn">Free quote</a></nav>
 </header>
 
 <main id="top">
@@ -399,6 +413,17 @@ small a{color:inherit;text-decoration:none}
 <div class="vctrl"><button type="button" class="vnav vprev" aria-label="Previous video"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button><div class="vdots" id="vdots" aria-hidden="true"></div><button type="button" class="vnav vnext" aria-label="Next video"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button></div>
 <p class="vmore rv"><a href="https://www.youtube.com/@alexjuanofficiel" target="_blank" rel="noopener">More videos on YouTube</a></p>
 <p class="vnote">Videos are played from YouTube only when you press play. <a href="../confidentialite.html">Learn more (in French)</a></p>
+</section>
+
+<section class="repertoire" id="repertoire">
+<div class="wrap center">
+<h2 class="split">Our repertoire</h2>
+<p class="lead rv">A glimpse of the songs we perform. The setlist is built with you.</p>
+<div class="rep-tabs rv" role="tablist" aria-label="Repertoire language"><button type="button" role="tab" id="rt-fr" aria-selected="true" aria-controls="rp-fr">French songs</button><button type="button" role="tab" id="rt-en" aria-selected="false" aria-controls="rp-en">In English</button></div>
+<ul class="rep-list" id="rp-fr" role="tabpanel" aria-labelledby="rt-fr"><li><b>Envole-moi</b><span>Jean-Jacques Goldman</span></li><li><b>Pour que tu m'aimes encore</b><span>Céline Dion</span></li><li><b>La Bohème</b><span>Charles Aznavour</span></li><li><b>La Vie en rose</b><span>Édith Piaf</span></li><li><b>Les Champs-Élysées</b><span>Joe Dassin</span></li><li><b>Je l'aime à mourir</b><span>Francis Cabrel</span></li><li><b>Les Lacs du Connemara</b><span>Michel Sardou</span></li><li><b>L'Aziza</b><span>Daniel Balavoine</span></li><li><b>Que je t'aime</b><span>Johnny Hallyday</span></li><li><b>Alexandrie Alexandra</b><span>Claude François</span></li><li><b>Alors on danse</b><span>Stromae</span></li><li><b>Andalouse</b><span>Kendji Girac</span></li><li><b>Je m'en vais</b><span>Vianney</span></li><li><b>Viens on s'aime</b><span>Slimane</span></li><li><b>J'ai cherché</b><span>Amir</span></li><li><b>Je veux</b><span>Zaz</span></li><li><b>L'Aventurier</b><span>Indochine</span></li><li><b>Jour 1</b><span>Louane</span></li><li><b>Il est où le bonheur</b><span>Christophe Maé</span></li><li><b>Place des grands hommes</b><span>Patrick Bruel</span></li></ul>
+<ul class="rep-list" id="rp-en" role="tabpanel" aria-labelledby="rt-en" hidden><li><b>Perfect</b><span>Ed Sheeran</span></li><li><b>All of Me</b><span>John Legend</span></li><li><b>Just the Way You Are</b><span>Bruno Mars</span></li><li><b>Can't Help Falling in Love</b><span>Elvis Presley</span></li><li><b>I Will Always Love You</b><span>Whitney Houston</span></li><li><b>At Last</b><span>Etta James</span></li><li><b>Stand by Me</b><span>Ben E. King</span></li><li><b>Isn't She Lovely</b><span>Stevie Wonder</span></li><li><b>Make You Feel My Love</b><span>Adele</span></li><li><b>A Thousand Years</b><span>Christina Perri</span></li><li><b>Shallow</b><span>Lady Gaga &amp; Bradley Cooper</span></li><li><b>Hallelujah</b><span>Leonard Cohen</span></li><li><b>Viva la Vida</b><span>Coldplay</span></li><li><b>Don't Stop Me Now</b><span>Queen</span></li><li><b>Uptown Funk</b><span>Mark Ronson ft. Bruno Mars</span></li><li><b>Happy</b><span>Pharrell Williams</span></li><li><b>Livin' on a Prayer</b><span>Bon Jovi</span></li><li><b>Dancing Queen</b><span>ABBA</span></li><li><b>I Will Survive</b><span>Gloria Gaynor</span></li><li><b>Summer of '69</b><span>Bryan Adams</span></li></ul>
+<div class="rep-cta rv"><h3>A song that means a lot to you?</h3><p>For your entrance, first dance or a surprise moment, list your songs in your quote request: we build the programme with you.</p><a href="#contact" class="btn">Get a free quote</a></div>
+</div>
 </section>
 
 <section class="team" id="equipe">
@@ -483,9 +508,9 @@ fd.min=new Date(now.getTime()-now.getTimezoneOffset()*6e4).toISOString().slice(0
 function syncDate(){dw.classList.toggle('has',!!fd.value)}fd.addEventListener('input',syncDate);fd.addEventListener('change',syncDate);
 // Editable starter message, matched to the chosen event type.
 var msg=document.getElementById('f-msg'),typ=document.getElementById('f-type'),edited=false;
-var tpl={'Wedding':"Hello,\n\nWe are getting married and would love your live show for our day.\nWe will be around ___ guests.\nMoments we have in mind: ceremony, drinks reception, dinner, first dance.\n\nWe look forward to your proposal!",
-'Corporate event':"Hello,\n\nWe are organising a corporate event (gala dinner, seminar, launch…) and would like your live show.\nNumber of attendees: around ___.\n\nWe look forward to your proposal!",
-'Private event':"Hello,\n\nI am organising a private event (birthday, reception…) and would love your live show.\nNumber of guests: around ___.\n\nI look forward to your proposal!"};
+var tpl={'Wedding':"Hello,\n\nWe are getting married and would love your live show for our day.\nWe will be around ___ guests.\nMoments we have in mind: ceremony, drinks reception, dinner, first dance.\nSongs we would love: ___\n\nWe look forward to your proposal!",
+'Corporate event':"Hello,\n\nWe are organising a corporate event (gala dinner, seminar, launch…) and would like your live show.\nNumber of attendees: around ___.\nSongs we would love: ___\n\nWe look forward to your proposal!",
+'Private event':"Hello,\n\nI am organising a private event (birthday, reception…) and would love your live show.\nNumber of guests: around ___.\nSongs I would love: ___\n\nI look forward to your proposal!"};
 function isTpl(v){v=v.trim();if(!v)return true;for(var k in tpl)if(tpl[k]===v)return true;return false}
 // Untouched or emptied text follows the event type; text the visitor wrote is only replaced if they confirm.
 function fill(){if(edited&&!isTpl(msg.value)&&!confirm('Replace your message with the "'+typ.value+'" template?'))return;msg.value=tpl[typ.value]||'';edited=false}
@@ -569,6 +594,11 @@ var imgs=document.querySelectorAll('.pic img'),tick=false;
 function par(){tick=false;var H=innerHeight;imgs.forEach(function(im){var r=im.parentNode.getBoundingClientRect();if(r.bottom<-50||r.top>H+50)return;var d=((r.top+r.height/2)-H/2)/H;im.style.setProperty('--py',(-d*(im.parentNode.classList.contains('alive')?10:12)).toFixed(1)+'px')})}
 addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(par)}},{passive:true});par();
 })();
+</script>
+<script>
+// Repertoire tabs: French / English list.
+(function(){var t=[document.getElementById('rt-fr'),document.getElementById('rt-en')],pn=[document.getElementById('rp-fr'),document.getElementById('rp-en')];if(!t[0])return;
+t.forEach(function(b,i){b.addEventListener('click',function(){t.forEach(function(x,j){x.setAttribute('aria-selected',i===j?'true':'false');pn[j].hidden=i!==j})})})})();
 </script>
 <button type="button" id="totop" aria-label="Back to top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
 <script>
