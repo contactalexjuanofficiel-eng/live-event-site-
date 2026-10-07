@@ -150,12 +150,10 @@ h2.split.on::after{transform:scaleX(1)}
 .pic{position:relative;overflow:hidden;clip-path:inset(0 0 100% 0);transition:clip-path 1.5s cubic-bezier(.77,0,.18,1)}
 .pic.wipe{clip-path:inset(0 100% 0 0)}
 .pic.on{clip-path:inset(0)}
-.pic img{display:block;width:100%;height:100%;object-fit:cover;transform:translate3d(0,var(--py,0px),0) scale(1.14)}
-.pic::after{content:"";position:absolute;inset:12px;border:1px solid rgba(226,198,130,.7);opacity:0;transition:opacity 1s ease 1.3s;pointer-events:none}
-.pic.on::after{opacity:1}
+.pic img{display:block;width:100%;height:100%;object-fit:cover;transform:translate3d(0,var(--py,0px),0) scale(1.05)}
 .duo,.duo2{display:grid;gap:44px;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));align-items:center}
 .duo{text-align:left}.duo .lead{margin:0}
-.tall{aspect-ratio:3/4;max-height:560px;width:100%;box-shadow:0 26px 50px -30px rgba(43,68,104,.7)}
+.tall{aspect-ratio:2/3;width:100%;max-width:420px;margin:0 auto;box-shadow:0 26px 50px -30px rgba(43,68,104,.7)}
 .duo2{margin-top:44px}
 .band{position:relative;height:58vh;min-height:320px;overflow:hidden;background:var(--deep)}
 .band .pic{position:absolute;inset:0}
@@ -167,7 +165,7 @@ h2.split.on::after{transform:scaleX(1)}
 .cbg img{filter:grayscale(1)}
 .cbg::after{display:none}
 .contact .wrap{position:relative;z-index:1}
-@media(prefers-reduced-motion:reduce){.split .w{opacity:1;transform:none;filter:none}.pic{clip-path:none}.pic::after{opacity:1}}
+@media(prefers-reduced-motion:reduce){.split .w{opacity:1;transform:none;filter:none}.pic{clip-path:none}}
 .hero{min-height:calc(100svh - 70px);padding:28px 24px 36px;justify-content:center}
 .hero .logo{width:min(230px,56vw);margin-bottom:12px}
 .hero h1{font-size:clamp(32px,5vw,54px);margin-bottom:14px;text-wrap:balance}
@@ -268,7 +266,7 @@ small a{color:inherit;text-decoration:none}
 <div class="wrap center">
 <div class="duo"><div><h2 class="split">Un show pour chaque événement</h2>
 <p class="lead rv" style="margin-top:18px">Chanson française, avec une touche d'anglais. Le format se compose avec vous.</p></div>
-<div class="pic tall"><img src="assets/portrait.jpg" alt="Portrait d'Alex Juan"></div></div>
+<div class="pic tall"><img src="assets/portrait.jpg?v=2" alt="Portrait d'Alex Juan"></div></div>
 <div class="grid">
 <div class="card rv"><svg class="ico" viewBox="0 0 48 48"><circle cx="19" cy="26" r="11"/><circle cx="29" cy="26" r="11"/></svg><h3>Mariage</h3><p>Cérémonie, vin d'honneur, dîner, ouverture de bal : la musique suit chaque moment de la journée.</p></div>
 <div class="card rv"><svg class="ico" viewBox="0 0 48 48"><path d="M8 38h32M12 38V18h24v20M18 18v-6h12v6"/></svg><h3>Séminaires et entreprises</h3><p>Soirées de gala, lancements, remises de prix : un show soigné, avec sa propre sonorisation.</p></div>
@@ -407,7 +405,7 @@ var tg=document.querySelectorAll('.split:not(.hero h1),.pic');
 // A fully clipped .pic never reports as intersecting, so watch its parent and reveal the photo from there.
 if('IntersectionObserver' in window){var watch=new Map();var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){(watch.get(e.target)||[]).forEach(function(el){el.classList.add('on')});io.unobserve(e.target)}})},{threshold:.1});tg.forEach(function(e){var t=e.classList.contains('pic')?e.parentNode:e;if(!watch.has(t)){watch.set(t,[]);io.observe(t)}watch.get(t).push(e)})}else{tg.forEach(function(e){e.classList.add('on')})}
 var imgs=document.querySelectorAll('.pic img'),tick=false;
-function par(){tick=false;var H=innerHeight;imgs.forEach(function(im){var r=im.parentNode.getBoundingClientRect();if(r.bottom<-50||r.top>H+50)return;var d=((r.top+r.height/2)-H/2)/H;im.style.setProperty('--py',(-d*34).toFixed(1)+'px')})}
+function par(){tick=false;var H=innerHeight;imgs.forEach(function(im){var r=im.parentNode.getBoundingClientRect();if(r.bottom<-50||r.top>H+50)return;var d=((r.top+r.height/2)-H/2)/H;im.style.setProperty('--py',(-d*12).toFixed(1)+'px')})}
 addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(par)}},{passive:true});par();
 })();
 </script>
