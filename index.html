@@ -222,6 +222,11 @@ small a{color:inherit;text-decoration:none}
 .perk svg{width:30px;height:30px;stroke:var(--gold);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;margin-bottom:6px}
 .perk b{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:21px;line-height:1.15;color:var(--deep)}
 .perk span{font-size:13px;line-height:1.4;color:var(--mute)}
+#totop{position:fixed;right:16px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:40;width:42px;height:42px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(184,147,74,.7);background:rgba(234,242,250,.82);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:var(--gold);cursor:pointer;opacity:0;visibility:hidden;transform:translateY(10px);transition:opacity .4s ease,transform .4s ease,visibility .4s}
+#totop.show{opacity:.85;visibility:visible;transform:none}
+#totop svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+#totop:active{opacity:1;transform:scale(.92)}
+@media(hover:hover) and (pointer:fine){#totop:hover{opacity:1;background:#fff}}
 </style>
 </head>
 <body>
@@ -405,6 +410,15 @@ var imgs=document.querySelectorAll('.pic img'),tick=false;
 function par(){tick=false;var H=innerHeight;imgs.forEach(function(im){var r=im.parentNode.getBoundingClientRect();if(r.bottom<-50||r.top>H+50)return;var d=((r.top+r.height/2)-H/2)/H;im.style.setProperty('--py',(-d*34).toFixed(1)+'px')})}
 addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(par)}},{passive:true});par();
 })();
+</script>
+<button type="button" id="totop" aria-label="Revenir en haut de la page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
+<script>
+(function(){var t=document.getElementById('totop'),ck=document.getElementById('ckbar'),tick=false;
+// Shown once the visitor has scrolled past most of the first screen, kept out of the way while the cookie bar is open.
+function upd(){tick=false;t.classList.toggle('show',scrollY>innerHeight*.6&&(!ck||ck.hidden))}
+addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(upd)}},{passive:true});
+document.getElementById('ckok').addEventListener('click',upd);
+t.onclick=function(){scrollTo({top:0,behavior:'smooth'})};upd()})();
 </script>
 </body>
 </html>
