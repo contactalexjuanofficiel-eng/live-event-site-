@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Alex Juan Live événement</title>
 <meta name="description" content="Alex Juan Live événement : show live chant, choriste et sonorisation pour mariages, séminaires et soirées privées, partout en France.">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap">
+<link rel="stylesheet" href="assets/fonts.css">
 <style>
 :root{--sky:#eaf2fa;--sky2:#d6e5f3;--sky3:#b7d0e8;--deep:#2b4468;--gold:#b8934a;--gold2:#e2c682;--txt:#2a3550;--mute:#62708c;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -200,6 +200,13 @@ h2.split.on::after{transform:scaleX(1)}
 #loader .ld-pct{font-size:13px;letter-spacing:.2em;color:#b9c6da;margin-top:-12px}
 html.loading{overflow:hidden}
 html.loading .hero *{animation-play-state:paused!important}
+.site-foot{background:#1f3352;color:#8fa1bd;text-align:center;padding:22px 20px calc(22px + env(safe-area-inset-bottom,0px));font-size:13px}
+.site-foot a{color:#b9c6da;margin:0 10px;text-decoration:none}
+.site-foot a:hover{color:var(--gold2)}
+#ckbar{position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:50;max-width:520px;margin:0 auto;display:flex;gap:14px;align-items:center;padding:14px 16px;background:rgba(31,51,82,.96);color:#e3ebf6;border:1px solid rgba(226,198,130,.45);font-size:14px;line-height:1.5;box-shadow:0 18px 40px -20px rgba(0,0,0,.6)}
+#ckbar[hidden]{display:none}
+#ckbar a{color:var(--gold2)}
+#ckbar button{flex:none;padding:8px 18px;background:transparent;border:1px solid var(--gold2);color:#fff;font:inherit;cursor:pointer}
 </style>
 </head>
 <body>
@@ -310,6 +317,13 @@ html.loading .hero *{animation-play-state:paused!important}
 </div>
 </section>
 </main>
+<footer class="site-foot">© 2026 Alex Juan Live événement<br><a href="mentions-legales.html">Mentions légales</a><a href="confidentialite.html">Confidentialité et cookies</a><a href="cgu.html">CGU</a></footer>
+<div id="ckbar" role="region" aria-label="Information cookies" hidden><span>Ce site n'utilise aucun cookie publicitaire ni de mesure d'audience. <a href="confidentialite.html">En savoir plus</a></span><button type="button" id="ckok">OK</button></div>
+<script>
+(function(){var b=document.getElementById('ckbar'),k='aj-info-ok';var seen=false;try{seen=localStorage.getItem(k)==='1'}catch(e){}
+if(seen)return;function show(){b.hidden=false}if(document.documentElement.classList.contains('loading'))document.addEventListener('siteready',show);else show();
+document.getElementById('ckok').onclick=function(){b.hidden=true;try{localStorage.setItem(k,'1')}catch(e){}}})();
+</script>
 
 <script>
 (function(){
