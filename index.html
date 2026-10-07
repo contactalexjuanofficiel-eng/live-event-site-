@@ -143,9 +143,9 @@ small{display:block;margin-top:34px;color:#8fa1bd;font-size:13px}
 .hero .btn{color:#fff;border-color:var(--gold2)}
 .split .w{display:inline-block;opacity:0;transform:translateY(.55em);filter:blur(7px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.2,1),filter .9s ease;transition-delay:calc(var(--i)*65ms)}
 .split.on .w{opacity:1;transform:none;filter:none}
-h2.split::after{content:"";display:block;width:0;height:1px;margin-top:16px;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width 1.4s ease .6s}
+h2.split::after{content:"";display:block;width:96px;height:2px;margin-top:16px;background:var(--gold2);transform:scaleX(0);transform-origin:center;transition:transform 1.4s ease .6s}
 .center h2.split::after,.contact h2.split::after,.bandtxt h2.split::after{margin-left:auto;margin-right:auto}
-h2.split.on::after{width:96px}
+h2.split.on::after{transform:scaleX(1)}
 .pic{position:relative;overflow:hidden;clip-path:inset(0 0 100% 0);transition:clip-path 1.5s cubic-bezier(.77,0,.18,1)}
 .pic.wipe{clip-path:inset(0 100% 0 0)}
 .pic.on{clip-path:inset(0)}
