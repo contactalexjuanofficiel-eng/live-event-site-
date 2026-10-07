@@ -21,11 +21,9 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;display:flex;
 header svg{width:44px;height:44px}
 nav{display:flex;gap:24px;align-items:center;font-size:15px}
 nav a{text-decoration:none;color:var(--mute);transition:color .3s}
-nav a:hover{color:var(--gold)}
 @media(max-width:640px){nav a:not(.btn){display:none}}
 .btn{display:inline-block;position:relative;overflow:hidden;padding:13px 30px;border:1px solid var(--gold);color:var(--deep);text-decoration:none;font-weight:400;letter-spacing:.04em;background:transparent;font-family:inherit;font-size:16px;cursor:pointer;transition:color .4s}
 .btn::before{content:"";position:absolute;inset:0;background:linear-gradient(100deg,var(--gold),var(--gold2));transform:translateX(-101%);transition:transform .45s ease;z-index:-1}
-.btn:hover::before{transform:none}
 .btn{z-index:0}
 .hero{position:relative;text-align:center;padding:70px 24px 110px;overflow:hidden;background:radial-gradient(ellipse at 50% 0%,#fff 0%,var(--sky) 45%,var(--sky2) 100%)}
 .spark{position:absolute;border-radius:50%;background:radial-gradient(circle,var(--gold2),rgba(226,198,130,0) 70%);opacity:.0;animation:float linear infinite;pointer-events:none}
@@ -56,8 +54,6 @@ h2{font-size:clamp(32px,6vw,48px);margin-bottom:14px}
 .grid{display:grid;gap:24px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:46px}
 .card{position:relative;background:#fff;padding:34px 28px;border:1px solid rgba(184,147,74,.35);box-shadow:0 14px 34px -22px rgba(43,68,104,.45);transition:transform .45s ease,box-shadow .45s ease}
 .card::after{content:"";position:absolute;left:0;top:0;height:3px;width:0;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .5s ease}
-.card:hover{transform:translateY(-8px);box-shadow:0 26px 40px -22px rgba(43,68,104,.55)}
-.card:hover::after{width:100%}
 .card h3{font-size:30px;margin-bottom:10px}
 .card p{margin:0;color:var(--mute)}
 .ico{width:46px;height:46px;margin-bottom:16px;stroke:var(--gold);fill:none;stroke-width:1.4}
@@ -69,7 +65,6 @@ h2{font-size:clamp(32px,6vw,48px);margin-bottom:14px}
 .step h3{font-size:26px}.step p{margin:4px 0 0;color:var(--mute)}
 .team .card{text-align:center}
 .avatar{width:84px;height:84px;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;font-family:"Cormorant Garamond",serif;font-size:34px;color:var(--deep);background:radial-gradient(circle at 30% 25%,#fff,var(--sky3));border:1px solid var(--gold);transition:transform .8s ease}
-.card:hover .avatar{transform:rotateY(360deg)}
 .contact{background:var(--deep);color:#e9eef6;text-align:center}
 .contact h2{color:#fff}
 .contact .lead{color:#b9c6da}
@@ -94,11 +89,9 @@ small{display:block;margin-top:34px;color:#8fa1bd;font-size:13px}
 .ch{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
 .ch h3{font-size:28px;text-transform:capitalize}
 .nv{width:40px;height:40px;border:1px solid var(--gold);background:none;color:var(--deep);font-size:20px;cursor:pointer;transition:background .3s}
-.nv:hover{background:var(--sky2)}
 .dw,.dg{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;text-align:center}
 .dw span{font-size:13px;color:var(--mute);padding:4px 0}
 .d{aspect-ratio:1;border:1px solid transparent;background:var(--sky);color:var(--deep);font:400 15px Jost,sans-serif;cursor:pointer;transition:transform .25s,background .3s}
-.d:hover:not(:disabled){transform:scale(1.1);border-color:var(--gold)}
 .d.today{border-color:var(--gold)}
 .d.sel{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;animation:pop .4s ease}
 @keyframes pop{50%{transform:scale(1.18)}}
@@ -202,11 +195,23 @@ html.loading{overflow:hidden}
 html.loading .hero *{animation-play-state:paused!important}
 .site-foot{background:#1f3352;color:#8fa1bd;text-align:center;padding:22px 20px calc(22px + env(safe-area-inset-bottom,0px));font-size:13px}
 .site-foot a{color:#b9c6da;margin:0 10px;text-decoration:none}
-.site-foot a:hover{color:var(--gold2)}
 #ckbar{position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:50;max-width:520px;margin:0 auto;display:flex;gap:14px;align-items:center;padding:14px 16px;background:rgba(31,51,82,.96);color:#e3ebf6;border:1px solid rgba(226,198,130,.45);font-size:14px;line-height:1.5;box-shadow:0 18px 40px -20px rgba(0,0,0,.6)}
 #ckbar[hidden]{display:none}
 #ckbar a{color:var(--gold2)}
 #ckbar button{flex:none;padding:8px 18px;background:transparent;border:1px solid var(--gold2);color:#fff;font:inherit;cursor:pointer}
+/* Hover effects only on devices with a real mouse: on touch screens iOS turns the first tap into a hover, so links needed two taps. */
+@media(hover:hover) and (pointer:fine){
+nav a:hover{color:var(--gold)}
+.btn:hover::before{transform:none}
+.card:hover{transform:translateY(-8px);box-shadow:0 26px 40px -22px rgba(43,68,104,.55)}
+.card:hover::after{width:100%}
+.card:hover .avatar{transform:rotateY(360deg)}
+.nv:hover{background:var(--sky2)}
+.d:hover:not(:disabled){transform:scale(1.1);border-color:var(--gold)}
+.site-foot a:hover{color:var(--gold2)}
+}
+.btn:active::before{transform:none;transition-duration:.15s}
+a,button{-webkit-tap-highlight-color:transparent}
 </style>
 </head>
 <body>
