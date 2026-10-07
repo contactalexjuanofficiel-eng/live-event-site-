@@ -325,15 +325,13 @@ small a{color:inherit;text-decoration:none}
 .rep-row{text-align:left;min-width:0}
 .rep-label{display:block;max-width:1000px;margin:0 auto 10px;padding:0 24px;font:500 13px Jost,sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
 .rep-view{position:relative;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
-.rep-track{display:flex;width:max-content;gap:14px;list-style:none;margin:0;padding:4px 0;animation:repscroll 70s linear infinite}
-.rep-row.rev .rep-track{animation-direction:reverse}
-.rep-view:hover .rep-track,.rep-view.hold .rep-track{animation-play-state:paused}
-@keyframes repscroll{to{transform:translateX(-50%)}}
+.rep-track{display:flex;width:max-content;gap:14px;list-style:none;margin:0;padding:4px 0;will-change:transform}
+.rep-view{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;cursor:grab;touch-action:pan-y}
+.rep-view.hold{cursor:grabbing}
 .rep-track li{flex:none;min-width:190px;padding:14px 20px;background:#fff;border:1px solid rgba(184,147,74,.35);box-shadow:0 12px 26px -20px rgba(43,68,104,.5)}
 .rep-track b{display:block;font:500 21px/1.15 "Cormorant Garamond",Georgia,serif;color:var(--deep);white-space:nowrap}
 .rep-track span{display:block;margin-top:3px;font-size:13px;color:var(--mute);white-space:nowrap}
 .rep-hint{margin:14px 0 0;font-size:12.5px;color:var(--mute);text-align:center}
-@media(prefers-reduced-motion:reduce){.rep-track{animation:none}.rep-view{overflow-x:auto}}
 .rep-cta{max-width:640px;margin:36px auto 0;padding:28px 22px;border:1px solid rgba(184,147,74,.5);background:linear-gradient(135deg,#fff,var(--sky2))}
 .rep-cta h3{font-size:28px;margin-bottom:8px}.rep-cta p{color:var(--mute);margin:0 0 20px}
 .faq{background:linear-gradient(180deg,var(--sky),#fff)}
@@ -616,10 +614,21 @@ addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(p
 })();
 </script>
 <script>
-// Repertoire rows scroll on their own; holding a finger on a row pauses it so the titles can be read.
-(function(){[].forEach.call(document.querySelectorAll('.rep-view'),function(v){
-v.addEventListener('touchstart',function(){v.classList.add('hold')},{passive:true});
-['touchend','touchcancel'].forEach(function(e){v.addEventListener(e,function(){v.classList.remove('hold')},{passive:true})})})})();
+// Repertoire rows scroll on their own. Holding a finger or the mouse button stops them and lets the visitor drag the row;
+// on release the row carries on scrolling from where it was left. Each list is duplicated, so the offset wraps at half the width.
+(function(){var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+[].forEach.call(document.querySelectorAll('.rep-view'),function(v,i){var tr=v.querySelector('.rep-track'),dir=v.parentNode.classList.contains('rev')?1:-1,
+x=0,half=0,drag=false,lastX=0,last=performance.now(),SECONDS=70;
+function measure(){half=tr.scrollWidth/2}measure();addEventListener('resize',measure);if(document.fonts)document.fonts.ready.then(measure);
+function wrap(){if(!half)return;while(x<=-half)x+=half;while(x>0)x-=half}
+if(dir>0)x=-half/2;
+function frame(t){var dt=Math.min(.1,(t-last)/1000);last=t;if(!drag&&!reduce&&half)x+=dir*half/SECONDS*dt;wrap();tr.style.transform='translate3d('+x+'px,0,0)';requestAnimationFrame(frame)}
+requestAnimationFrame(frame);
+v.addEventListener('pointerdown',function(e){drag=true;lastX=e.clientX;v.classList.add('hold');try{v.setPointerCapture(e.pointerId)}catch(_){}});
+v.addEventListener('pointermove',function(e){if(!drag)return;x+=e.clientX-lastX;lastX=e.clientX});
+['pointerup','pointercancel','lostpointercapture'].forEach(function(n){v.addEventListener(n,function(){drag=false;v.classList.remove('hold')})});
+v.addEventListener('contextmenu',function(e){e.preventDefault()});
+v.addEventListener('dragstart',function(e){e.preventDefault()})})})();
 </script>
 <button type="button" id="totop" aria-label="Revenir en haut de la page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
 <script>
