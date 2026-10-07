@@ -520,7 +520,8 @@ var t=['Weddings','Corporate events','Gala evenings','Cocktail parties','Birthda
 for(var k=0;k<2;k++){t.forEach(function(x){m+='<span>'+x+'</span><span>✦</span>'})}
 document.getElementById('mq').innerHTML=m+m;
 var els=document.querySelectorAll('.rv');
-if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}})},{threshold:.15});els.forEach(function(e,i){e.style.transitionDelay=(i%3)*0.12+'s';io.observe(e)})}else{els.forEach(function(e){e.classList.add('on')})}
+// Reveal again every time an element comes back on screen: shown from 15 % visible, reset only once fully off screen (no flicker at the edge).
+if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.intersectionRatio>=.15)e.target.classList.add('on');else if(!e.isIntersecting)e.target.classList.remove('on')})},{threshold:[0,.15]});els.forEach(function(e,i){e.style.transitionDelay=(i%3)*0.12+'s';io.observe(e)})}else{els.forEach(function(e){e.classList.add('on')})}
 var fd=document.getElementById('f-date'),dw=document.getElementById('dt-wrap'),now=new Date();
 fd.min=new Date(now.getTime()-now.getTimezoneOffset()*6e4).toISOString().slice(0,10);
 function syncDate(){dw.classList.toggle('has',!!fd.value)}fd.addEventListener('input',syncDate);fd.addEventListener('change',syncDate);
@@ -607,7 +608,7 @@ var sp=document.querySelectorAll('.split');sp.forEach(split);
 var h1=document.querySelector('.hero h1.split');if(h1)document.addEventListener('siteready',function(){setTimeout(function(){h1.classList.add('on')},400)});
 var tg=document.querySelectorAll('.split:not(.hero h1),.pic');
 // A fully clipped .pic never reports as intersecting, so watch its parent and reveal the photo from there.
-if('IntersectionObserver' in window){var watch=new Map();var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){(watch.get(e.target)||[]).forEach(function(el){el.classList.add('on')});io.unobserve(e.target)}})},{threshold:.1});tg.forEach(function(e){var t=e.classList.contains('pic')?e.parentNode:e;if(!watch.has(t)){watch.set(t,[]);io.observe(t)}watch.get(t).push(e)})}else{tg.forEach(function(e){e.classList.add('on')})}
+if('IntersectionObserver' in window){var watch=new Map();var io=new IntersectionObserver(function(es){es.forEach(function(e){var on=e.intersectionRatio>=.1;if(!on&&e.isIntersecting)return;(watch.get(e.target)||[]).forEach(function(el){el.classList.toggle('on',on)})})},{threshold:[0,.1]});tg.forEach(function(e){var t=e.classList.contains('pic')?e.parentNode:e;if(!watch.has(t)){watch.set(t,[]);io.observe(t)}watch.get(t).push(e)})}else{tg.forEach(function(e){e.classList.add('on')})}
 var imgs=document.querySelectorAll('.pic img'),tick=false;
 function par(){tick=false;var H=innerHeight;imgs.forEach(function(im){var r=im.parentNode.getBoundingClientRect();if(r.bottom<-50||r.top>H+50)return;var d=((r.top+r.height/2)-H/2)/H;im.style.setProperty('--py',(-d*(im.parentNode.classList.contains('alive')?10:12)).toFixed(1)+'px')})}
 addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(par)}},{passive:true});par();
