@@ -304,6 +304,22 @@ small a{color:inherit;text-decoration:none}
 .vcard.nothumb::before{content:"Vidéo live";position:absolute;left:0;right:0;bottom:28px;z-index:1;text-align:center;font:500 26px "Cormorant Garamond",Georgia,serif;color:#fff;letter-spacing:.02em}
 .lang{font-size:13px;letter-spacing:.08em;color:var(--gold)!important;border:1px solid rgba(184,147,74,.5);padding:4px 9px;text-decoration:none}
 @media(max-width:640px){nav a.lang{display:inline-block}nav{gap:12px}}
+.artists{border:0;margin:4px 0 0;padding:0;min-width:0}
+.artists legend{color:#b9c6da;font-size:15px;margin-bottom:10px;padding:0}
+.art-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.art{position:relative;cursor:pointer}
+.art input{position:absolute;opacity:0;pointer-events:none}
+.art-in{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 6px 12px;border:1px solid rgba(226,198,130,.4);background:rgba(255,255,255,.07);text-align:center;transition:border-color .25s,background .25s;height:100%}
+.art-pics{display:flex;justify-content:center}
+.art-pics img{width:46px;height:46px;border-radius:50%;object-fit:cover;border:1px solid var(--gold2)}
+.art-pics img+img{margin-left:-14px}
+.art-in b{color:#fff;font-weight:400;font-size:15px;line-height:1.2}
+.art-in small{display:block;margin:0;color:#9fb0c9;font-size:12px}
+.art input:checked+.art-in{border-color:var(--gold2);background:rgba(226,198,130,.18);box-shadow:inset 0 0 0 1px var(--gold2)}
+.art input:focus-visible+.art-in{outline:2px solid var(--gold2);outline-offset:2px}
+.artists.bad .art-in{border-color:#e8a0a0}
+.art-note{margin:10px 0 0;color:#9fb0c9;font-size:13px;text-align:center}
+@media(max-width:380px){.art-pics img{width:38px;height:38px}.art-in b{font-size:14px}}
 </style>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":["MusicGroup","LocalBusiness"],"name":"Alex Juan Live Événement","description":"Show live à deux voix avec sonorisation pour mariages, séminaires et soirées privées.","url":"https://live.alexjuan.com/","email":"contact@alexjuan.com","telephone":"+33627330380","address":{"@type":"PostalAddress","streetAddress":"6 avenue Maryse Bastié","addressLocality":"Bruges","postalCode":"33520","addressRegion":"Gironde","addressCountry":"FR"},"sameAs":["https://www.instagram.com/alexjuanoff/","https://www.tiktok.com/@alexjuanoff","https://www.youtube.com/@alexjuanofficiel","https://open.spotify.com/artist/4G3rz3swIwkBHNyaX5E4CF"],"image":"https://live.alexjuan.com/assets/og-image.jpg","areaServed":[{"@type":"City","name":"Bordeaux"},{"@type":"AdministrativeArea","name":"Gironde"},{"@type":"AdministrativeArea","name":"Nouvelle-Aquitaine"},{"@type":"Country","name":"France"}],"genre":["Chanson française","Variété"]}</script>
 </head>
@@ -392,13 +408,13 @@ small a{color:inherit;text-decoration:none}
 <div class="grid">
 <div class="card rv"><div class="avatar"><img src="assets/avatar-alex.jpg?v=2" alt="Alex Juan"></div><h3>Alex Juan</h3><p>Chanteur et voix du show. Il porte le spectacle et construit le répertoire avec vous.</p></div>
 <div class="card rv"><div class="avatar"><img src="assets/avatar-camille.jpg?v=2" alt="Camille" loading="lazy"></div><h3>Camille</h3><p>Chanteuse et choriste. Elle prend la scène en solo sur certains titres, partage des duos avec Alex et apporte de la profondeur aux voix.</p></div>
-<div class="card rv"><div class="avatar"><img src="assets/avatar-antonin.jpg?v=2" alt="Antonin" loading="lazy"></div><h3>Antonin</h3><p>Sonorisateur. Il installe, règle et veille à ce que chaque invité entende parfaitement.</p></div>
+<div class="card rv"><div class="avatar"><img src="assets/avatar-antonin.jpg?v=2" alt="Antonin" loading="lazy"></div><h3>Antonin</h3><p>Ingénieur son et lumière. Présent à chaque prestation, il installe, règle et veille à ce que chaque invité entende et voie parfaitement.</p></div>
 </div>
 </div>
 </section>
 
 <div class="perks" aria-label="Nos engagements"><div class="perks-in">
-<div class="perk rv"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="14" y="6" width="20" height="36" rx="3"/><circle cx="24" cy="30" r="6"/><circle cx="24" cy="15" r="3"/></svg><b>Sonorisation incluse</b><span>Installée et réglée par notre ingénieur son</span></div>
+<div class="perk rv"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="14" y="6" width="20" height="36" rx="3"/><circle cx="24" cy="30" r="6"/><circle cx="24" cy="15" r="3"/></svg><b>Sonorisation incluse</b><span>Son et lumière réglés par notre ingénieur</span></div>
 <div class="perk rv"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M18 36V10l20-4v26"/><circle cx="13" cy="36" r="5"/><circle cx="33" cy="32" r="5"/></svg><b>Répertoire sur mesure</b><span>Chanson française, avec une touche d'anglais</span></div>
 <div class="perk rv"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="7" y="10" width="34" height="30" rx="2"/><path d="M7 18h34M16 6v8M32 6v8M18 29l4 4 8-8"/></svg><b>Date bloquée en ligne</b><span>Avec un acompte de 100 €</span></div>
 <div class="perk rv"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 43s-13-12-13-23a13 13 0 0 1 26 0c0 11-13 23-13 23z"/><circle cx="24" cy="20" r="5"/></svg><b>Basés près de Bordeaux</b><span>Gironde, Nouvelle-Aquitaine, partout en France</span></div>
@@ -431,6 +447,7 @@ small a{color:inherit;text-decoration:none}
 <label class="dt" id="dt-wrap"><span>Date de l'événement</span><input id="f-date" type="date" aria-label="Date de l'événement"></label>
 <div class="ac"><input id="f-lieu" placeholder="Lieu (ville, salle…)" aria-label="Lieu de l'événement" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="lieu-list"><ul id="lieu-list" role="listbox" hidden></ul></div>
 <select id="f-type" aria-label="Type d'événement"><option>Mariage</option><option>Séminaire / entreprise</option><option>Événement privé</option></select>
+<fieldset class="artists" id="f-artist"><legend>Artiste souhaité</legend><div class="art-row"><label class="art"><input type="radio" name="artiste" value="Alex Juan"><span class="art-in"><span class="art-pics"><img src="assets/avatar-alex.jpg?v=2" alt=""></span><b>Alex Juan</b><small>en solo</small></span></label><label class="art"><input type="radio" name="artiste" value="Camille"><span class="art-in"><span class="art-pics"><img src="assets/avatar-camille.jpg?v=2" alt=""></span><b>Camille</b><small>en solo</small></span></label><label class="art"><input type="radio" name="artiste" value="Alex & Camille"><span class="art-in"><span class="art-pics"><img src="assets/avatar-alex.jpg?v=2" alt=""><img src="assets/avatar-camille.jpg?v=2" alt=""></span><b>Alex & Camille</b><small>en duo</small></span></label></div><p class="art-note">Antonin, notre ingénieur son et lumière, est présent à chaque prestation.</p></fieldset>
 <textarea id="f-msg" rows="10" placeholder="Un mot sur votre projet" aria-label="Votre message"></textarea>
 </div>
 <button class="btn" id="send" type="button">Envoyer ma demande</button>
@@ -493,22 +510,24 @@ inp.addEventListener('keydown',function(e){if(ul.hidden)return;if(e.key==='Arrow
 else if(e.key==='Enter'&&cur>=0){e.preventDefault();pick(cur)}else if(e.key==='Escape')close()});
 inp.addEventListener('blur',function(){setTimeout(close,150)})})();
 // Sends the request straight to the inbox through FormSubmit; falls back to the visitor's mail app if the service can't be reached.
+[].forEach.call(document.querySelectorAll('input[name=artiste]'),function(r){r.addEventListener('change',function(){document.getElementById('f-artist').classList.remove('bad')})});
 var MAIL='contact@alexjuan.com',FORM_ID='7e1adee14a65debe62f66d12ed0c07de',btn=document.getElementById('send'),st=document.getElementById('f-status');
 function say(t,c){st.textContent=t;st.className='fstatus'+(c?' '+c:'')}
 btn.onclick=function(){
 var v=function(i){return document.getElementById(i).value.trim()};
 if(v('f-honey'))return;
 var miss=[];[['f-nom','votre nom'],['f-email','votre email']].forEach(function(f){var el=document.getElementById(f[0]),bad=!v(f[0])||(f[0]==='f-email'&&!el.checkValidity());el.classList.toggle('bad',bad);if(bad)miss.push(f[1])});
+var art=document.querySelector('input[name=artiste]:checked'),artBox=document.getElementById('f-artist');artBox.classList.toggle('bad',!art);if(!art)miss.push('l\'artiste souhaité');
 if(miss.length){say('Merci d\'indiquer '+miss.join(' et ')+'.','err');return}
 var d=v('f-date'),dd=d?new Date(d+'T12:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}):'';
-var data={_subject:'Nouvelle demande – '+v('f-type')+(dd?' le '+dd:''),_replyto:v('f-email'),_template:'table',
-'Nom':v('f-nom'),'Email':v('f-email'),'Téléphone':v('f-tel'),'Date':dd,'Lieu':v('f-lieu'),'Type':v('f-type'),'Message':v('f-msg')};
+var data={_subject:'Nouvelle demande – '+v('f-type')+' – '+art.value+(dd?' le '+dd:''),_replyto:v('f-email'),_template:'table',
+'Nom':v('f-nom'),'Email':v('f-email'),'Téléphone':v('f-tel'),'Date':dd,'Lieu':v('f-lieu'),'Type':v('f-type'),'Artiste':art.value,'Message':v('f-msg')};
 btn.disabled=true;say('Envoi en cours…');
 fetch('https://formsubmit.co/ajax/'+FORM_ID,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)})
 .then(function(r){return r.json().then(function(j){if(!r.ok||String(j.success)!=='true')throw 0})})
-.then(function(){say('Merci ! Votre demande est bien envoyée, nous vous répondons très vite.','ok');['f-nom','f-email','f-tel','f-lieu','f-date'].forEach(function(i){document.getElementById(i).value=''});dw.classList.remove('has');edited=false;fill()})
+.then(function(){say('Merci ! Votre demande est bien envoyée, nous vous répondons très vite.','ok');['f-nom','f-email','f-tel','f-lieu','f-date'].forEach(function(i){document.getElementById(i).value=''});dw.classList.remove('has');var c=document.querySelector('input[name=artiste]:checked');if(c)c.checked=false;edited=false;fill()})
 .catch(function(){say('L\'envoi n\'a pas fonctionné : votre messagerie va s\'ouvrir pour nous écrire directement.','err');
-var body='Nom : '+data['Nom']+'\nEmail : '+data['Email']+'\nTéléphone : '+data['Téléphone']+'\nDate : '+dd+'\nLieu : '+data['Lieu']+'\nType : '+data['Type']+'\n\n'+data['Message'];
+var body='Nom : '+data['Nom']+'\nEmail : '+data['Email']+'\nTéléphone : '+data['Téléphone']+'\nDate : '+dd+'\nLieu : '+data['Lieu']+'\nType : '+data['Type']+'\nArtiste : '+data['Artiste']+'\n\n'+data['Message'];
 location.href='mailto:'+MAIL+'?subject='+encodeURIComponent('Demande de devis')+'&body='+encodeURIComponent(body)})
 .then(function(){btn.disabled=false})};
 })();
