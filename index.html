@@ -434,7 +434,7 @@ inp.addEventListener('keydown',function(e){if(ul.hidden)return;if(e.key==='Arrow
 else if(e.key==='Enter'&&cur>=0){e.preventDefault();pick(cur)}else if(e.key==='Escape')close()});
 inp.addEventListener('blur',function(){setTimeout(close,150)})})();
 // Sends the request straight to the inbox through FormSubmit; falls back to the visitor's mail app if the service can't be reached.
-var MAIL='contact@alexjuan.com',btn=document.getElementById('send'),st=document.getElementById('f-status');
+var MAIL='contact@alexjuan.com',FORM_ID='7e1adee14a65debe62f66d12ed0c07de',btn=document.getElementById('send'),st=document.getElementById('f-status');
 function say(t,c){st.textContent=t;st.className='fstatus'+(c?' '+c:'')}
 btn.onclick=function(){
 var v=function(i){return document.getElementById(i).value.trim()};
@@ -445,7 +445,7 @@ var d=v('f-date'),dd=d?new Date(d+'T12:00').toLocaleDateString('fr-FR',{weekday:
 var data={_subject:'Nouvelle demande – '+v('f-type')+(dd?' le '+dd:''),_replyto:v('f-email'),_template:'table',
 'Nom':v('f-nom'),'Email':v('f-email'),'Téléphone':v('f-tel'),'Date':dd,'Lieu':v('f-lieu'),'Type':v('f-type'),'Message':v('f-msg')};
 btn.disabled=true;say('Envoi en cours…');
-fetch('https://formsubmit.co/ajax/'+MAIL,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)})
+fetch('https://formsubmit.co/ajax/'+FORM_ID,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)})
 .then(function(r){return r.json().then(function(j){if(!r.ok||String(j.success)!=='true')throw 0})})
 .then(function(){say('Merci ! Votre demande est bien envoyée, nous vous répondons très vite.','ok');['f-nom','f-email','f-tel','f-lieu','f-date'].forEach(function(i){document.getElementById(i).value=''});dw.classList.remove('has');edited=false;fill()})
 .catch(function(){say('L\'envoi n\'a pas fonctionné : votre messagerie va s\'ouvrir pour nous écrire directement.','err');
