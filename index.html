@@ -346,7 +346,7 @@ small a{color:inherit;text-decoration:none}
 <label class="dt" id="dt-wrap"><span>Date de l'événement</span><input id="f-date" type="date" aria-label="Date de l'événement"></label>
 <input id="f-lieu" placeholder="Lieu (ville, salle…)" aria-label="Lieu de l'événement" autocomplete="off">
 <select id="f-type" aria-label="Type d'événement"><option>Mariage</option><option>Séminaire / entreprise</option><option>Événement privé</option></select>
-<textarea id="f-msg" rows="4" placeholder="Un mot sur votre projet" aria-label="Votre message"></textarea>
+<textarea id="f-msg" rows="10" placeholder="Un mot sur votre projet" aria-label="Votre message"></textarea>
 </div>
 <button class="btn" id="send">Envoyer ma demande</button>
 <p class="call">Vous préférez en parler de vive voix ?<a href="tel:+33627330380">06 27 33 03 80</a></p>
@@ -376,6 +376,13 @@ if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es
 var fd=document.getElementById('f-date'),dw=document.getElementById('dt-wrap'),now=new Date();
 fd.min=new Date(now.getTime()-now.getTimezoneOffset()*6e4).toISOString().slice(0,10);
 function syncDate(){dw.classList.toggle('has',!!fd.value)}fd.addEventListener('input',syncDate);fd.addEventListener('change',syncDate);
+// Editable starter message, matched to the event type until the visitor types their own text.
+var msg=document.getElementById('f-msg'),typ=document.getElementById('f-type'),edited=false;
+var tpl={'Mariage':"Bonjour,\n\nNous nous marions et aimerions votre show live pour notre journée.\nNous serons environ ___ invités.\nMoments souhaités : cérémonie, vin d'honneur, dîner, ouverture de bal.\n\nMerci de nous faire une proposition !",
+'Séminaire / entreprise':"Bonjour,\n\nNous organisons un événement d'entreprise (soirée de gala, séminaire, lancement…) et souhaitons votre show live.\nNombre de participants : environ ___.\n\nMerci de nous faire une proposition !",
+'Événement privé':"Bonjour,\n\nJ'organise un événement privé (anniversaire, réception…) et j'aimerais votre show live.\nNombre d'invités : environ ___.\n\nMerci de me faire une proposition !"};
+function fill(){if(!edited)msg.value=tpl[typ.value]||''}
+msg.addEventListener('input',function(){edited=true});typ.addEventListener('change',fill);fill();
 document.getElementById('send').onclick=function(){
 var v=function(i){return document.getElementById(i).value};
 var d=v('f-date'),dd=d?new Date(d+'T12:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}):'';
