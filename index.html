@@ -77,6 +77,14 @@ h2{font-size:clamp(32px,6vw,48px);margin-bottom:14px}
 .fields input,.fields select,.fields textarea{width:100%;padding:14px 16px;background:rgba(255,255,255,.07);border:1px solid rgba(226,198,130,.4);color:#fff;font:inherit;border-radius:0}
 .fields select option{color:#222}
 .fields input::placeholder,.fields textarea::placeholder{color:#9fb0c9}
+.fields input:-webkit-autofill{-webkit-text-fill-color:#fff;-webkit-box-shadow:0 0 0 40px #3d5577 inset;caret-color:#fff}
+.dt{position:relative;display:block}
+.dt input{-webkit-appearance:none;appearance:none;min-height:54px;line-height:1.5;color-scheme:dark;text-align:left}
+.dt input::-webkit-date-and-time-value{text-align:left}
+.dt span{position:absolute;left:17px;top:50%;transform:translateY(-50%);color:#9fb0c9;pointer-events:none}
+.dt.has span{display:none}
+.dt:not(.has) input{color:transparent}
+.dt:not(.has) input:focus{color:#fff}
 .contact .btn{color:#fff}
 small{display:block;margin-top:34px;color:#8fa1bd;font-size:13px}
 
@@ -292,7 +300,8 @@ html.loading .hero *{animation-play-state:paused!important}
 <p class="lead rv" style="margin:0 auto">Date, lieu, nombre d'invités : nous vous répondons avec une proposition adaptée.</p>
 <div class="fields">
 <input id="f-nom" placeholder="Votre nom" aria-label="Votre nom">
-<input id="f-date" placeholder="Date et lieu de l'événement" aria-label="Date et lieu">
+<label class="dt" id="dt-wrap"><span>Date de l'événement</span><input id="f-date" type="date" aria-label="Date de l'événement"></label>
+<input id="f-lieu" placeholder="Lieu (ville, salle…)" aria-label="Lieu de l'événement" autocomplete="off">
 <select id="f-type" aria-label="Type d'événement"><option>Mariage</option><option>Séminaire / entreprise</option><option>Événement privé</option></select>
 <textarea id="f-msg" rows="4" placeholder="Un mot sur votre projet" aria-label="Votre message"></textarea>
 </div>
@@ -313,9 +322,13 @@ for(var k=0;k<2;k++){t.forEach(function(x){m+='<span>'+x+'</span><span>✦</span
 document.getElementById('mq').innerHTML=m+m;
 var els=document.querySelectorAll('.rv');
 if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}})},{threshold:.15});els.forEach(function(e,i){e.style.transitionDelay=(i%3)*0.12+'s';io.observe(e)})}else{els.forEach(function(e){e.classList.add('on')})}
+var fd=document.getElementById('f-date'),dw=document.getElementById('dt-wrap'),now=new Date();
+fd.min=new Date(now.getTime()-now.getTimezoneOffset()*6e4).toISOString().slice(0,10);
+function syncDate(){dw.classList.toggle('has',!!fd.value)}fd.addEventListener('input',syncDate);fd.addEventListener('change',syncDate);
 document.getElementById('send').onclick=function(){
 var v=function(i){return document.getElementById(i).value};
-var body='Nom : '+v('f-nom')+'\nDate et lieu : '+v('f-date')+'\nType : '+v('f-type')+'\n\n'+v('f-msg');
+var d=v('f-date'),dd=d?new Date(d+'T12:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}):'';
+var body='Nom : '+v('f-nom')+'\nDate : '+dd+'\nLieu : '+v('f-lieu')+'\nType : '+v('f-type')+'\n\n'+v('f-msg');
 location.href='mailto:contact@alexjuan.com?subject='+encodeURIComponent('Demande de devis')+'&body='+encodeURIComponent(body)};
 })();
 </script>
