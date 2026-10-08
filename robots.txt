@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /pro/
 
 Sitemap: https://live.alexjuan.com/sitemap.xml

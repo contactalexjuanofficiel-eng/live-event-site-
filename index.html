@@ -575,6 +575,8 @@ if(miss.length){say('Merci d\'indiquer '+miss.join(' et ')+'.','err');return}
 var d=v('f-date'),dd=d?new Date(d+'T12:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}):'';
 var data={_subject:'Nouvelle demande – '+v('f-type')+' – '+art.value+(dd?' le '+dd:''),_replyto:v('f-email'),_template:'table',
 'Nom':v('f-nom'),'Email':v('f-email'),'Téléphone':v('f-tel'),'Date':dd,'Lieu':v('f-lieu'),'Type':v('f-type'),'Artiste':art.value,'Message':v('f-msg')};
+// One-click link in the request email that opens the pro quote page already filled in.
+data['Créer le devis']='https://live.alexjuan.com/pro/?'+new URLSearchParams({nom:v('f-nom'),email:v('f-email'),tel:v('f-tel'),date:v('f-date'),lieu:v('f-lieu'),type:v('f-type'),artiste:art.value}).toString();
 btn.disabled=true;say('Envoi en cours…');
 fetch('https://formsubmit.co/ajax/'+FORM_ID,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)})
 .then(function(r){return r.json().then(function(j){if(!r.ok||String(j.success)!=='true')throw 0})})

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Espace pro · Devis · Alex Juan Live Événement</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="../favicon.ico?v=2" sizes="any">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png?v=2">
+<meta name="theme-color" content="#2b4468">
+<link rel="stylesheet" href="../assets/fonts.css">
+<style>
+:root{--sky:#eaf2fa;--sky2:#d6e5f3;--deep:#2b4468;--gold:#b8934a;--gold2:#e2c682;--txt:#2a3550;--mute:#62708c;--line:rgba(184,147,74,.35)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--sky);color:var(--txt);font:300 16px/1.55 Jost,system-ui,sans-serif}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;color:var(--deep);margin:0;line-height:1.15}
+button,input,select,textarea{font:inherit;color:inherit}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px;background:var(--deep);color:#fff}
+.top b{font:500 22px "Cormorant Garamond",serif}.top b span{color:var(--gold2)}
+.top a{color:#b9c6da;font-size:14px;text-decoration:none}
+.app{display:grid;gap:22px;padding:20px 16px 60px;max-width:1300px;margin:0 auto}
+@media(min-width:1000px){.app{grid-template-columns:430px 1fr;align-items:start}.editor{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto}}
+.editor{background:#fff;border:1px solid var(--line);padding:18px}
+.editor h2{font-size:26px;margin-bottom:4px}
+.hint{font-size:13px;color:var(--mute);margin:0 0 14px}
+fieldset{border:0;border-top:1px solid var(--line);margin:14px 0 0;padding:12px 0 0}
+legend{font:500 12px Jost,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);padding:0 6px 0 0}
+label{display:block;font-size:13px;color:var(--mute);margin:8px 0 3px}
+input,select,textarea{width:100%;padding:9px 11px;border:1px solid #c9d6e6;background:var(--sky);border-radius:0}
+textarea{resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lines{display:grid;gap:8px;margin-top:6px}
+.line{display:grid;grid-template-columns:1fr 54px 86px 30px;gap:6px;align-items:start}
+.line input{padding:8px}
+.line button{height:38px;border:1px solid #e3c4c4;background:#fff;color:#a54;cursor:pointer}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.presets button,.btn2{padding:6px 10px;border:1px solid var(--gold);background:#fff;color:var(--deep);font-size:13px;cursor:pointer}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;position:sticky;bottom:0;background:#fff;padding:12px 0 2px;border-top:1px solid var(--line)}
+.btn{padding:11px 16px;border:1px solid var(--gold);background:var(--deep);color:#fff;cursor:pointer;font-weight:400}
+.btn.light{background:#fff;color:var(--deep)}
+.saved{font-size:13px;color:var(--mute);margin-top:8px}
+@media(max-width:999px){.actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:8px 0 4px}.actions .btn{padding:8px 6px;font-size:14px}}
+.drafts{margin-top:10px}
+.drafts select{margin-top:4px}
+/* Quote preview = the printed document */
+.paper{background:#fff;box-shadow:0 20px 50px -30px rgba(43,68,104,.6);padding:42px 46px;max-width:840px;width:100%;margin:0 auto;color:#24304a}
+@media(max-width:640px){.paper{padding:24px 18px}}
+.ph{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;border-bottom:2px solid var(--gold2);padding-bottom:18px}
+.brand{display:flex;gap:14px;align-items:center}
+.brand svg{width:64px;height:64px;flex:none}
+.brand h1{font-size:28px}
+.brand small{display:block;color:var(--gold);letter-spacing:.24em;text-transform:uppercase;font-size:11px;font-family:Jost,sans-serif}
+.meta{text-align:right;font-size:13px}
+.meta h2{font-size:30px;color:var(--gold)}
+.parties{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:22px 0;font-size:13.5px}
+@media(max-width:560px){.parties{grid-template-columns:1fr}.ph{flex-direction:column}.meta{text-align:left}}
+.parties h3{font-size:18px;margin-bottom:4px}
+.parties p{margin:0;white-space:pre-line}
+.event{background:var(--sky);padding:12px 14px;font-size:13.5px;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:6px 18px}
+.event b{font-weight:500;color:var(--deep)}
+table{width:100%;border-collapse:collapse;margin:22px 0 8px;font-size:14px}
+th{text-align:left;font-weight:500;color:var(--deep);border-bottom:1px solid var(--gold);padding:8px 6px}
+td{padding:9px 6px;border-bottom:1px solid #e6ecf3;vertical-align:top}
+td.n,th.n{text-align:right;white-space:nowrap}
+.totals{margin-left:auto;width:min(100%,320px);font-size:14px}
+.totals div{display:flex;justify-content:space-between;padding:5px 6px}
+.totals .grand{border-top:2px solid var(--gold2);margin-top:4px;padding-top:9px;font:500 20px "Cormorant Garamond",serif;color:var(--deep)}
+.totals .muted{color:var(--mute);font-size:13px}
+.notes{margin-top:20px;font-size:12.5px;color:#4a5670}
+.notes h3{font-size:17px;margin:14px 0 4px}
+.notes ul{margin:4px 0;padding-left:18px}
+.sign{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:26px;font-size:13px}
+.sign div{border:1px dashed #b9c6da;min-height:92px;padding:10px}
+.foot{margin-top:24px;padding-top:10px;border-top:1px solid #e6ecf3;font-size:11px;color:var(--mute);text-align:center}
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:#fff}
+  .top,.editor{display:none!important}
+  .app{display:block;padding:0}
+  .paper{box-shadow:none;padding:0;max-width:none}
+  .event{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  /* Keep the whole quote on one A4 page. */
+  .paper{font-size:13px}
+  .ph{padding-bottom:12px}.brand svg{width:54px;height:54px}
+  .parties{margin:14px 0;font-size:12.5px}
+  .event{font-size:12.5px;padding:9px 12px}
+  table{margin:14px 0 6px;font-size:13px}td{padding:6px}
+  .totals{font-size:13px}.totals div{padding:3px 6px}
+  .notes{margin-top:12px;font-size:11.5px}.notes h3{margin:8px 0 2px}
+  .sign{margin-top:14px}.sign div{min-height:74px}
+  .foot{margin-top:12px}
+  .paper,.sign,.totals{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="top"><b>Espace pro <span>· Devis</span></b><a href="../">← Retour au site</a></div>
+
+<div class="app">
+<form class="editor" id="ed" autocomplete="off" onsubmit="return false">
+<h2>Nouveau devis</h2>
+<p class="hint">Le devis se met à jour en direct (à droite sur ordinateur, en dessous sur téléphone). Rien n'est envoyé sur Internet : les brouillons restent sur cet appareil.</p>
+
+<fieldset><legend>Client</legend>
+<label for="c_nom">Nom</label><input id="c_nom">
+<div class="row"><div><label for="c_email">Email</label><input id="c_email" type="email"></div><div><label for="c_tel">Téléphone</label><input id="c_tel" type="tel"></div></div>
+<label for="c_adr">Adresse (facultatif)</label><textarea id="c_adr" rows="2"></textarea>
+</fieldset>
+
+<fieldset><legend>Événement</legend>
+<div class="row"><div><label for="e_type">Type</label><select id="e_type"><option>Mariage</option><option>Séminaire / entreprise</option><option>Événement privé</option></select></div>
+<div><label for="e_date">Date</label><input id="e_date" type="date"></div></div>
+<label for="e_lieu">Lieu</label><input id="e_lieu">
+<div class="row"><div><label for="e_artiste">Formule</label><select id="e_artiste"><option>Alex Juan</option><option>Camille</option><option>Alex &amp; Camille</option></select></div>
+<div><label for="e_duree">Durée de prestation</label><input id="e_duree" placeholder="ex. 4 h"></div></div>
+<label for="e_horaires">Horaires / moments (facultatif)</label><input id="e_horaires" placeholder="ex. vin d'honneur + dîner + ouverture de bal">
+</fieldset>
+
+<fieldset><legend>Prestations</legend>
+<div class="lines" id="lines"></div>
+<div class="presets">
+<button type="button" data-p="artist">+ Prestation chant</button>
+<button type="button" data-p="son">+ Son &amp; lumière</button>
+<button type="button" data-p="dep">+ Déplacement</button>
+<button type="button" data-p="hs">+ Heure sup.</button>
+<button type="button" data-p="free">+ Ligne libre</button>
+</div>
+<div class="row" style="margin-top:10px"><div><label for="remise">Remise (€)</label><input id="remise" type="number" min="0" step="1" value="0"></div>
+<div><label for="acompte">Acompte (€)</label><input id="acompte" type="number" min="0" step="1" value="100"></div></div>
+</fieldset>
+
+<fieldset><legend>Devis</legend>
+<div class="row"><div><label for="d_num">N° de devis</label><input id="d_num"></div><div><label for="d_valid">Valable (jours)</label><input id="d_valid" type="number" min="1" value="30"></div></div>
+<label for="d_tva">Mention TVA</label><input id="d_tva" value="TVA non applicable, art. 293 B du CGI">
+<label for="d_note">Message au client (facultatif)</label><textarea id="d_note" rows="3" placeholder="ex. Merci pour votre demande, nous serions ravis d'accompagner votre journée…"></textarea>
+</fieldset>
+
+<div class="drafts"><label for="drafts">Mes devis enregistrés</label><select id="drafts"><option value="">— Ouvrir un devis enregistré —</option></select></div>
+
+<div class="actions">
+<button type="button" class="btn" id="b_pdf">Télécharger le PDF</button>
+<button type="button" class="btn light" id="b_mail">Envoyer par email</button>
+<button type="button" class="btn light" id="b_save">Enregistrer</button>
+<button type="button" class="btn light" id="b_new">Nouveau</button>
+</div>
+<p class="saved" id="saved"></p>
+</form>
+
+<div class="paper" id="paper">
+<div class="ph">
+<div class="brand"><svg viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b8934a"/><stop offset=".5" stop-color="#e2c682"/><stop offset="1" stop-color="#b8934a"/></linearGradient></defs><circle cx="60" cy="60" r="56" fill="none" stroke="url(#g)" stroke-width="2"/><circle cx="60" cy="60" r="50" fill="none" stroke="url(#g)" stroke-width=".8"/><text x="60" y="76" text-anchor="middle" font-family="Cormorant Garamond,Georgia,serif" font-size="50" font-weight="500" fill="#b8934a" letter-spacing="-3">AJ</text></svg>
+<div><h1>Alex Juan</h1><small>Live Événement</small></div></div>
+<div class="meta"><h2>Devis</h2><div>N° <b id="p_num"></b></div><div>Émis le <span id="p_today"></span></div><div>Valable jusqu'au <span id="p_valid"></span></div></div>
+</div>
+
+<div class="parties">
+<div><h3>Prestataire</h3><p>Alex Juan Live Événement
+Alex Juan, entrepreneur individuel
+6 avenue Maryse Bastié, 33520 Bruges
+06 27 33 03 80 · contact@alexjuan.com
+SIRET : en cours d'attribution</p></div>
+<div><h3>Client</h3><p id="p_client"></p></div>
+</div>
+
+<div class="event" id="p_event"></div>
+<p id="p_note" style="margin:16px 0 0;font-size:14px;white-space:pre-line"></p>
+
+<table><thead><tr><th>Désignation</th><th class="n">Qté</th><th class="n">Prix unitaire</th><th class="n">Total</th></tr></thead><tbody id="p_lines"></tbody></table>
+
+<div class="totals">
+<div id="p_remise_row"><span>Remise</span><span id="p_remise"></span></div>
+<div class="grand"><span>Total</span><span id="p_total"></span></div>
+<div class="muted" id="p_tva"></div>
+<div><span>Acompte à la réservation</span><span id="p_acompte"></span></div>
+<div><span>Solde (au plus tard 7 jours avant)</span><span id="p_solde"></span></div>
+</div>
+
+<div class="notes">
+<h3>Conditions</h3>
+<ul>
+<li>Réservation ferme à réception de l'acompte, payable par carte en ligne : https://cal.com/alexjuanliveevenement/reservationlive. L'acompte est déduit du total.</li>
+<li>Solde à régler au plus tard 7 jours avant l'événement, par virement ou autre moyen convenu.</li>
+<li>À prévoir sur place : une prise électrique 230 V et un espace d'environ 3 × 3 m à l'abri de la pluie ; accès 2 h avant le début pour l'installation. Pour une prestation couvrant le dîner, un repas pour l'équipe.</li>
+<li>Annulation, report et force majeure : voir nos conditions générales de vente sur https://live.alexjuan.com/cgv.html.</li>
+</ul>
+</div>
+
+<div class="sign"><div><b>Le prestataire</b><br>Alex Juan</div><div><b>Le client</b><br>Date et signature, précédées de la mention « Bon pour accord »</div></div>
+<div class="foot">Alex Juan Live Événement · live.alexjuan.com · contact@alexjuan.com · 06 27 33 03 80</div>
+</div>
+</div>
+
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var KEY='aj-devis',CNT='aj-devis-count';
+var PRESETS={
+ artist:function(){return {d:'Prestation chant live – '+$('e_artiste').value+($('e_duree').value?' ('+$('e_duree').value+')':''),q:1,u:0}},
+ son:function(){return {d:'Sonorisation et éclairage (ingénieur son et lumière)',q:1,u:0}},
+ dep:function(){return {d:'Frais de déplacement'+($('e_lieu').value?' – '+$('e_lieu').value:''),q:1,u:0}},
+ hs:function(){return {d:'Heure supplémentaire',q:1,u:0}},
+ free:function(){return {d:'',q:1,u:0}}};
+var lines=[];
+function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+function eur(n){return (Math.round(n*100)/100).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €'}
+function fdate(iso){if(!iso)return '';var d=new Date(iso+'T12:00');return isNaN(d)?iso:d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function nextNum(){var y=new Date().getFullYear(),n=parseInt(store(CNT+'-'+y)||'0',10)+1;return 'DEV-'+y+'-'+String(n).padStart(3,'0')}
+function claimNum(num){var m=/^DEV-(\d{4})-(\d+)$/.exec(num);if(!m)return;var k=CNT+'-'+m[1],cur=parseInt(store(k)||'0',10);if(+m[2]>cur)store(k,String(+m[2]))}
+
+function renderLines(){var box=$('lines');box.innerHTML='';
+ lines.forEach(function(l,i){var r=document.createElement('div');r.className='line';
+  r.innerHTML='<input aria-label="Désignation" value="'+esc(l.d)+'" placeholder="Désignation"><input aria-label="Quantité" type="number" min="0" step="0.5" value="'+l.q+'"><input aria-label="Prix unitaire en euros" type="number" min="0" step="1" value="'+l.u+'" placeholder="Prix €"><button type="button" aria-label="Supprimer la ligne">×</button>';
+  var f=r.querySelectorAll('input');
+  f[0].oninput=function(){l.d=this.value;paint()};f[1].oninput=function(){l.q=parseFloat(this.value)||0;paint()};f[2].oninput=function(){l.u=parseFloat(this.value)||0;paint()};
+  r.querySelector('button').onclick=function(){lines.splice(i,1);renderLines();paint()};
+  box.appendChild(r)})}
+
+function paint(){
+ var today=new Date(),valid=new Date(today.getTime()+(parseInt($('d_valid').value,10)||30)*864e5);
+ $('p_num').textContent=$('d_num').value;$('p_today').textContent=today.toLocaleDateString('fr-FR');$('p_valid').textContent=valid.toLocaleDateString('fr-FR');
+ $('p_client').textContent=[$('c_nom').value,$('c_adr').value,$('c_email').value,$('c_tel').value].filter(Boolean).join('\n')||'—';
+ var ev=[['Événement',$('e_type').value],['Date',fdate($('e_date').value)],['Lieu',$('e_lieu').value],['Formule',$('e_artiste').value+' – son et lumière inclus'],['Durée',$('e_duree').value],['Déroulé',$('e_horaires').value]];
+ $('p_event').innerHTML=ev.filter(function(x){return x[1]}).map(function(x){return '<div><b>'+x[0]+' :</b> '+esc(x[1])+'</div>'}).join('');
+ $('p_note').textContent=$('d_note').value;
+ var sub=0;$('p_lines').innerHTML=lines.map(function(l){var t=l.q*l.u;sub+=t;return '<tr><td>'+esc(l.d||'—')+'</td><td class="n">'+l.q+'</td><td class="n">'+(l.u?eur(l.u):'Inclus')+'</td><td class="n">'+(t?eur(t):'Inclus')+'</td></tr>'}).join('')||'<tr><td colspan="4" style="color:#8a96ad">Ajoutez une prestation avec les boutons à gauche.</td></tr>';
+ var rem=Math.max(0,parseFloat($('remise').value)||0),tot=Math.max(0,sub-rem),ac=Math.min(tot,Math.max(0,parseFloat($('acompte').value)||0));
+ $('p_remise_row').style.display=rem?'':'none';$('p_remise').textContent='– '+eur(rem);
+ $('p_total').textContent=eur(tot);$('p_tva').textContent=$('d_tva').value;
+ $('p_acompte').textContent=eur(ac);$('p_solde').textContent=eur(tot-ac);
+ document.title='Devis '+$('d_num').value+($('c_nom').value?' – '+$('c_nom').value:'')}
+
+var FIELDS=['c_nom','c_email','c_tel','c_adr','e_type','e_date','e_lieu','e_artiste','e_duree','e_horaires','remise','acompte','d_num','d_valid','d_tva','d_note'];
+function snapshot(){var o={lines:lines.slice()};FIELDS.forEach(function(f){o[f]=$(f).value});return o}
+function load(o){FIELDS.forEach(function(f){if(o[f]!=null)$(f).value=o[f]});lines=(o.lines||[]).map(function(l){return{d:l.d,q:l.q,u:l.u}});renderLines();paint()}
+function drafts(){try{return JSON.parse(store(KEY)||'{}')}catch(e){return{}}}
+function listDrafts(){var d=drafts(),s=$('drafts');s.length=1;Object.keys(d).sort().reverse().forEach(function(k){var o=document.createElement('option');o.value=k;o.textContent=k+' – '+(d[k].c_nom||'sans nom')+(d[k].e_date?' – '+d[k].e_date:'');s.appendChild(o)})}
+function save(){var d=drafts(),n=$('d_num').value||nextNum();$('d_num').value=n;d[n]=snapshot();store(KEY,JSON.stringify(d));claimNum(n);listDrafts();$('saved').textContent='Devis '+n+' enregistré sur cet appareil.';paint()}
+
+function fresh(){var o={d_num:nextNum(),d_valid:30,acompte:100,remise:0,d_tva:'TVA non applicable, art. 293 B du CGI',lines:[]};
+ FIELDS.forEach(function(f){if(!(f in o))o[f]=''});o.e_type='Mariage';o.e_artiste='Alex Juan';load(o);
+ lines=[PRESETS.artist(),PRESETS.son()];lines[1].u=0;renderLines();paint()}
+
+// Pre-fill from the link sent in each website request email (?nom=…&email=…&date=…).
+function fromUrl(){var q=new URLSearchParams(location.search);if(![...q.keys()].length)return false;fresh();
+ var map={nom:'c_nom',email:'c_email',tel:'c_tel',lieu:'e_lieu',date:'e_date'};Object.keys(map).forEach(function(k){if(q.get(k))$(map[k]).value=q.get(k)});
+ var t=q.get('type');if(t){var tt={'Wedding':'Mariage','Corporate event':'Séminaire / entreprise','Private event':'Événement privé'}[t]||t;[].forEach.call($('e_type').options,function(o){if(o.text===tt)$('e_type').value=tt})}
+ var a=q.get('artiste');if(a){[].forEach.call($('e_artiste').options,function(o){if(o.text===a)$('e_artiste').value=a})}
+ lines=[PRESETS.artist(),PRESETS.son(),PRESETS.dep()];renderLines();paint();
+ history.replaceState(null,'',location.pathname);$('saved').textContent='Devis pré-rempli à partir de la demande. Ajoutez vos prix.';return true}
+
+FIELDS.forEach(function(f){$(f).addEventListener('input',paint);$(f).addEventListener('change',paint)});
+[].forEach.call(document.querySelectorAll('.presets button'),function(b){b.onclick=function(){lines.push(PRESETS[b.dataset.p]());renderLines();paint()}});
+$('b_pdf').onclick=function(){save();window.print()};
+$('b_save').onclick=save;
+$('b_new').onclick=function(){if(confirm('Commencer un nouveau devis ? Pensez à enregistrer celui-ci avant.'))fresh()};
+$('drafts').onchange=function(){var d=drafts()[this.value];if(d)load(d);this.value=''};
+$('b_mail').onclick=function(){save();var tot=$('p_total').textContent,sub='Votre devis '+$('d_num').value+' – Alex Juan Live Événement';
+ var body='Bonjour'+($('c_nom').value?' '+$('c_nom').value:'')+',\n\nMerci pour votre demande. Vous trouverez ci-joint notre devis n° '+$('d_num').value+' pour votre '+$('e_type').value.toLowerCase()+(($('e_date').value)?' du '+fdate($('e_date').value):'')+(($('e_lieu').value)?' à '+$('e_lieu').value:'')+'.\n\nMontant total : '+tot+' (acompte de '+$('p_acompte').textContent+' à la réservation).\n\nPour bloquer votre date, il vous suffit de réserver en ligne et de régler l\'acompte ici :\nhttps://cal.com/alexjuanliveevenement/reservationlive\n\nNous restons à votre disposition pour toute question.\n\nBien musicalement,\nAlex Juan\nAlex Juan Live Événement\n06 27 33 03 80 · live.alexjuan.com';
+ alert('Votre messagerie va s\'ouvrir avec le message prêt. Pensez à joindre le PDF du devis (bouton « Télécharger le PDF »).');
+ location.href='mailto:'+encodeURIComponent($('c_email').value)+'?subject='+encodeURIComponent(sub)+'&body='+encodeURIComponent(body)};
+
+listDrafts();if(!fromUrl())fresh();
+})();
+</script>
+</body>
+</html>
