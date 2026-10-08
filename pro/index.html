@@ -8,6 +8,8 @@
 <link rel="icon" href="../favicon.ico?v=2" sizes="any">
 <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png?v=2">
 <meta name="theme-color" content="#2b4468">
+<script>/* Access code: the page stays hidden until the code (stored only as a hash) has been entered once on this device. */
+var AJ_LOCK='e0eaea7f69bd713bd4522d207ed4b365a05c0a6be2d09653cc533c3db415e4af';try{if(localStorage.getItem('aj-pro-ok')!==AJ_LOCK)document.documentElement.classList.add('locked')}catch(e){document.documentElement.classList.add('locked')}</script>
 <link rel="stylesheet" href="../assets/fonts.css">
 <style>
 :root{--sky:#eaf2fa;--sky2:#d6e5f3;--deep:#2b4468;--gold:#b8934a;--gold2:#e2c682;--txt:#2a3550;--mute:#62708c;--line:rgba(184,147,74,.35)}
@@ -80,7 +82,26 @@ textarea{resize:vertical}
 #b_save.done{background:#2e9e5b;border-color:#2e9e5b;color:#fff}
 .toast{position:fixed;left:50%;top:16px;transform:translate(-50%,-20px);background:#1d1d1f;color:#fff;padding:12px 18px;border-radius:12px;font-size:14px;line-height:1.4;white-space:pre-line;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:99;max-width:calc(100% - 32px)}
 .toast.on{opacity:1;transform:translate(-50%,0)}
-@media print{.toast,.tabs,.list{display:none!important}}
+@media print{.toast,.tabs,.list,.lock{display:none!important}}
+/* Lock screen */
+.lock{display:none}
+html.locked body>*:not(.lock){display:none!important}
+html.locked .lock{display:flex;min-height:100vh;align-items:center;justify-content:center;padding:24px 16px;background:var(--deep)}
+.lockbox{background:#fff;width:100%;max-width:380px;padding:30px 24px;text-align:center;border-top:3px solid var(--gold2)}
+.lockbox .aj{width:60px;height:60px;margin:0 auto 10px;border:1.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font:500 24px "Cormorant Garamond",serif;color:var(--gold)}
+.lockbox h1{font-size:30px}
+.lockbox p{font-size:14px;color:var(--mute);margin:6px 0 16px}
+.lockbox input{text-align:center;font-size:22px;letter-spacing:.3em;padding:12px;background:var(--sky)}
+.lockbox input[type=date]{letter-spacing:normal;font-size:18px}
+.lockbox .btn{width:100%;margin-top:10px;padding:13px}
+.lockbox .err{color:#b03a37;font-size:13.5px;min-height:20px;margin:8px 0 0}
+.lockbox .link{background:none;border:0;color:var(--deep);text-decoration:underline;font-size:13.5px;cursor:pointer;margin-top:14px;padding:4px}
+.lockbox .q{display:none;margin-top:16px;padding-top:14px;border-top:1px solid var(--line);text-align:left}
+.lockbox .q.on{display:block}
+.lockbox .q label{font-size:14px;color:var(--txt);margin-bottom:6px}
+.shake{animation:shake .35s}@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.top .tr{display:flex;gap:16px;align-items:center}
+.top button.lk{background:none;border:0;color:#b9c6da;font-size:14px;cursor:pointer;padding:0}
 /* Quote preview = the printed document */
 .paper{background:#fff;box-shadow:0 20px 50px -30px rgba(43,68,104,.6);padding:42px 46px;max-width:840px;width:100%;margin:0 auto;color:#24304a}
 @media(max-width:640px){.paper{padding:24px 18px}}
@@ -149,7 +170,24 @@ td.n,th.n{text-align:right;white-space:nowrap}
 </style>
 </head>
 <body>
-<div class="top"><b>Espace pro <span>· Devis</span></b><a href="../">← Retour au site</a></div>
+<div class="lock" id="lock">
+<form class="lockbox" id="lk_form" onsubmit="return false">
+<div class="aj">AJ</div>
+<h1>Espace pro</h1>
+<p>Entrez votre code d'accès</p>
+<input id="lk_code" type="password" inputmode="numeric" autocomplete="off" aria-label="Code d'accès" placeholder="••••••••">
+<p class="err" id="lk_err" aria-live="polite"></p>
+<button type="submit" class="btn" id="lk_go">Entrer</button>
+<button type="button" class="link" id="lk_forgot">Code oublié ?</button>
+<div class="q" id="lk_q">
+<label for="lk_ans">Question secrète : quelle est la date d'anniversaire de votre fille ?</label>
+<input id="lk_ans" type="date" aria-label="Date d'anniversaire">
+<p class="err" id="lk_err2" aria-live="polite"></p>
+<button type="button" class="btn" id="lk_ans_go">Valider la réponse</button>
+</div>
+</form>
+</div>
+<div class="top"><b>Espace pro <span>· Devis</span></b><span class="tr"><button type="button" class="lk" id="lk_lock">🔒 Verrouiller</button><a href="../">← Retour au site</a></span></div>
 <nav class="tabs" aria-label="Espace pro">
 <button type="button" id="t_list">Mes devis<span class="cnt" id="t_cnt">0</span></button>
 <button type="button" id="t_edit">En cours</button>
@@ -280,6 +318,20 @@ SIRET : en cours d'attribution</p></div>
 </div>
 </div>
 
+<script>
+(function(){var $=function(i){return document.getElementById(i)};
+function sha(t){return crypto.subtle.digest('SHA-256',new TextEncoder().encode('aj-pro:'+t)).then(function(b){return Array.prototype.map.call(new Uint8Array(b),function(x){return x.toString(16).padStart(2,'0')}).join('')})}
+function unlock(){try{localStorage.setItem('aj-pro-ok',AJ_LOCK)}catch(e){}document.documentElement.classList.remove('locked');dispatchEvent(new Event('resize'))}
+function fail(el,msg){$(el.id==='lk_ans'?'lk_err2':'lk_err').textContent=msg;var f=$('lk_form');f.classList.remove('shake');void f.offsetWidth;f.classList.add('shake');el.value='';el.focus()}
+function check(v,el,msg){v=String(v||'').replace(/\D/g,'');if(!v){el.focus();return}sha(v).then(function(h){if(h===AJ_LOCK)unlock();else fail(el,msg)})}
+$('lk_go').onclick=function(){check($('lk_code').value,$('lk_code'),'Code incorrect. Réessayez ou appuyez sur « Code oublié ? ».')};
+$('lk_forgot').onclick=function(){$('lk_q').classList.add('on');$('lk_err').textContent='';$('lk_err2').textContent='';$('lk_ans').focus()};
+// The answer (a date picked as YYYY-MM-DD) is turned into DDMMYYYY and checked like the code.
+$('lk_ans_go').onclick=function(){var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec($('lk_ans').value);if(!m){$('lk_err2').textContent='Choisissez une date.';return}check(m[3]+m[2]+m[1],$('lk_ans'),'Mauvaise réponse.')};
+$('lk_lock').onclick=function(){try{localStorage.removeItem('aj-pro-ok')}catch(e){}$('lk_code').value='';$('lk_err').textContent='';$('lk_q').classList.remove('on');document.documentElement.classList.add('locked');scrollTo(0,0)};
+if(document.documentElement.classList.contains('locked'))setTimeout(function(){$('lk_code').focus()},50);
+})();
+</script>
 <script src="vendor/html2canvas.min.js"></script>
 <script src="vendor/jspdf.umd.min.js"></script>
 <script>
