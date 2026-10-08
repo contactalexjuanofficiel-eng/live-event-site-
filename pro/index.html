@@ -70,7 +70,15 @@ td.n,th.n{text-align:right;white-space:nowrap}
 .notes h3{font-size:17px;margin:14px 0 4px}
 .notes ul{margin:4px 0;padding-left:18px}
 .sign{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:26px;font-size:13px}
-.sign div{border:1px dashed #b9c6da;min-height:92px;padding:10px}
+.sign>div{border:1px dashed #b9c6da;min-height:92px;padding:10px;position:relative}
+.sign .who{display:block;margin-bottom:2px}
+.sign .when{display:block;font-size:12px;color:#4a5670;min-height:40px}
+.pad{display:block;width:100%;height:120px;margin-top:6px;background:repeating-linear-gradient(transparent 0 118px,#d7e0ec 118px 119px);touch-action:none;cursor:crosshair;border-radius:2px}
+.sigimg{display:none;width:100%;height:120px;object-fit:contain;object-position:left center;margin-top:6px}
+.sigbar{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.sigbar button{padding:4px 9px;border:1px solid #c9d6e6;background:#fff;color:#2b4468;font-size:12px;cursor:pointer}
+.sighint{font-size:11.5px;color:#8a96ad;margin:4px 0 0}
+@media(max-width:560px){.sign{grid-template-columns:1fr}.pad,.sigimg{height:150px}}
 .foot{margin-top:24px;padding-top:10px;border-top:1px solid #e6ecf3;font-size:11px;color:var(--mute);text-align:center}
 @media print{
   @page{size:A4;margin:12mm}
@@ -87,7 +95,8 @@ td.n,th.n{text-align:right;white-space:nowrap}
   table{margin:14px 0 6px;font-size:13px}td{padding:6px}
   .totals{font-size:13px}.totals div{padding:3px 6px}
   .notes{margin-top:12px;font-size:11.5px}.notes h3{margin:8px 0 2px}
-  .sign{margin-top:14px}.sign div{min-height:74px}
+  .sign{margin-top:14px}.sign>div{min-height:74px}
+  .pad,.sigbar,.sighint{display:none!important}.sigimg.has{display:block;height:90px}
   .foot{margin-top:12px}
   .paper,.sign,.totals{break-inside:avoid}
 }
@@ -191,7 +200,16 @@ SIRET : en cours d'attribution</p></div>
 </ul>
 </div>
 
-<div class="sign"><div><b>Le prestataire</b><br>Alex Juan</div><div><b>Le client</b><br>Date et signature, précédées de la mention « Bon pour accord »</div></div>
+<div class="sign">
+<div><b class="who">Le prestataire · Alex Juan</b><span class="when" id="when_pro"></span>
+<canvas class="pad" id="pad_pro" aria-label="Signature du prestataire"></canvas><img class="sigimg" id="img_pro" alt="">
+<div class="sigbar"><button type="button" data-clear="pro">Effacer</button><button type="button" id="b_sig_keep">Mémoriser ma signature</button></div>
+<p class="sighint">Signez avec le doigt ou la souris.</p></div>
+<div><b class="who">Le client · Bon pour accord</b><span class="when" id="when_cli">Date et signature, précédées de la mention « Bon pour accord »</span>
+<canvas class="pad" id="pad_cli" aria-label="Signature du client"></canvas><img class="sigimg" id="img_cli" alt="">
+<div class="sigbar"><button type="button" data-clear="cli">Effacer</button></div>
+<p class="sighint">Faites signer le client ici, sur votre téléphone ou votre ordinateur.</p></div>
+</div>
 <div class="foot">Alex Juan Live Événement · live.alexjuan.com · contact@alexjuan.com · 06 27 33 03 80</div>
 </div>
 </div>
@@ -236,9 +254,26 @@ function paint(){
  $('p_acompte').textContent=eur(ac);$('p_solde').textContent=eur(tot-ac);
  document.title='Devis '+$('d_num').value+($('c_nom').value?' – '+$('c_nom').value:'')}
 
+// Hand-written signatures: drawn with a finger, stylus or mouse on a canvas, kept as an image so they print in the PDF and save with the draft.
+var SIG={pro:'',cli:'',cliDate:''},PROKEY='aj-sig-pro';
+function sigSet(who,data){SIG[who]=data||'';var im=$('img_'+who);if(data){im.src=data;im.classList.add('has')}else{im.removeAttribute('src');im.classList.remove('has')}sigDraw(who);sigWhen()}
+function sigWhen(){$('when_cli').textContent=SIG.cli?'« Bon pour accord » – signé le '+(SIG.cliDate||new Date().toLocaleDateString('fr-FR')):'Date et signature, précédées de la mention « Bon pour accord »';
+ $('when_pro').textContent=SIG.pro?'Signé le '+new Date().toLocaleDateString('fr-FR'):''}
+function sigSize(c){var r=c.getBoundingClientRect(),d=window.devicePixelRatio||1;c.width=Math.max(1,Math.round(r.width*d));c.height=Math.max(1,Math.round(r.height*d));var x=c.getContext('2d');x.setTransform(d,0,0,d,0,0);x.lineCap='round';x.lineJoin='round';x.strokeStyle='#1f3352';x.lineWidth=2.2;return x}
+function sigDraw(who){var c=$('pad_'+who),x=sigSize(c);if(!SIG[who])return;var im=new Image();im.onload=function(){var r=c.getBoundingClientRect();x.drawImage(im,0,0,r.width,r.height)};im.src=SIG[who]}
+['pro','cli'].forEach(function(who){var c=$('pad_'+who),x,drawing=false,last=null;
+ function pt(e){var r=c.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top}}
+ c.addEventListener('pointerdown',function(e){e.preventDefault();x=c.getContext('2d');drawing=true;last=pt(e);try{c.setPointerCapture(e.pointerId)}catch(_){}x.beginPath();x.arc(last.x,last.y,1.1,0,7);x.fillStyle='#1f3352';x.fill()});
+ c.addEventListener('pointermove',function(e){if(!drawing)return;e.preventDefault();var p=pt(e);x.beginPath();x.moveTo(last.x,last.y);x.lineTo(p.x,p.y);x.stroke();last=p});
+ function end(){if(!drawing)return;drawing=false;if(who==='cli'&&!SIG.cli)SIG.cliDate=new Date().toLocaleDateString('fr-FR');SIG[who]=c.toDataURL('image/png');var im=$('img_'+who);im.src=SIG[who];im.classList.add('has');sigWhen()}
+ ['pointerup','pointercancel','lostpointercapture'].forEach(function(n){c.addEventListener(n,end)})});
+[].forEach.call(document.querySelectorAll('[data-clear]'),function(b){b.onclick=function(){var w=b.dataset.clear;if(w==='cli')SIG.cliDate='';sigSet(w,'')}});
+$('b_sig_keep').onclick=function(){if(!SIG.pro){alert('Signez d\'abord dans le cadre « Le prestataire ».');return}store(PROKEY,SIG.pro);alert('Votre signature est mémorisée sur cet appareil : elle sera ajoutée automatiquement à vos prochains devis.')};
+var rsT;addEventListener('resize',function(){clearTimeout(rsT);rsT=setTimeout(function(){sigDraw('pro');sigDraw('cli')},150)});
+
 var FIELDS=['c_nom','c_email','c_tel','c_adr','e_type','e_date','e_lieu','e_artiste','e_duree','e_horaires','remise','acompte','d_num','d_valid','d_tva','d_note'];
-function snapshot(){var o={lines:lines.slice()};FIELDS.forEach(function(f){o[f]=$(f).value});return o}
-function load(o){FIELDS.forEach(function(f){if(o[f]!=null)$(f).value=o[f]});lines=(o.lines||[]).map(function(l){return{d:l.d,q:l.q,u:l.u}});renderLines();paint()}
+function snapshot(){var o={lines:lines.slice(),sig_pro:SIG.pro,sig_cli:SIG.cli,sig_cli_date:SIG.cliDate};FIELDS.forEach(function(f){o[f]=$(f).value});return o}
+function load(o){FIELDS.forEach(function(f){if(o[f]!=null)$(f).value=o[f]});lines=(o.lines||[]).map(function(l){return{d:l.d,q:l.q,u:l.u}});SIG.cliDate=o.sig_cli_date||'';sigSet('pro',o.sig_pro!=null?o.sig_pro:(store(PROKEY)||''));sigSet('cli',o.sig_cli||'');renderLines();paint()}
 function drafts(){try{return JSON.parse(store(KEY)||'{}')}catch(e){return{}}}
 function listDrafts(){var d=drafts(),s=$('drafts');s.length=1;Object.keys(d).sort().reverse().forEach(function(k){var o=document.createElement('option');o.value=k;o.textContent=k+' – '+(d[k].c_nom||'sans nom')+(d[k].e_date?' – '+d[k].e_date:'');s.appendChild(o)})}
 function save(){var d=drafts(),n=$('d_num').value||nextNum();$('d_num').value=n;d[n]=snapshot();store(KEY,JSON.stringify(d));claimNum(n);listDrafts();$('saved').textContent='Devis '+n+' enregistré sur cet appareil.';paint()}
