@@ -12,6 +12,7 @@
 <style>
 :root{--sky:#eaf2fa;--sky2:#d6e5f3;--deep:#2b4468;--gold:#b8934a;--gold2:#e2c682;--txt:#2a3550;--mute:#62708c;--line:rgba(184,147,74,.35)}
 *,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
 body{margin:0;background:var(--sky);color:var(--txt);font:300 16px/1.55 Jost,system-ui,sans-serif}
 h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;color:var(--deep);margin:0;line-height:1.15}
 button,input,select,textarea{font:inherit;color:inherit}
@@ -40,13 +41,46 @@ textarea{resize:vertical}
 .btn.light{background:#fff;color:var(--deep)}
 .saved{font-size:13px;color:var(--mute);margin-top:8px}
 @media(max-width:999px){.actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:8px 0 4px}.actions .btn{padding:8px 6px;font-size:14px}.actions #b_pdf{grid-column:1/-1}}
-.drafts{margin-top:10px}
-.drafts select{margin-top:4px;transition:box-shadow .3s,border-color .3s}
-.drafts select.flash{border-color:#2e9e5b;box-shadow:0 0 0 3px rgba(46,158,91,.25)}
+/* Tabs + "Mes devis" dashboard */
+.tabs{display:flex;gap:4px;padding:0 12px;background:var(--deep);position:sticky;top:0;z-index:20;overflow-x:auto}
+.tabs button{flex:none;padding:12px 16px;border:0;background:transparent;color:#b9c6da;cursor:pointer;border-bottom:3px solid transparent;font-size:15px;white-space:nowrap}
+.tabs button.on{color:#fff;border-bottom-color:var(--gold2)}
+.tabs .cnt{display:inline-block;min-width:20px;padding:0 6px;margin-left:6px;border-radius:10px;background:rgba(255,255,255,.15);font-size:12px;text-align:center}
+.tabs .plus{margin-left:auto;color:var(--gold2)}
+@media(max-width:560px){.tabs{padding:0 4px;gap:0}.tabs button{padding:11px 10px;font-size:14px}.tabs .lg{display:none}}
+.list{max-width:980px;margin:0 auto;padding:22px 16px 60px}
+.lhead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.lhead h2{font-size:32px}
+.lbar{display:grid;gap:10px;margin-bottom:16px}
+.lbar input{background:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{padding:6px 12px;border:1px solid #c9d6e6;background:#fff;color:var(--deep);cursor:pointer;font-size:13.5px;border-radius:20px}
+.chips button.on{background:var(--deep);border-color:var(--deep);color:#fff}
+.cards{display:grid;gap:10px}
+.card{background:#fff;border:1px solid var(--line);border-left:4px solid #c9d6e6;padding:14px 16px;display:grid;gap:4px}
+.card.st-envoye{border-left-color:#d9a33a}.card.st-signe{border-left-color:#2e9e5b}.card.st-refuse{border-left-color:#c0504d}
+.card .r1{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.card .r1 b{font:500 21px "Cormorant Garamond",serif;color:var(--deep)}
+.card .r2{font-size:13.5px;color:var(--mute)}
+.card .r3{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.card .r3 strong{font-weight:500;color:var(--deep);font-size:17px}
+.card .r3 small{color:#8a96ad;font-size:12px}
+.badge{flex:none;font-size:12px;padding:3px 10px;border-radius:20px;background:#eef2f7;color:#4a5670}
+.st-envoye .badge{background:#fbf0d9;color:#8a6212}.st-signe .badge{background:#dff3e7;color:#1f7442}.st-refuse .badge{background:#f8e1e0;color:#9a3431}
+.cact{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.cact button,.cact select{width:auto;padding:7px 12px;border:1px solid #c9d6e6;background:#fff;color:var(--deep);cursor:pointer;font-size:13.5px}
+.cact .open{background:var(--deep);border-color:var(--deep);color:#fff}
+.cact .del{color:#a33;border-color:#e3c4c4;margin-left:auto}
+.empty{background:#fff;border:1px dashed #b9c6da;padding:30px 20px;text-align:center;color:var(--mute)}
+.backup{margin-top:30px;background:#fff;border:1px solid var(--line);padding:16px}
+.backup h3{font-size:20px;margin-bottom:4px}
+.backup p{font-size:13.5px;color:var(--mute);margin:0 0 10px}
+.backup .row2{display:flex;flex-wrap:wrap;gap:8px}
+.autosave{font-size:12.5px;color:#2e9e5b;min-height:18px;margin:2px 0 0}
 #b_save.done{background:#2e9e5b;border-color:#2e9e5b;color:#fff}
 .toast{position:fixed;left:50%;top:16px;transform:translate(-50%,-20px);background:#1d1d1f;color:#fff;padding:12px 18px;border-radius:12px;font-size:14px;line-height:1.4;white-space:pre-line;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:99;max-width:calc(100% - 32px)}
 .toast.on{opacity:1;transform:translate(-50%,0)}
-@media print{.toast{display:none}}
+@media print{.toast,.tabs,.list{display:none!important}}
 /* Quote preview = the printed document */
 .paper{background:#fff;box-shadow:0 20px 50px -30px rgba(43,68,104,.6);padding:42px 46px;max-width:840px;width:100%;margin:0 auto;color:#24304a}
 @media(max-width:640px){.paper{padding:24px 18px}}
@@ -116,11 +150,30 @@ td.n,th.n{text-align:right;white-space:nowrap}
 </head>
 <body>
 <div class="top"><b>Espace pro <span>· Devis</span></b><a href="../">← Retour au site</a></div>
+<nav class="tabs" aria-label="Espace pro">
+<button type="button" id="t_list">Mes devis<span class="cnt" id="t_cnt">0</span></button>
+<button type="button" id="t_edit">En cours</button>
+<button type="button" class="plus" id="t_new">+ Nouveau<span class="lg"> devis</span></button>
+</nav>
 
-<div class="app">
+<section class="list" id="v_list" hidden>
+<div class="lhead"><h2>Mes devis</h2><button type="button" class="btn" id="l_new">+ Nouveau devis</button></div>
+<div class="lbar">
+<input type="search" id="l_q" placeholder="Rechercher un client, un lieu, un n° de devis…" aria-label="Rechercher">
+<div class="chips" id="l_chips"></div>
+</div>
+<div class="cards" id="l_cards"></div>
+<div class="backup">
+<h3>Sauvegarde</h3>
+<p>Vos devis sont gardés sur cet appareil. Pour les mettre à l'abri ou les retrouver sur un autre appareil (téléphone ↔ ordinateur) : créez un fichier de sauvegarde, puis ouvrez-le avec « Restaurer » sur l'autre appareil.</p>
+<div class="row2"><button type="button" class="btn light" id="bk_out">Créer une sauvegarde</button><button type="button" class="btn light" id="bk_in">Restaurer une sauvegarde</button><input type="file" id="bk_file" accept=".json,application/json" hidden></div>
+</div>
+</section>
+
+<div class="app" id="v_edit" hidden>
 <form class="editor" id="ed" autocomplete="off" onsubmit="return false">
-<h2>Nouveau devis</h2>
-<p class="hint">Le devis se met à jour en direct (à droite sur ordinateur, en dessous sur téléphone). Rien n'est envoyé sur Internet : les brouillons restent sur cet appareil.</p>
+<h2 id="ed_title">Nouveau devis</h2>
+<p class="hint">Le devis se met à jour en direct (à droite sur ordinateur, en dessous sur téléphone). Il s'enregistre tout seul dès que le nom du client est rempli, et vous le retrouvez dans l'onglet « Mes devis ». Rien n'est envoyé sur Internet.</p>
 
 <fieldset><legend>Importer une demande</legend>
 <label for="paste">Copiez le contenu de l'email de demande reçu, puis collez-le ici</label>
@@ -162,15 +215,14 @@ td.n,th.n{text-align:right;white-space:nowrap}
 <label for="d_note">Message au client (facultatif)</label><textarea id="d_note" rows="3" placeholder="ex. Merci pour votre demande, nous serions ravis d'accompagner votre journée…"></textarea>
 </fieldset>
 
-<div class="drafts"><label for="drafts">Mes devis enregistrés</label><select id="drafts"><option value="">— Ouvrir un devis enregistré —</option></select></div>
-
 <div class="actions">
 <button type="button" class="btn" id="b_pdf">Télécharger le PDF</button>
 <button type="button" class="btn light" id="b_print">Imprimer</button>
 <button type="button" class="btn light" id="b_mail">Envoyer par email</button>
-<button type="button" class="btn light" id="b_save">Enregistrer le brouillon</button>
-<button type="button" class="btn light" id="b_new">Nouveau</button>
+<button type="button" class="btn light" id="b_save">Enregistrer</button>
+<button type="button" class="btn light" id="b_list">Mes devis</button>
 </div>
+<p class="autosave" id="autosave"></p>
 <p class="saved" id="saved"></p>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </form>
@@ -240,7 +292,8 @@ var PRESETS={
  dep:function(){return {d:'Frais de déplacement'+($('e_lieu').value?' – '+$('e_lieu').value:''),q:1,u:0}},
  hs:function(){return {d:'Heure supplémentaire',q:1,u:0}},
  free:function(){return {d:'',q:1,u:0}}};
-var lines=[];
+var lines=[],STATUS='brouillon',dirty=false,asT;
+var ST={brouillon:'Brouillon',envoye:'Envoyé',signe:'Accepté (signé)',refuse:'Refusé'};
 function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
 function eur(n){return (Math.round(n*100)/100).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €'}
 function fdate(iso){if(!iso)return '';var d=new Date(iso+'T12:00');return isNaN(d)?iso:d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
@@ -253,7 +306,7 @@ function renderLines(){var box=$('lines');box.innerHTML='';
   r.innerHTML='<input aria-label="Désignation" value="'+esc(l.d)+'" placeholder="Désignation"><input aria-label="Quantité" type="number" min="0" step="0.5" value="'+l.q+'"><input aria-label="Prix unitaire en euros" type="number" min="0" step="1" value="'+l.u+'" placeholder="Prix €"><button type="button" aria-label="Supprimer la ligne">×</button>';
   var f=r.querySelectorAll('input');
   f[0].oninput=function(){l.d=this.value;paint()};f[1].oninput=function(){l.q=parseFloat(this.value)||0;paint()};f[2].oninput=function(){l.u=parseFloat(this.value)||0;paint()};
-  r.querySelector('button').onclick=function(){lines.splice(i,1);renderLines();paint()};
+  r.querySelector('button').onclick=function(){lines.splice(i,1);renderLines();paint();markDirty()};
   box.appendChild(r)})}
 
 function paint(){
@@ -281,20 +334,49 @@ function sigDraw(who){var c=$('pad_'+who),x=sigSize(c);if(!SIG[who])return;var i
  function pt(e){var r=c.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top}}
  c.addEventListener('pointerdown',function(e){e.preventDefault();x=c.getContext('2d');drawing=true;last=pt(e);try{c.setPointerCapture(e.pointerId)}catch(_){}x.beginPath();x.arc(last.x,last.y,1.1,0,7);x.fillStyle='#1f3352';x.fill()});
  c.addEventListener('pointermove',function(e){if(!drawing)return;e.preventDefault();var p=pt(e);x.beginPath();x.moveTo(last.x,last.y);x.lineTo(p.x,p.y);x.stroke();last=p});
- function end(){if(!drawing)return;drawing=false;if(who==='cli'&&!SIG.cli)SIG.cliDate=new Date().toLocaleDateString('fr-FR');SIG[who]=c.toDataURL('image/png');var im=$('img_'+who);im.src=SIG[who];im.classList.add('has');sigWhen()}
+ function end(){if(!drawing)return;drawing=false;if(who==='cli'&&!SIG.cli)SIG.cliDate=new Date().toLocaleDateString('fr-FR');SIG[who]=c.toDataURL('image/png');var im=$('img_'+who);im.src=SIG[who];im.classList.add('has');sigWhen();markDirty()}
  ['pointerup','pointercancel','lostpointercapture'].forEach(function(n){c.addEventListener(n,end)})});
-[].forEach.call(document.querySelectorAll('[data-clear]'),function(b){b.onclick=function(){var w=b.dataset.clear;if(w==='cli')SIG.cliDate='';sigSet(w,'')}});
+[].forEach.call(document.querySelectorAll('[data-clear]'),function(b){b.onclick=function(){var w=b.dataset.clear;if(w==='cli'){SIG.cliDate='';if(STATUS==='signe')STATUS='brouillon'}sigSet(w,'');markDirty()}});
 $('b_sig_keep').onclick=function(){if(!SIG.pro){alert('Signez d\'abord dans le cadre « Le prestataire ».');return}store(PROKEY,SIG.pro);alert('Votre signature est mémorisée sur cet appareil : elle sera ajoutée automatiquement à vos prochains devis.')};
 var rsT;addEventListener('resize',function(){clearTimeout(rsT);rsT=setTimeout(function(){sigDraw('pro');sigDraw('cli')},150)});
 
 var FIELDS=['c_nom','c_email','c_tel','c_adr','e_type','e_date','e_lieu','e_artiste','e_duree','e_horaires','remise','acompte','d_num','d_valid','d_tva','d_note'];
-function snapshot(){var o={lines:lines.slice(),sig_pro:SIG.pro,sig_cli:SIG.cli,sig_cli_date:SIG.cliDate};FIELDS.forEach(function(f){o[f]=$(f).value});return o}
-function load(o){FIELDS.forEach(function(f){if(o[f]!=null)$(f).value=o[f]});lines=(o.lines||[]).map(function(l){return{d:l.d,q:l.q,u:l.u}});SIG.cliDate=o.sig_cli_date||'';sigSet('pro',o.sig_pro!=null?o.sig_pro:(store(PROKEY)||''));sigSet('cli',o.sig_cli||'');renderLines();paint()}
+function snapshot(){var o={lines:lines.slice(),sig_pro:SIG.pro,sig_cli:SIG.cli,sig_cli_date:SIG.cliDate,status:STATUS,updated:Date.now()};FIELDS.forEach(function(f){o[f]=$(f).value});o.total=totalOf(o);return o}
+function totalOf(o){var sub=(o.lines||[]).reduce(function(a,l){return a+(+l.q||0)*(+l.u||0)},0);return Math.max(0,sub-Math.max(0,parseFloat(o.remise)||0))}
+function load(o){STATUS=o.status||(o.sig_cli?'signe':'brouillon');FIELDS.forEach(function(f){if(o[f]!=null)$(f).value=o[f]});lines=(o.lines||[]).map(function(l){return{d:l.d,q:l.q,u:l.u}});SIG.cliDate=o.sig_cli_date||'';sigSet('pro',o.sig_pro!=null?o.sig_pro:(store(PROKEY)||''));sigSet('cli',o.sig_cli||'');renderLines();paint();dirty=false;$('autosave').textContent='';edTitle()}
 function drafts(){try{return JSON.parse(store(KEY)||'{}')}catch(e){return{}}}
-function listDrafts(){var d=drafts(),s=$('drafts');s.length=1;Object.keys(d).sort().reverse().forEach(function(k){var o=document.createElement('option');o.value=k;o.textContent=k+' – '+(d[k].c_nom||'sans nom')+(d[k].e_date?' – '+d[k].e_date:'');s.appendChild(o)})}
-function save(){var d=drafts(),n=$('d_num').value||nextNum();$('d_num').value=n;d[n]=snapshot();store(KEY,JSON.stringify(d));claimNum(n);listDrafts();var ok=!!drafts()[n];$('saved').textContent=ok?'Devis '+n+' enregistré sur cet appareil.':'';paint();return ok}
+function edTitle(){var n=$('d_num').value,saved=!!drafts()[n];try{sessionStorage.setItem('aj-cur',saved?n:'')}catch(e){}$('ed_title').textContent=saved?'Devis '+n+($('c_nom').value?' – '+$('c_nom').value:''):'Nouveau devis';$('t_edit').innerHTML=saved?'<span class="lg">Devis </span>'+n:'En cours'}
+function save(){var d=drafts(),n=$('d_num').value||nextNum();$('d_num').value=n;if(SIG.cli)STATUS='signe';d[n]=snapshot();store(KEY,JSON.stringify(d));claimNum(n);var ok=!!drafts()[n];if(ok){dirty=false;$('saved').textContent=''}paint();edTitle();renderList();return ok}
 function saveClick(){var b=$('b_save'),ok=save();if(!ok){alert("Impossible d'enregistrer sur cet appareil (navigation privée ?).\nUtilisez « Télécharger le PDF » pour garder une copie du devis.");return}
-toast('✓ Devis '+$('d_num').value+' enregistré\nRetrouvez-le dans « Mes devis enregistrés »');b.textContent='✓ Enregistré';b.classList.add('done');$('drafts').classList.add('flash');clearTimeout(b._t);b._t=setTimeout(function(){b.textContent='Enregistrer le brouillon';b.classList.remove('done');$('drafts').classList.remove('flash')},2500)}
+toast('✓ Devis '+$('d_num').value+' enregistré\nRetrouvez-le dans l\'onglet « Mes devis »');b.textContent='✓ Enregistré';b.classList.add('done');clearTimeout(b._t);b._t=setTimeout(function(){b.textContent='Enregistrer';b.classList.remove('done')},2500)}
+// Automatic saving: any change to a quote that has a client name is saved a moment later.
+function markDirty(){dirty=true;clearTimeout(asT);asT=setTimeout(autoSave,900)}
+function autoSave(){if(!dirty||!$('c_nom').value.trim())return;if(save()){var t=new Date();$('autosave').textContent='✓ Enregistré automatiquement à '+t.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}}
+
+// "Mes devis" dashboard: search, filter by status, open, duplicate, delete.
+var FILTER='tous';
+function view(v){if(v==='list'&&dirty)autoSave();$('v_list').hidden=v!=='list';$('v_edit').hidden=v!=='edit';$('t_list').classList.toggle('on',v==='list');$('t_edit').classList.toggle('on',v==='edit');if(v==='list')renderList();else{sigDraw('pro');sigDraw('cli')}try{sessionStorage.setItem('aj-view',v)}catch(e){}scrollTo(0,0)}
+function renderList(){var d=drafts(),keys=Object.keys(d),q=$('l_q').value.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+ $('t_cnt').textContent=keys.length;
+ var counts={tous:keys.length};keys.forEach(function(k){var st=d[k].status||(d[k].sig_cli?'signe':'brouillon');counts[st]=(counts[st]||0)+1});
+ $('l_chips').innerHTML=[['tous','Tous']].concat(Object.keys(ST).map(function(k){return[k,ST[k]]})).map(function(c){return '<button type="button" data-f="'+c[0]+'" class="'+(FILTER===c[0]?'on':'')+'">'+c[1]+' ('+(counts[c[0]]||0)+')</button>'}).join('');
+ var rows=keys.map(function(k){var o=d[k];o._k=k;o._st=o.status||(o.sig_cli?'signe':'brouillon');return o})
+  .filter(function(o){return FILTER==='tous'||o._st===FILTER})
+  .filter(function(o){if(!q)return true;return [o._k,o.c_nom,o.c_email,o.c_tel,o.e_lieu,o.e_type,o.e_artiste].join(' ').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').indexOf(q)>=0})
+  .sort(function(a,b){return (b.updated||0)-(a.updated||0)||(b._k>a._k?1:-1)});
+ var box=$('l_cards');
+ if(!keys.length){box.innerHTML='<div class="empty">Aucun devis enregistré pour l\'instant.<br>Appuyez sur « + Nouveau devis » pour commencer.</div>';return}
+ if(!rows.length){box.innerHTML='<div class="empty">Aucun devis ne correspond.</div>';return}
+ box.innerHTML=rows.map(function(o){var info=[o._k,o.e_type,o.e_date?fdate(o.e_date):'',o.e_lieu].filter(Boolean).map(esc).join(' · ');
+  return '<article class="card st-'+o._st+'" data-k="'+esc(o._k)+'"><div class="r1"><b>'+esc(o.c_nom||'Client sans nom')+'</b><span class="badge">'+ST[o._st]+'</span></div>'
+  +'<div class="r2">'+info+'</div><div class="r3"><strong>'+eur(o.total!=null?o.total:totalOf(o))+'</strong><small>'+(o.updated?'Modifié le '+new Date(o.updated).toLocaleDateString('fr-FR')+' à '+new Date(o.updated).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}):'')+'</small></div>'
+  +'<div class="cact"><button type="button" class="open" data-a="open">Ouvrir</button><select data-a="status" aria-label="Statut du devis">'+Object.keys(ST).map(function(k){return '<option value="'+k+'"'+(k===o._st?' selected':'')+'>'+ST[k]+'</option>'}).join('')+'</select><button type="button" data-a="dup">Dupliquer</button><button type="button" class="del" data-a="del">Supprimer</button></div></article>'}).join('')}
+function openDraft(k){if(dirty)autoSave();var o=drafts()[k];if(!o)return;load(o);view('edit')}
+function setStatus(k,st){var d=drafts();if(!d[k])return;d[k].status=st;d[k].updated=Date.now();store(KEY,JSON.stringify(d));if($('d_num').value===k)STATUS=st;renderList();toast('Statut : '+ST[st])}
+function dupDraft(k){if(dirty)autoSave();var o=drafts()[k];if(!o)return;var c=JSON.parse(JSON.stringify(o));c.d_num=nextNum();c.sig_cli='';c.sig_cli_date='';c.status='brouillon';load(c);save();view('edit');toast('Copie créée : '+c.d_num)}
+function delDraft(k){var d=drafts(),o=d[k];if(!o)return;if(!confirm('Supprimer définitivement le devis '+k+(o.c_nom?' – '+o.c_nom:'')+' ?\n\nIl sera effacé de cet appareil et ne pourra pas être récupéré.'))return;
+ delete d[k];store(KEY,JSON.stringify(d));if($('d_num').value===k){fresh()}renderList();toast('Devis '+k+' supprimé')}
+function newDraft(){if(dirty)autoSave();fresh();view('edit')}
 function toast(t){var e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(function(){e.classList.remove('on')},3000)}
 
 function fresh(){var o={d_num:nextNum(),d_valid:30,acompte:100,remise:0,d_tva:'TVA non applicable, art. 293 B du CGI',lines:[]};
@@ -307,10 +389,10 @@ function fromUrl(){var q=new URLSearchParams(location.search);if(![...q.keys()].
  var t=q.get('type');if(t){var tt={'Wedding':'Mariage','Corporate event':'Séminaire / entreprise','Private event':'Événement privé'}[t]||t;[].forEach.call($('e_type').options,function(o){if(o.text===tt)$('e_type').value=tt})}
  var a=q.get('artiste');if(a){[].forEach.call($('e_artiste').options,function(o){if(o.text===a)$('e_artiste').value=a})}
  lines=[PRESETS.artist(),PRESETS.son(),PRESETS.dep()];renderLines();paint();
- history.replaceState(null,'',location.pathname);$('saved').textContent='Devis pré-rempli à partir de la demande. Ajoutez vos prix.';return true}
+ history.replaceState(null,'',location.pathname);markDirty();$('saved').textContent='Devis pré-rempli à partir de la demande. Ajoutez vos prix.';return true}
 
 FIELDS.forEach(function(f){$(f).addEventListener('input',paint);$(f).addEventListener('change',paint)});
-[].forEach.call(document.querySelectorAll('.presets button'),function(b){b.onclick=function(){lines.push(PRESETS[b.dataset.p]());renderLines();paint()}});
+[].forEach.call(document.querySelectorAll('.presets button'),function(b){b.onclick=function(){lines.push(PRESETS[b.dataset.p]());renderLines();paint();markDirty()}});
 // Builds a real PDF file (one A4 page) from the quote preview: downloaded on a computer, shared/saved via the share sheet on a phone.
 function pdfName(){var n=($('c_nom').value||'client').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9]+/g,'-').replace(/^-|-$/g,'');return 'Devis-'+($('d_num').value||'brouillon')+'-'+n+'.pdf'}
 function makePdf(){var b=$('b_pdf'),label=b.textContent;save();b.disabled=true;b.textContent='Création du PDF…';
@@ -329,9 +411,23 @@ function makePdf(){var b=$('b_pdf'),label=b.textContent;save();b.disabled=true;b
 $('b_pdf').onclick=makePdf;
 $('b_print').onclick=function(){save();window.print()};
 $('b_save').onclick=saveClick;
-$('b_new').onclick=function(){if(confirm('Commencer un nouveau devis ? Pensez à enregistrer celui-ci avant.'))fresh()};
-$('drafts').onchange=function(){var d=drafts()[this.value];if(d)load(d);this.value=''};
-$('b_mail').onclick=function(){save();var tot=$('p_total').textContent,sub='Votre devis '+$('d_num').value+' – Alex Juan Live Événement';
+$('b_list').onclick=function(){view('list')};
+$('t_list').onclick=function(){view('list')};$('t_edit').onclick=function(){view('edit')};$('t_new').onclick=newDraft;$('l_new').onclick=newDraft;
+$('l_q').oninput=renderList;
+$('l_chips').onclick=function(e){var b=e.target.closest('button');if(!b)return;FILTER=b.dataset.f;renderList()};
+$('l_cards').addEventListener('click',function(e){var b=e.target.closest('button[data-a]');if(!b)return;var k=b.closest('.card').dataset.k;({open:openDraft,dup:dupDraft,del:delDraft})[b.dataset.a](k)});
+$('l_cards').addEventListener('change',function(e){if(e.target.dataset.a==='status')setStatus(e.target.closest('.card').dataset.k,e.target.value)});
+$('ed').addEventListener('input',markDirty);$('ed').addEventListener('change',markDirty);
+// Backup file: lets the quotes travel between devices.
+$('bk_out').onclick=function(){var d=drafts(),n=Object.keys(d).length;if(!n){alert('Aucun devis à sauvegarder pour l\'instant.');return}
+ var name='Sauvegarde-devis-'+new Date().toISOString().slice(0,10)+'.json',blob=new Blob([JSON.stringify({app:'aj-devis',v:1,devis:d})],{type:'application/json'}),file;try{file=new File([blob],name,{type:'application/json'})}catch(e){}
+ if(matchMedia('(pointer:coarse)').matches&&file&&navigator.canShare&&navigator.canShare({files:[file]})){navigator.share({files:[file],title:name}).catch(function(){});return}
+ var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},4000);toast('✓ Sauvegarde de '+n+' devis téléchargée')};
+$('bk_in').onclick=function(){$('bk_file').click()};
+$('bk_file').onchange=function(){var f=this.files[0];this.value='';if(!f)return;f.text().then(function(t){var j=JSON.parse(t),inc=j&&j.devis;if(!inc||typeof inc!=='object')throw 0;
+  var d=drafts(),add=0,upd=0;Object.keys(inc).forEach(function(k){if(!d[k]){add++;d[k]=inc[k]}else if((inc[k].updated||0)>(d[k].updated||0)){upd++;d[k]=inc[k]}claimNum(k)});
+  store(KEY,JSON.stringify(d));renderList();alert('Sauvegarde restaurée : '+add+' devis ajouté(s), '+upd+' mis à jour.')}).catch(function(){alert("Ce fichier n'est pas une sauvegarde de devis valide.")})};
+$('b_mail').onclick=function(){if(STATUS==='brouillon')STATUS='envoye';save();var tot=$('p_total').textContent,sub='Votre devis '+$('d_num').value+' – Alex Juan Live Événement';
  var body='Bonjour'+($('c_nom').value?' '+$('c_nom').value:'')+',\n\nMerci pour votre demande. Vous trouverez ci-joint notre devis n° '+$('d_num').value+' pour votre '+$('e_type').value.toLowerCase()+(($('e_date').value)?' du '+fdate($('e_date').value):'')+(($('e_lieu').value)?' à '+$('e_lieu').value:'')+'.\n\nMontant total : '+tot+' (acompte de '+$('p_acompte').textContent+' à la réservation).\n\nPour bloquer votre date, il vous suffit de réserver en ligne et de régler l\'acompte ici :\nhttps://cal.com/alexjuanliveevenement/reservationlive\n\nNous restons à votre disposition pour toute question.\n\nBien musicalement,\nAlex Juan\nAlex Juan Live Événement\n06 27 33 03 80 · live.alexjuan.com';
  alert('Votre messagerie va s\'ouvrir avec le message prêt. Pensez à joindre le PDF du devis (bouton « Télécharger le PDF »).');
  location.href='mailto:'+encodeURIComponent($('c_email').value)+'?subject='+encodeURIComponent(sub)+'&body='+encodeURIComponent(body)};
@@ -348,8 +444,9 @@ $('b_import').onclick=function(){var r=parseRequest($('paste').value);if(!Object
  fresh();if(r.Nom)$('c_nom').value=r.Nom;if(r.Email)$('c_email').value=r.Email;if(r['Téléphone'])$('c_tel').value=r['Téléphone'];if(r.Lieu)$('e_lieu').value=r.Lieu;
  var iso=toIso(r.Date);if(iso)$('e_date').value=iso;
  [['Type','e_type'],['Artiste','e_artiste']].forEach(function(x){var v=r[x[0]];if(!v)return;[].forEach.call($(x[1]).options,function(o){if(o.text.toLowerCase()===v.toLowerCase())$(x[1]).value=o.text})});
- lines=[PRESETS.artist(),PRESETS.son(),PRESETS.dep()];renderLines();paint();$('paste').value='';$('saved').textContent='Devis rempli à partir de la demande. Ajoutez vos prix.'};
-listDrafts();if(!fromUrl())fresh();
+ lines=[PRESETS.artist(),PRESETS.son(),PRESETS.dep()];renderLines();paint();markDirty();$('paste').value='';$('saved').textContent='Devis rempli à partir de la demande. Ajoutez vos prix.'};
+renderList();
+if(fromUrl())view('edit');else{var v='',cur='';try{v=sessionStorage.getItem('aj-view');cur=sessionStorage.getItem('aj-cur')}catch(e){}if(cur&&drafts()[cur])load(drafts()[cur]);else fresh();view(v||'list')}
 })();
 </script>
 </body>
