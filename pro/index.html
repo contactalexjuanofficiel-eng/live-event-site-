@@ -41,7 +41,12 @@ textarea{resize:vertical}
 .saved{font-size:13px;color:var(--mute);margin-top:8px}
 @media(max-width:999px){.actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:8px 0 4px}.actions .btn{padding:8px 6px;font-size:14px}.actions #b_pdf{grid-column:1/-1}}
 .drafts{margin-top:10px}
-.drafts select{margin-top:4px}
+.drafts select{margin-top:4px;transition:box-shadow .3s,border-color .3s}
+.drafts select.flash{border-color:#2e9e5b;box-shadow:0 0 0 3px rgba(46,158,91,.25)}
+#b_save.done{background:#2e9e5b;border-color:#2e9e5b;color:#fff}
+.toast{position:fixed;left:50%;top:16px;transform:translate(-50%,-20px);background:#1d1d1f;color:#fff;padding:12px 18px;border-radius:12px;font-size:14px;line-height:1.4;white-space:pre-line;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:99;max-width:calc(100% - 32px)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media print{.toast{display:none}}
 /* Quote preview = the printed document */
 .paper{background:#fff;box-shadow:0 20px 50px -30px rgba(43,68,104,.6);padding:42px 46px;max-width:840px;width:100%;margin:0 auto;color:#24304a}
 @media(max-width:640px){.paper{padding:24px 18px}}
@@ -163,10 +168,11 @@ td.n,th.n{text-align:right;white-space:nowrap}
 <button type="button" class="btn" id="b_pdf">Télécharger le PDF</button>
 <button type="button" class="btn light" id="b_print">Imprimer</button>
 <button type="button" class="btn light" id="b_mail">Envoyer par email</button>
-<button type="button" class="btn light" id="b_save">Enregistrer</button>
+<button type="button" class="btn light" id="b_save">Enregistrer le brouillon</button>
 <button type="button" class="btn light" id="b_new">Nouveau</button>
 </div>
 <p class="saved" id="saved"></p>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 </form>
 
 <div class="paper" id="paper">
@@ -286,7 +292,10 @@ function snapshot(){var o={lines:lines.slice(),sig_pro:SIG.pro,sig_cli:SIG.cli,s
 function load(o){FIELDS.forEach(function(f){if(o[f]!=null)$(f).value=o[f]});lines=(o.lines||[]).map(function(l){return{d:l.d,q:l.q,u:l.u}});SIG.cliDate=o.sig_cli_date||'';sigSet('pro',o.sig_pro!=null?o.sig_pro:(store(PROKEY)||''));sigSet('cli',o.sig_cli||'');renderLines();paint()}
 function drafts(){try{return JSON.parse(store(KEY)||'{}')}catch(e){return{}}}
 function listDrafts(){var d=drafts(),s=$('drafts');s.length=1;Object.keys(d).sort().reverse().forEach(function(k){var o=document.createElement('option');o.value=k;o.textContent=k+' – '+(d[k].c_nom||'sans nom')+(d[k].e_date?' – '+d[k].e_date:'');s.appendChild(o)})}
-function save(){var d=drafts(),n=$('d_num').value||nextNum();$('d_num').value=n;d[n]=snapshot();store(KEY,JSON.stringify(d));claimNum(n);listDrafts();$('saved').textContent='Devis '+n+' enregistré sur cet appareil.';paint()}
+function save(){var d=drafts(),n=$('d_num').value||nextNum();$('d_num').value=n;d[n]=snapshot();store(KEY,JSON.stringify(d));claimNum(n);listDrafts();var ok=!!drafts()[n];$('saved').textContent=ok?'Devis '+n+' enregistré sur cet appareil.':'';paint();return ok}
+function saveClick(){var b=$('b_save'),ok=save();if(!ok){alert("Impossible d'enregistrer sur cet appareil (navigation privée ?).\nUtilisez « Télécharger le PDF » pour garder une copie du devis.");return}
+toast('✓ Devis '+$('d_num').value+' enregistré\nRetrouvez-le dans « Mes devis enregistrés »');b.textContent='✓ Enregistré';b.classList.add('done');$('drafts').classList.add('flash');clearTimeout(b._t);b._t=setTimeout(function(){b.textContent='Enregistrer le brouillon';b.classList.remove('done');$('drafts').classList.remove('flash')},2500)}
+function toast(t){var e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(function(){e.classList.remove('on')},3000)}
 
 function fresh(){var o={d_num:nextNum(),d_valid:30,acompte:100,remise:0,d_tva:'TVA non applicable, art. 293 B du CGI',lines:[]};
  FIELDS.forEach(function(f){if(!(f in o))o[f]=''});o.e_type='Mariage';o.e_artiste='Alex Juan';load(o);
@@ -319,7 +328,7 @@ function makePdf(){var b=$('b_pdf'),label=b.textContent;save();b.disabled=true;b
  .then(function(){b.disabled=false;b.textContent=label})}
 $('b_pdf').onclick=makePdf;
 $('b_print').onclick=function(){save();window.print()};
-$('b_save').onclick=save;
+$('b_save').onclick=saveClick;
 $('b_new').onclick=function(){if(confirm('Commencer un nouveau devis ? Pensez à enregistrer celui-ci avant.'))fresh()};
 $('drafts').onchange=function(){var d=drafts()[this.value];if(d)load(d);this.value=''};
 $('b_mail').onclick=function(){save();var tot=$('p_total').textContent,sub='Votre devis '+$('d_num').value+' – Alex Juan Live Événement';
