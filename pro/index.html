@@ -101,6 +101,12 @@ td.n,th.n{text-align:right;white-space:nowrap}
 <h2>Nouveau devis</h2>
 <p class="hint">Le devis se met à jour en direct (à droite sur ordinateur, en dessous sur téléphone). Rien n'est envoyé sur Internet : les brouillons restent sur cet appareil.</p>
 
+<fieldset><legend>Importer une demande</legend>
+<label for="paste">Copiez le contenu de l'email de demande reçu, puis collez-le ici</label>
+<textarea id="paste" rows="3" placeholder="Nom … Email … Téléphone … Date … Lieu … Type … Artiste …"></textarea>
+<button type="button" class="btn2" id="b_import" style="margin-top:6px">Remplir le devis avec cette demande</button>
+</fieldset>
+
 <fieldset><legend>Client</legend>
 <label for="c_nom">Nom</label><input id="c_nom">
 <div class="row"><div><label for="c_email">Email</label><input id="c_email" type="email"></div><div><label for="c_tel">Téléphone</label><input id="c_tel" type="tel"></div></div>
@@ -260,6 +266,19 @@ $('b_mail').onclick=function(){save();var tot=$('p_total').textContent,sub='Votr
  alert('Votre messagerie va s\'ouvrir avec le message prêt. Pensez à joindre le PDF du devis (bouton « Télécharger le PDF »).');
  location.href='mailto:'+encodeURIComponent($('c_email').value)+'?subject='+encodeURIComponent(sub)+'&body='+encodeURIComponent(body)};
 
+// Fill the quote from a request email pasted as text (labels and values on the same line or on consecutive lines).
+var MONTHS={janvier:1,'février':2,fevrier:2,mars:3,avril:4,mai:5,juin:6,juillet:7,'août':8,aout:8,septembre:9,octobre:10,novembre:11,'décembre':12,decembre:12};
+function toIso(t){var m=/(\d{1,2})\s+([a-zéèûô]+)\s+(\d{4})/i.exec(t||'');if(!m)return '';var mo=MONTHS[m[2].toLowerCase()];return mo?m[3]+'-'+String(mo).padStart(2,'0')+'-'+String(+m[1]).padStart(2,'0'):''}
+function parseRequest(txt){var L=['Nom','Email','Téléphone','Date','Lieu','Type','Artiste','Message'],out={};
+ var rows=txt.replace(/\r/g,'').split('\n').map(function(x){return x.replace(/ /g,' ').trim()}).filter(Boolean);
+ for(var i=0;i<rows.length;i++){L.forEach(function(lab){if(out[lab])return;var re=new RegExp('^'+lab+'\\s*[:\\t]?\\s*(.*)$','i'),m=re.exec(rows[i]);if(!m)return;
+   var val=m[1].trim();if(!val&&rows[i+1]&&L.indexOf(rows[i+1])<0)val=rows[i+1];if(val)out[lab]=val})}
+ return out}
+$('b_import').onclick=function(){var r=parseRequest($('paste').value);if(!Object.keys(r).length){alert("Je n'ai pas reconnu de demande dans ce texte. Copiez tout le tableau de l'email (Nom, Email, Téléphone, Date…).");return}
+ fresh();if(r.Nom)$('c_nom').value=r.Nom;if(r.Email)$('c_email').value=r.Email;if(r['Téléphone'])$('c_tel').value=r['Téléphone'];if(r.Lieu)$('e_lieu').value=r.Lieu;
+ var iso=toIso(r.Date);if(iso)$('e_date').value=iso;
+ [['Type','e_type'],['Artiste','e_artiste']].forEach(function(x){var v=r[x[0]];if(!v)return;[].forEach.call($(x[1]).options,function(o){if(o.text.toLowerCase()===v.toLowerCase())$(x[1]).value=o.text})});
+ lines=[PRESETS.artist(),PRESETS.son(),PRESETS.dep()];renderLines();paint();$('paste').value='';$('saved').textContent='Devis rempli à partir de la demande. Ajoutez vos prix.'};
 listDrafts();if(!fromUrl())fresh();
 })();
 </script>
