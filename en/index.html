@@ -303,8 +303,18 @@ small a{color:inherit;text-decoration:none}
 .vcard.nothumb{background:radial-gradient(ellipse at 50% 35%,rgba(226,198,130,.25),transparent 60%),linear-gradient(160deg,#2b4468,#14223c)}
 .vcard.nothumb img{display:none}
 .vcard.nothumb::before{content:"Live video";position:absolute;left:0;right:0;bottom:28px;z-index:1;text-align:center;font:500 26px "Cormorant Garamond",Georgia,serif;color:#fff;letter-spacing:.02em}
-.lang{font-size:13px;letter-spacing:.08em;color:var(--gold)!important;border:1px solid rgba(184,147,74,.5);padding:4px 9px;text-decoration:none}
-@media(max-width:640px){nav a.lang{display:inline-block}nav{gap:12px}}
+.langsel{position:relative}
+.langbtn{display:flex;align-items:center;gap:6px;font:inherit;font-size:13px;letter-spacing:.08em;color:var(--gold);background:transparent;border:1px solid rgba(184,147,74,.5);padding:5px 9px;cursor:pointer;border-radius:0}
+.langbtn svg{width:17px!important;height:17px!important;flex:none}
+.langbtn .car{width:9px!important;height:9px!important;transition:transform .2s}
+.langsel.open .langbtn .car{transform:rotate(180deg)}
+.langmenu{position:absolute;right:0;top:calc(100% + 8px);min-width:170px;background:#fff;border:1px solid rgba(184,147,74,.45);box-shadow:0 14px 30px -12px rgba(43,68,104,.35);padding:6px;display:none;z-index:30}
+.langsel.open .langmenu{display:block}
+nav .langmenu a{display:flex!important;align-items:center;justify-content:space-between;gap:12px;padding:9px 12px;color:var(--txt,#2a3550);font-size:15px;text-decoration:none}
+nav .langmenu a[aria-current]{color:var(--gold)}
+nav .langmenu a[aria-current]::after{content:"✓"}
+@media(hover:hover) and (pointer:fine){nav .langmenu a:hover{background:var(--sky)}}
+@media(max-width:640px){nav{gap:12px}}
 .artists{border:0;margin:4px 0 0;padding:0;min-width:0}
 .artists legend{color:#b9c6da;font-size:15px;margin-bottom:10px;padding:0}
 .art-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
@@ -368,7 +378,7 @@ small a{color:inherit;text-decoration:none}
 
 <header>
 <a href="#top" aria-label="Home"><svg viewBox="0 0 120 120"><use href="#mono"/></svg></a>
-<nav><a href="#formules">Events</a><a href="#deroule">The evening</a><a href="#reserver">Book</a><a href="#videos">Videos</a><a href="#repertoire">Repertoire</a><a href="#equipe">The team</a><a href="../" class="lang" hreflang="fr" lang="fr" aria-label="Version française">FR</a><a href="#contact" class="btn">Free quote</a></nav>
+<nav><a href="#formules">Events</a><a href="#deroule">The evening</a><a href="#reserver">Book</a><a href="#videos">Videos</a><a href="#repertoire">Repertoire</a><a href="#equipe">The team</a><div class="langsel" id="langsel"><button type="button" class="langbtn" aria-haspopup="true" aria-expanded="false" aria-label="Choose language"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9.2"/><path d="M2.8 12h18.4M12 2.8c2.6 2.6 3.9 5.6 3.9 9.2s-1.3 6.6-3.9 9.2M12 2.8C9.4 5.4 8.1 8.4 8.1 12s1.3 6.6 3.9 9.2"/></svg><span>EN</span><svg class="car" viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 3.5 5 7l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><div class="langmenu"><a href="../" hreflang="fr" lang="fr">🇫🇷 Français</a><a href="./" hreflang="en" lang="en" aria-current="true">🇬🇧 English</a></div></div><a href="#contact" class="btn">Free quote</a></nav>
 </header>
 
 <main id="top">
@@ -676,5 +686,13 @@ upd()})();
 </script>
 <!-- Cloudflare Web Analytics: visit statistics without cookies -->
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "2add43b340f4457ebb4f646436ea3a8f"}'></script>
+<script>
+// Language picker (globe button): opens on tap/click, closes on outside tap or Escape.
+(function(){var s=document.getElementById('langsel');if(!s)return;var b=s.querySelector('.langbtn');
+function set(o){s.classList.toggle('open',o);b.setAttribute('aria-expanded',o)}
+b.addEventListener('click',function(e){e.stopPropagation();set(!s.classList.contains('open'))});
+document.addEventListener('click',function(e){if(!s.contains(e.target))set(false)});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false)})})();
+</script>
 </body>
 </html>
