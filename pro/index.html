@@ -49,7 +49,9 @@ textarea{resize:vertical}
 .tabs button.on{color:#fff;border-bottom-color:var(--gold2)}
 .tabs .cnt{display:inline-block;min-width:20px;padding:0 6px;margin-left:6px;border-radius:10px;background:rgba(255,255,255,.15);font-size:12px;text-align:center}
 .tabs .plus{margin-left:auto;color:var(--gold2)}
-@media(max-width:560px){.tabs{padding:0 4px;gap:0}.tabs button{padding:11px 10px;font-size:14px}.tabs .lg{display:none}}
+.tabs .sm{display:none}
+@media(max-width:560px){.top b span{display:none}.top .tr{gap:12px}}
+@media(max-width:560px){.tabs{padding:0 4px;gap:0}.tabs button{padding:11px 10px;font-size:14px}.tabs .lg{display:none}.tabs .sm{display:inline}}
 .list{max-width:980px;margin:0 auto;padding:22px 16px 60px}
 .lhead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
 .lhead h2{font-size:32px}
@@ -79,6 +81,18 @@ textarea{resize:vertical}
 .backup p{font-size:13.5px;color:var(--mute);margin:0 0 10px}
 .backup .row2{display:flex;flex-wrap:wrap;gap:8px}
 .autosave{font-size:12.5px;color:#2e9e5b;min-height:18px;margin:2px 0 0}
+/* Devis / facture mode: .fac on the editor+paper wrapper switches which parts show. */
+.app:not(.fac) .only-fac,.app.fac .only-dev{display:none!important}
+.seg{display:inline-flex;border:1px solid var(--deep);margin-bottom:14px}
+.seg button{padding:9px 18px;border:0;background:#fff;color:var(--deep);cursor:pointer;font-size:15px}
+.seg button.on{background:var(--deep);color:#fff}
+.card.st-a_payer{border-left-color:#d9a33a}.card.st-payee{border-left-color:#2e9e5b}
+.st-a_payer .badge{background:#fbf0d9;color:#8a6212}.st-payee .badge{background:#dff3e7;color:#1f7442}
+.card .link{font-size:12.5px;color:var(--gold)}
+.cact .fac{border-color:var(--gold);color:var(--deep)}
+#b_fac{background:#fff;color:var(--deep)}
+.stamp{display:inline-block;margin-top:8px;padding:4px 12px;border:2px solid #2e9e5b;color:#2e9e5b;font:600 13px Jost,sans-serif;letter-spacing:.12em;text-transform:uppercase;transform:rotate(-3deg)}
+.totals .due{font-weight:500;color:var(--deep);font-size:15px}
 #b_save.done{background:#2e9e5b;border-color:#2e9e5b;color:#fff}
 .toast{position:fixed;left:50%;top:16px;transform:translate(-50%,-20px);background:#1d1d1f;color:#fff;padding:12px 18px;border-radius:12px;font-size:14px;line-height:1.4;white-space:pre-line;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:99;max-width:calc(100% - 32px)}
 .toast.on{opacity:1;transform:translate(-50%,0)}
@@ -187,23 +201,24 @@ td.n,th.n{text-align:right;white-space:nowrap}
 </div>
 </form>
 </div>
-<div class="top"><b>Espace pro <span>· Devis</span></b><span class="tr"><button type="button" class="lk" id="lk_lock">🔒 Verrouiller</button><a href="../">← Retour au site</a></span></div>
+<div class="top"><b>Espace pro <span>· Devis &amp; factures</span></b><span class="tr"><button type="button" class="lk" id="lk_lock">🔒 Verrouiller</button><a href="../">← Retour au site</a></span></div>
 <nav class="tabs" aria-label="Espace pro">
-<button type="button" id="t_list">Mes devis<span class="cnt" id="t_cnt">0</span></button>
+<button type="button" id="t_list"><span class="lg">Devis &amp; factures</span><span class="sm">Documents</span><span class="cnt" id="t_cnt">0</span></button>
 <button type="button" id="t_edit">En cours</button>
 <button type="button" class="plus" id="t_new">+ Nouveau<span class="lg"> devis</span></button>
 </nav>
 
 <section class="list" id="v_list" hidden>
-<div class="lhead"><h2>Mes devis</h2><button type="button" class="btn" id="l_new">+ Nouveau devis</button></div>
+<div class="lhead"><h2 id="l_title">Mes devis</h2><button type="button" class="btn" id="l_new">+ Nouveau devis</button></div>
+<div class="seg" role="tablist"><button type="button" id="k_dev" class="on">Devis <span id="k_dev_n"></span></button><button type="button" id="k_fac">Factures <span id="k_fac_n"></span></button></div>
 <div class="lbar">
-<input type="search" id="l_q" placeholder="Rechercher un client, un lieu, un n° de devis…" aria-label="Rechercher">
+<input type="search" id="l_q" placeholder="Rechercher un client, un lieu, un n°…" aria-label="Rechercher">
 <div class="chips" id="l_chips"></div>
 </div>
 <div class="cards" id="l_cards"></div>
 <div class="backup">
 <h3>Sauvegarde</h3>
-<p>Vos devis sont gardés sur cet appareil. Pour les mettre à l'abri ou les retrouver sur un autre appareil (téléphone ↔ ordinateur) : créez un fichier de sauvegarde, puis ouvrez-le avec « Restaurer » sur l'autre appareil.</p>
+<p>Vos devis et factures sont gardés sur cet appareil. Pour les mettre à l'abri ou les retrouver sur un autre appareil (téléphone ↔ ordinateur) : créez un fichier de sauvegarde, puis ouvrez-le avec « Restaurer » sur l'autre appareil.</p>
 <div class="row2"><button type="button" class="btn light" id="bk_out">Créer une sauvegarde</button><button type="button" class="btn light" id="bk_in">Restaurer une sauvegarde</button><input type="file" id="bk_file" accept=".json,application/json" hidden></div>
 </div>
 </section>
@@ -244,11 +259,19 @@ td.n,th.n{text-align:right;white-space:nowrap}
 <button type="button" data-p="free">+ Ligne libre</button>
 </div>
 <div class="row" style="margin-top:10px"><div><label for="remise">Remise (€)</label><input id="remise" type="number" min="0" step="1" value="0"></div>
-<div><label for="acompte">Acompte (€)</label><input id="acompte" type="number" min="0" step="1" value="100"></div></div>
+<div class="only-dev"><label for="acompte">Acompte (€)</label><input id="acompte" type="number" min="0" step="1" value="100"></div></div>
 </fieldset>
 
-<fieldset><legend>Devis</legend>
-<div class="row"><div><label for="d_num">N° de devis</label><input id="d_num"></div><div><label for="d_valid">Valable (jours)</label><input id="d_valid" type="number" min="1" value="30"></div></div>
+<fieldset class="only-fac"><legend>Facture</legend>
+<p class="hint" style="margin:0">Facture créée à partir du devis <b id="f_from_t"></b>. Le numéro de facture est définitif.</p>
+<div class="row"><div><label for="f_date">Date de la facture</label><input id="f_date" type="date"></div><div><label for="f_due">Échéance</label><input id="f_due" placeholder="ex. À réception"></div></div>
+<label for="f_paid">Acompte déjà réglé (€)</label><input id="f_paid" type="number" min="0" step="1">
+<label for="f_pay">Moyens de paiement</label><textarea id="f_pay" rows="2"></textarea>
+<label for="f_status">Statut</label><select id="f_status"><option value="a_payer">À payer</option><option value="payee">Payée</option></select>
+</fieldset>
+
+<fieldset><legend><span class="only-dev">Devis</span><span class="only-fac">Numéro et mentions</span></legend>
+<div class="row"><div><label for="d_num"><span class="only-dev">N° de devis</span><span class="only-fac">N° de facture</span></label><input id="d_num"></div><div class="only-dev"><label for="d_valid">Valable (jours)</label><input id="d_valid" type="number" min="1" value="30"></div></div>
 <label for="d_tva">Mention TVA</label><input id="d_tva" value="TVA non applicable, art. 293 B du CGI">
 <label for="d_note">Message au client (facultatif)</label><textarea id="d_note" rows="3" placeholder="ex. Merci pour votre demande, nous serions ravis d'accompagner votre journée…"></textarea>
 </fieldset>
@@ -258,7 +281,8 @@ td.n,th.n{text-align:right;white-space:nowrap}
 <button type="button" class="btn light" id="b_print">Imprimer</button>
 <button type="button" class="btn light" id="b_mail">Envoyer par email</button>
 <button type="button" class="btn light" id="b_save">Enregistrer</button>
-<button type="button" class="btn light" id="b_list">Mes devis</button>
+<button type="button" class="btn light only-dev" id="b_fac">→ Créer la facture</button>
+<button type="button" class="btn light" id="b_list">Mes documents</button>
 </div>
 <p class="autosave" id="autosave"></p>
 <p class="saved" id="saved"></p>
@@ -269,7 +293,7 @@ td.n,th.n{text-align:right;white-space:nowrap}
 <div class="ph">
 <div class="brand"><svg viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b8934a"/><stop offset=".5" stop-color="#e2c682"/><stop offset="1" stop-color="#b8934a"/></linearGradient></defs><circle cx="60" cy="60" r="56" fill="none" stroke="url(#g)" stroke-width="2"/><circle cx="60" cy="60" r="50" fill="none" stroke="url(#g)" stroke-width=".8"/><text x="60" y="76" text-anchor="middle" font-family="Cormorant Garamond,Georgia,serif" font-size="50" font-weight="500" fill="#b8934a" letter-spacing="-3">AJ</text></svg>
 <div><h1>Alex Juan</h1><small>Live Événement</small></div></div>
-<div class="meta"><h2>Devis</h2><div>N° <b id="p_num"></b></div><div>Émis le <span id="p_today"></span></div><div>Valable jusqu'au <span id="p_valid"></span></div></div>
+<div class="meta"><h2><span class="only-dev">Devis</span><span class="only-fac">Facture</span></h2><div>N° <b id="p_num"></b></div><div class="only-dev">Émis le <span id="p_today"></span></div><div class="only-dev">Valable jusqu'au <span id="p_valid"></span></div><div class="only-fac">Date : <span id="p_fdate"></span></div><div class="only-fac" id="p_from_row">Devis n° <span id="p_from"></span></div><div class="only-fac" id="p_stamp_row"><span class="stamp">Payée</span></div></div>
 </div>
 
 <div class="parties">
@@ -290,11 +314,21 @@ SIRET : en cours d'attribution</p></div>
 <div id="p_remise_row"><span>Remise</span><span id="p_remise"></span></div>
 <div class="grand"><span>Total</span><span id="p_total"></span></div>
 <div class="muted" id="p_tva"></div>
-<div><span>Acompte à la réservation</span><span id="p_acompte"></span></div>
-<div><span>Solde (au plus tard 7 jours avant)</span><span id="p_solde"></span></div>
+<div class="only-dev"><span>Acompte à la réservation</span><span id="p_acompte"></span></div>
+<div class="only-dev"><span>Solde (au plus tard 7 jours avant)</span><span id="p_solde"></span></div>
+<div class="only-fac"><span>Acompte déjà réglé</span><span id="p_paid"></span></div>
+<div class="only-fac due"><span id="p_rest_l">Reste à payer</span><span id="p_rest"></span></div>
 </div>
 
-<div class="notes">
+<div class="notes only-fac">
+<h3>Paiement</h3>
+<ul>
+<li>Échéance : <span id="p_due"></span></li>
+<li>Moyens de paiement : <span id="p_pay"></span></li>
+<li>Pas d'escompte pour paiement anticipé. En cas de retard de paiement, des pénalités au taux de trois fois le taux d'intérêt légal sont exigibles ; pour les clients professionnels, s'y ajoute une indemnité forfaitaire de 40 € pour frais de recouvrement (art. L441-10 du Code de commerce).</li>
+</ul>
+</div>
+<div class="notes only-dev">
 <h3>Conditions</h3>
 <ul>
 <li>Réservation ferme à réception de l'acompte, payable par carte en ligne : https://cal.com/alexjuanliveevenement/reservationlive. L'acompte est déduit du total.</li>
@@ -304,7 +338,7 @@ SIRET : en cours d'attribution</p></div>
 </ul>
 </div>
 
-<div class="sign">
+<div class="sign only-dev">
 <div><b class="who">Le prestataire · Alex Juan</b><span class="when" id="when_pro"></span>
 <canvas class="pad" id="pad_pro" aria-label="Signature du prestataire"></canvas><img class="sigimg" id="img_pro" alt="">
 <div class="sigbar"><button type="button" data-clear="pro">Effacer</button><button type="button" id="b_sig_keep">Mémoriser ma signature</button></div>
@@ -344,14 +378,19 @@ var PRESETS={
  dep:function(){return {d:'Frais de déplacement'+($('e_lieu').value?' – '+$('e_lieu').value:''),q:1,u:0}},
  hs:function(){return {d:'Heure supplémentaire',q:1,u:0}},
  free:function(){return {d:'',q:1,u:0}}};
-var lines=[],STATUS='brouillon',dirty=false,asT;
+var lines=[],STATUS='brouillon',KIND='devis',FROM='',dirty=false,asT;
+var FST={a_payer:'À payer',payee:'Payée'};
+var FAC_FIELDS={f_date:'',f_due:'À réception',f_paid:'0',f_pay:'Virement bancaire, chèque ou espèces.'};
+function isoToday(){var t=new Date();return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0')}
 var ST={brouillon:'Brouillon',envoye:'Envoyé',signe:'Accepté (signé)',refuse:'Refusé'};
 function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
 function eur(n){return (Math.round(n*100)/100).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €'}
 function fdate(iso){if(!iso)return '';var d=new Date(iso+'T12:00');return isNaN(d)?iso:d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-function nextNum(){var y=new Date().getFullYear(),n=parseInt(store(CNT+'-'+y)||'0',10)+1;return 'DEV-'+y+'-'+String(n).padStart(3,'0')}
-function claimNum(num){var m=/^DEV-(\d{4})-(\d+)$/.exec(num);if(!m)return;var k=CNT+'-'+m[1],cur=parseInt(store(k)||'0',10);if(+m[2]>cur)store(k,String(+m[2]))}
+// Numbering: DEV-YYYY-NNN for quotes, FAC-YYYY-NNN for invoices (invoices must follow an unbroken sequence).
+var FCNT='aj-facture-count';
+function nextNum(pre){pre=pre||'DEV';var y=new Date().getFullYear(),n=parseInt(store((pre==='FAC'?FCNT:CNT)+'-'+y)||'0',10)+1;return pre+'-'+y+'-'+String(n).padStart(3,'0')}
+function claimNum(num){var m=/^(DEV|FAC)-(\d{4})-(\d+)$/.exec(num);if(!m)return;var k=(m[1]==='FAC'?FCNT:CNT)+'-'+m[2],cur=parseInt(store(k)||'0',10);if(+m[3]>cur)store(k,String(+m[3]))}
 
 function renderLines(){var box=$('lines');box.innerHTML='';
  lines.forEach(function(l,i){var r=document.createElement('div');r.className='line';
@@ -373,7 +412,13 @@ function paint(){
  $('p_remise_row').style.display=rem?'':'none';$('p_remise').textContent='– '+eur(rem);
  $('p_total').textContent=eur(tot);$('p_tva').textContent=$('d_tva').value;
  $('p_acompte').textContent=eur(ac);$('p_solde').textContent=eur(tot-ac);
- document.title='Devis '+$('d_num').value+($('c_nom').value?' – '+$('c_nom').value:'')}
+ var fac=KIND==='facture';$('v_edit').classList.toggle('fac',fac);$('d_num').readOnly=fac;
+ if(fac){var paid=Math.min(tot,Math.max(0,parseFloat($('f_paid').value)||0)),payee=$('f_status').value==='payee';
+  $('p_fdate').textContent=$('f_date').value?new Date($('f_date').value+'T12:00').toLocaleDateString('fr-FR'):'';
+  $('p_from').textContent=FROM;$('p_from_row').style.display=FROM?'':'none';$('f_from_t').textContent=FROM||'—';
+  $('p_paid').textContent='– '+eur(paid);$('p_rest').textContent=eur(payee?0:tot-paid);$('p_rest_l').textContent=payee?'Facture acquittée':'Reste à payer';
+  $('p_stamp_row').style.display=payee?'':'none';$('p_due').textContent=$('f_due').value||'À réception';$('p_pay').textContent=$('f_pay').value}
+ document.title=(fac?'Facture ':'Devis ')+$('d_num').value+($('c_nom').value?' – '+$('c_nom').value:'')}
 
 // Hand-written signatures: drawn with a finger, stylus or mouse on a canvas, kept as an image so they print in the PDF and save with the draft.
 var SIG={pro:'',cli:'',cliDate:''},PROKEY='aj-sig-pro';
@@ -393,12 +438,12 @@ $('b_sig_keep').onclick=function(){if(!SIG.pro){alert('Signez d\'abord dans le c
 var rsT;addEventListener('resize',function(){clearTimeout(rsT);rsT=setTimeout(function(){sigDraw('pro');sigDraw('cli')},150)});
 
 var FIELDS=['c_nom','c_email','c_tel','c_adr','e_type','e_date','e_lieu','e_artiste','e_duree','e_horaires','remise','acompte','d_num','d_valid','d_tva','d_note'];
-function snapshot(){var o={lines:lines.slice(),sig_pro:SIG.pro,sig_cli:SIG.cli,sig_cli_date:SIG.cliDate,status:STATUS,updated:Date.now()};FIELDS.forEach(function(f){o[f]=$(f).value});o.total=totalOf(o);return o}
+function snapshot(){var o={lines:lines.slice(),sig_pro:SIG.pro,sig_cli:SIG.cli,sig_cli_date:SIG.cliDate,status:STATUS,updated:Date.now(),kind:KIND};if(KIND==='facture'){o.from=FROM;o.status=$('f_status').value;Object.keys(FAC_FIELDS).forEach(function(f){o[f]=$(f).value})}else{var prev=drafts()[$('d_num').value];if(prev&&prev.facture)o.facture=prev.facture}FIELDS.forEach(function(f){o[f]=$(f).value});o.total=totalOf(o);return o}
 function totalOf(o){var sub=(o.lines||[]).reduce(function(a,l){return a+(+l.q||0)*(+l.u||0)},0);return Math.max(0,sub-Math.max(0,parseFloat(o.remise)||0))}
-function load(o){STATUS=o.status||(o.sig_cli?'signe':'brouillon');FIELDS.forEach(function(f){if(o[f]!=null)$(f).value=o[f]});lines=(o.lines||[]).map(function(l){return{d:l.d,q:l.q,u:l.u}});SIG.cliDate=o.sig_cli_date||'';sigSet('pro',o.sig_pro!=null?o.sig_pro:(store(PROKEY)||''));sigSet('cli',o.sig_cli||'');renderLines();paint();dirty=false;$('autosave').textContent='';edTitle()}
+function load(o){KIND=o.kind||'devis';FROM=o.from||'';STATUS=o.status||(KIND==='facture'?'a_payer':(o.sig_cli?'signe':'brouillon'));Object.keys(FAC_FIELDS).forEach(function(f){$(f).value=o[f]!=null?o[f]:FAC_FIELDS[f]});$('f_status').value=KIND==='facture'?STATUS:'a_payer';FIELDS.forEach(function(f){if(o[f]!=null)$(f).value=o[f]});lines=(o.lines||[]).map(function(l){return{d:l.d,q:l.q,u:l.u}});SIG.cliDate=o.sig_cli_date||'';sigSet('pro',o.sig_pro!=null?o.sig_pro:(store(PROKEY)||''));sigSet('cli',o.sig_cli||'');renderLines();paint();dirty=false;$('autosave').textContent='';edTitle()}
 function drafts(){try{return JSON.parse(store(KEY)||'{}')}catch(e){return{}}}
-function edTitle(){var n=$('d_num').value,saved=!!drafts()[n];try{sessionStorage.setItem('aj-cur',saved?n:'')}catch(e){}$('ed_title').textContent=saved?'Devis '+n+($('c_nom').value?' – '+$('c_nom').value:''):'Nouveau devis';$('t_edit').innerHTML=saved?'<span class="lg">Devis </span>'+n:'En cours'}
-function save(){var d=drafts(),n=$('d_num').value||nextNum();$('d_num').value=n;if(SIG.cli)STATUS='signe';d[n]=snapshot();store(KEY,JSON.stringify(d));claimNum(n);var ok=!!drafts()[n];if(ok){dirty=false;$('saved').textContent=''}paint();edTitle();renderList();return ok}
+function edTitle(){var n=$('d_num').value,saved=!!drafts()[n];try{sessionStorage.setItem('aj-cur',saved?n:'')}catch(e){}var w=KIND==='facture'?'Facture ':'Devis ';$('ed_title').textContent=saved?w+n+($('c_nom').value?' – '+$('c_nom').value:''):'Nouveau devis';$('t_edit').innerHTML=saved?'<span class="lg">'+w+'</span>'+n:'En cours'}
+function save(){var d=drafts(),n=$('d_num').value||nextNum(KIND==='facture'?'FAC':'DEV');$('d_num').value=n;if(KIND==='devis'&&SIG.cli)STATUS='signe';d[n]=snapshot();store(KEY,JSON.stringify(d));claimNum(n);var ok=!!drafts()[n];if(ok){dirty=false;$('saved').textContent=''}paint();edTitle();renderList();return ok}
 function saveClick(){var b=$('b_save'),ok=save();if(!ok){alert("Impossible d'enregistrer sur cet appareil (navigation privée ?).\nUtilisez « Télécharger le PDF » pour garder une copie du devis.");return}
 toast('✓ Devis '+$('d_num').value+' enregistré\nRetrouvez-le dans l\'onglet « Mes devis »');b.textContent='✓ Enregistré';b.classList.add('done');clearTimeout(b._t);b._t=setTimeout(function(){b.textContent='Enregistrer';b.classList.remove('done')},2500)}
 // Automatic saving: any change to a quote that has a client name is saved a moment later.
@@ -406,32 +451,52 @@ function markDirty(){dirty=true;clearTimeout(asT);asT=setTimeout(autoSave,900)}
 function autoSave(){if(!dirty||!$('c_nom').value.trim())return;if(save()){var t=new Date();$('autosave').textContent='✓ Enregistré automatiquement à '+t.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}}
 
 // "Mes devis" dashboard: search, filter by status, open, duplicate, delete.
-var FILTER='tous';
+var FILTER='tous',LK='devis';
 function view(v){if(v==='list'&&dirty)autoSave();$('v_list').hidden=v!=='list';$('v_edit').hidden=v!=='edit';$('t_list').classList.toggle('on',v==='list');$('t_edit').classList.toggle('on',v==='edit');if(v==='list')renderList();else{sigDraw('pro');sigDraw('cli')}try{sessionStorage.setItem('aj-view',v)}catch(e){}scrollTo(0,0)}
-function renderList(){var d=drafts(),keys=Object.keys(d),q=$('l_q').value.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
- $('t_cnt').textContent=keys.length;
- var counts={tous:keys.length};keys.forEach(function(k){var st=d[k].status||(d[k].sig_cli?'signe':'brouillon');counts[st]=(counts[st]||0)+1});
- $('l_chips').innerHTML=[['tous','Tous']].concat(Object.keys(ST).map(function(k){return[k,ST[k]]})).map(function(c){return '<button type="button" data-f="'+c[0]+'" class="'+(FILTER===c[0]?'on':'')+'">'+c[1]+' ('+(counts[c[0]]||0)+')</button>'}).join('');
- var rows=keys.map(function(k){var o=d[k];o._k=k;o._st=o.status||(o.sig_cli?'signe':'brouillon');return o})
+function kindOf(o){return o.kind||'devis'}
+function stOf(o){return o.status||(kindOf(o)==='facture'?'a_payer':(o.sig_cli?'signe':'brouillon'))}
+function setLK(k){LK=k;FILTER='tous';renderList()}
+function renderList(){var d=drafts(),all=Object.keys(d),q=$('l_q').value.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''),fac=LK==='facture',S=fac?FST:ST;
+ var keys=all.filter(function(k){return kindOf(d[k])===LK}),nf=all.filter(function(k){return kindOf(d[k])==='facture'}).length;
+ $('t_cnt').textContent=all.length;$('k_dev_n').textContent='('+(all.length-nf)+')';$('k_fac_n').textContent='('+nf+')';
+ $('k_dev').classList.toggle('on',!fac);$('k_fac').classList.toggle('on',fac);$('l_title').textContent=fac?'Mes factures':'Mes devis';
+ var counts={tous:keys.length};keys.forEach(function(k){var st=stOf(d[k]);counts[st]=(counts[st]||0)+1});
+ $('l_chips').innerHTML=[['tous','Tous']].concat(Object.keys(S).map(function(k){return[k,S[k]]})).map(function(c){return '<button type="button" data-f="'+c[0]+'" class="'+(FILTER===c[0]?'on':'')+'">'+c[1]+' ('+(counts[c[0]]||0)+')</button>'}).join('');
+ var rows=keys.map(function(k){var o=d[k];o._k=k;o._st=stOf(o);return o})
   .filter(function(o){return FILTER==='tous'||o._st===FILTER})
-  .filter(function(o){if(!q)return true;return [o._k,o.c_nom,o.c_email,o.c_tel,o.e_lieu,o.e_type,o.e_artiste].join(' ').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').indexOf(q)>=0})
+  .filter(function(o){if(!q)return true;return [o._k,o.from,o.c_nom,o.c_email,o.c_tel,o.e_lieu,o.e_type,o.e_artiste].join(' ').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').indexOf(q)>=0})
   .sort(function(a,b){return (b.updated||0)-(a.updated||0)||(b._k>a._k?1:-1)});
  var box=$('l_cards');
- if(!keys.length){box.innerHTML='<div class="empty">Aucun devis enregistré pour l\'instant.<br>Appuyez sur « + Nouveau devis » pour commencer.</div>';return}
- if(!rows.length){box.innerHTML='<div class="empty">Aucun devis ne correspond.</div>';return}
- box.innerHTML=rows.map(function(o){var info=[o._k,o.e_type,o.e_date?fdate(o.e_date):'',o.e_lieu].filter(Boolean).map(esc).join(' · ');
-  return '<article class="card st-'+o._st+'" data-k="'+esc(o._k)+'"><div class="r1"><b>'+esc(o.c_nom||'Client sans nom')+'</b><span class="badge">'+ST[o._st]+'</span></div>'
-  +'<div class="r2">'+info+'</div><div class="r3"><strong>'+eur(o.total!=null?o.total:totalOf(o))+'</strong><small>'+(o.updated?'Modifié le '+new Date(o.updated).toLocaleDateString('fr-FR')+' à '+new Date(o.updated).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}):'')+'</small></div>'
-  +'<div class="cact"><button type="button" class="open" data-a="open">Ouvrir</button><select data-a="status" aria-label="Statut du devis">'+Object.keys(ST).map(function(k){return '<option value="'+k+'"'+(k===o._st?' selected':'')+'>'+ST[k]+'</option>'}).join('')+'</select><button type="button" data-a="dup">Dupliquer</button><button type="button" class="del" data-a="del">Supprimer</button></div></article>'}).join('')}
+ if(!keys.length){box.innerHTML=fac?'<div class="empty">Aucune facture pour l\'instant.<br>Ouvrez un devis accepté et appuyez sur « Créer la facture ».</div>':'<div class="empty">Aucun devis enregistré pour l\'instant.<br>Appuyez sur « + Nouveau devis » pour commencer.</div>';return}
+ if(!rows.length){box.innerHTML='<div class="empty">Aucun document ne correspond.</div>';return}
+ box.innerHTML=rows.map(function(o){var info=[o._k,fac&&o.from?'devis '+o.from:'',o.e_type,o.e_date?fdate(o.e_date):'',o.e_lieu].filter(Boolean).map(esc).join(' · ');
+  var tot=o.total!=null?o.total:totalOf(o),amount=eur(tot);
+  if(fac&&o._st!=='payee'){var paid=Math.min(tot,Math.max(0,parseFloat(o.f_paid)||0));amount+=' <small>· reste '+eur(tot-paid)+'</small>'}
+  var facBtn=fac?'':(o.facture&&d[o.facture]?'<button type="button" class="fac" data-a="fac">Voir la facture</button>':'<button type="button" class="fac" data-a="fac">→ Facturer</button>');
+  return '<article class="card st-'+o._st+'" data-k="'+esc(o._k)+'"><div class="r1"><b>'+esc(o.c_nom||'Client sans nom')+'</b><span class="badge">'+S[o._st]+'</span></div>'
+  +'<div class="r2">'+info+'</div>'+(!fac&&o.facture&&d[o.facture]?'<div class="link">Facturé : '+esc(o.facture)+'</div>':'')
+  +'<div class="r3"><strong>'+amount+'</strong><small>'+(o.updated?'Modifié le '+new Date(o.updated).toLocaleDateString('fr-FR')+' à '+new Date(o.updated).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}):'')+'</small></div>'
+  +'<div class="cact"><button type="button" class="open" data-a="open">Ouvrir</button><select data-a="status" aria-label="Statut">'+Object.keys(S).map(function(k){return '<option value="'+k+'"'+(k===o._st?' selected':'')+'>'+S[k]+'</option>'}).join('')+'</select>'
+  +(fac?'':'<button type="button" data-a="dup">Dupliquer</button>')+facBtn+'<button type="button" class="del" data-a="del">Supprimer</button></div></article>'}).join('')}
 function openDraft(k){if(dirty)autoSave();var o=drafts()[k];if(!o)return;load(o);view('edit')}
-function setStatus(k,st){var d=drafts();if(!d[k])return;d[k].status=st;d[k].updated=Date.now();store(KEY,JSON.stringify(d));if($('d_num').value===k)STATUS=st;renderList();toast('Statut : '+ST[st])}
-function dupDraft(k){if(dirty)autoSave();var o=drafts()[k];if(!o)return;var c=JSON.parse(JSON.stringify(o));c.d_num=nextNum();c.sig_cli='';c.sig_cli_date='';c.status='brouillon';load(c);save();view('edit');toast('Copie créée : '+c.d_num)}
-function delDraft(k){var d=drafts(),o=d[k];if(!o)return;if(!confirm('Supprimer définitivement le devis '+k+(o.c_nom?' – '+o.c_nom:'')+' ?\n\nIl sera effacé de cet appareil et ne pourra pas être récupéré.'))return;
- delete d[k];store(KEY,JSON.stringify(d));if($('d_num').value===k){fresh()}renderList();toast('Devis '+k+' supprimé')}
+function setStatus(k,st){var d=drafts();if(!d[k])return;d[k].status=st;d[k].updated=Date.now();store(KEY,JSON.stringify(d));if($('d_num').value===k){STATUS=st;if(KIND==='facture'){$('f_status').value=st;paint()}}renderList();toast('Statut : '+(FST[st]||ST[st]))}
+function dupDraft(k){if(dirty)autoSave();var o=drafts()[k];if(!o)return;var c=JSON.parse(JSON.stringify(o));c.d_num=nextNum();c.sig_cli='';c.sig_cli_date='';c.status='brouillon';delete c.facture;load(c);save();view('edit');toast('Copie créée : '+c.d_num)}
+function delDraft(k){var d=drafts(),o=d[k];if(!o)return;var fac=kindOf(o)==='facture';
+ var msg=fac?'Supprimer définitivement la facture '+k+(o.c_nom?' – '+o.c_nom:'')+' ?\n\nAttention : une facture déjà envoyée au client ne doit pas être supprimée (obligation légale de conservation). Ne supprimez que si elle a été créée par erreur.':'Supprimer définitivement le devis '+k+(o.c_nom?' – '+o.c_nom:'')+' ?\n\nIl sera effacé de cet appareil et ne pourra pas être récupéré.';
+ if(!confirm(msg))return;if(fac&&o.from&&d[o.from]&&d[o.from].facture===k)delete d[o.from].facture;
+ delete d[k];store(KEY,JSON.stringify(d));if($('d_num').value===k){fresh()}renderList();toast((fac?'Facture ':'Devis ')+k+' supprimé'+(fac?'e':''))}
+// Turns a quote into an invoice: copies client, event and lines, gives the next FAC number, deducts the deposit already paid.
+function makeInvoice(k){if(dirty)autoSave();var d=drafts(),o=d[k];if(!o)return;
+ if(o.facture&&d[o.facture]){load(d[o.facture]);view('edit');return}
+ if(!confirm('Créer la facture du devis '+k+(o.c_nom?' – '+o.c_nom:'')+' ?\n\nElle reprend les prestations et les prix du devis, et reçoit un numéro de facture définitif.'))return;
+ var c=JSON.parse(JSON.stringify(o));c.kind='facture';c.from=k;c.d_num=nextNum('FAC');c.status='a_payer';c.sig_cli='';c.sig_cli_date='';delete c.facture;
+ c.f_date=isoToday();c.f_due='À réception';c.f_paid=String(parseFloat(o.acompte)||0);c.f_pay=FAC_FIELDS.f_pay;
+ d[c.d_num]=c;d[k].facture=c.d_num;if(stOf(d[k])!=='signe'){d[k].status='signe'}d[k].updated=Date.now();store(KEY,JSON.stringify(d));claimNum(c.d_num);
+ load(c);save();view('edit');toast('✓ Facture '+c.d_num+' créée')}
 function newDraft(){if(dirty)autoSave();fresh();view('edit')}
 function toast(t){var e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(function(){e.classList.remove('on')},3000)}
 
-function fresh(){var o={d_num:nextNum(),d_valid:30,acompte:100,remise:0,d_tva:'TVA non applicable, art. 293 B du CGI',lines:[]};
+function fresh(){var o={kind:'devis',d_num:nextNum(),d_valid:30,acompte:100,remise:0,d_tva:'TVA non applicable, art. 293 B du CGI',lines:[]};
  FIELDS.forEach(function(f){if(!(f in o))o[f]=''});o.e_type='Mariage';o.e_artiste='Alex Juan';load(o);
  lines=[PRESETS.artist(),PRESETS.son()];lines[1].u=0;renderLines();paint()}
 
@@ -446,7 +511,7 @@ function fromUrl(){var q=new URLSearchParams(location.search);if(![...q.keys()].
 FIELDS.forEach(function(f){$(f).addEventListener('input',paint);$(f).addEventListener('change',paint)});
 [].forEach.call(document.querySelectorAll('.presets button'),function(b){b.onclick=function(){lines.push(PRESETS[b.dataset.p]());renderLines();paint();markDirty()}});
 // Builds a real PDF file (one A4 page) from the quote preview: downloaded on a computer, shared/saved via the share sheet on a phone.
-function pdfName(){var n=($('c_nom').value||'client').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9]+/g,'-').replace(/^-|-$/g,'');return 'Devis-'+($('d_num').value||'brouillon')+'-'+n+'.pdf'}
+function pdfName(){var n=($('c_nom').value||'client').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9]+/g,'-').replace(/^-|-$/g,'');return (KIND==='facture'?'Facture-':'Devis-')+($('d_num').value||'brouillon')+'-'+n+'.pdf'}
 function makePdf(){var b=$('b_pdf'),label=b.textContent;save();b.disabled=true;b.textContent='Création du PDF…';
  var pp=$('paper');pp.classList.add('capture');
  (document.fonts?document.fonts.ready:Promise.resolve()).then(function(){return html2canvas(pp,{scale:2.5,backgroundColor:'#ffffff',useCORS:true,logging:false})}).then(function(cv){
@@ -466,10 +531,13 @@ $('b_save').onclick=saveClick;
 $('b_list').onclick=function(){view('list')};
 $('t_list').onclick=function(){view('list')};$('t_edit').onclick=function(){view('edit')};$('t_new').onclick=newDraft;$('l_new').onclick=newDraft;
 $('l_q').oninput=renderList;
+$('k_dev').onclick=function(){setLK('devis')};$('k_fac').onclick=function(){setLK('facture')};
+$('b_fac').onclick=function(){if(!$('c_nom').value.trim()){alert('Indiquez d\'abord le nom du client.');return}save();makeInvoice($('d_num').value)};
+$('f_status').onchange=function(){STATUS=this.value;paint();markDirty()};
 $('l_chips').onclick=function(e){var b=e.target.closest('button');if(!b)return;FILTER=b.dataset.f;renderList()};
-$('l_cards').addEventListener('click',function(e){var b=e.target.closest('button[data-a]');if(!b)return;var k=b.closest('.card').dataset.k;({open:openDraft,dup:dupDraft,del:delDraft})[b.dataset.a](k)});
+$('l_cards').addEventListener('click',function(e){var b=e.target.closest('button[data-a]');if(!b)return;var k=b.closest('.card').dataset.k;({open:openDraft,dup:dupDraft,del:delDraft,fac:makeInvoice})[b.dataset.a](k)});
 $('l_cards').addEventListener('change',function(e){if(e.target.dataset.a==='status')setStatus(e.target.closest('.card').dataset.k,e.target.value)});
-$('ed').addEventListener('input',markDirty);$('ed').addEventListener('change',markDirty);
+$('ed').addEventListener('input',markDirty);Object.keys(FAC_FIELDS).forEach(function(f){$(f).addEventListener('input',paint)});$('ed').addEventListener('change',markDirty);
 // Backup file: lets the quotes travel between devices.
 $('bk_out').onclick=function(){var d=drafts(),n=Object.keys(d).length;if(!n){alert('Aucun devis à sauvegarder pour l\'instant.');return}
  var name='Sauvegarde-devis-'+new Date().toISOString().slice(0,10)+'.json',blob=new Blob([JSON.stringify({app:'aj-devis',v:1,devis:d})],{type:'application/json'}),file;try{file=new File([blob],name,{type:'application/json'})}catch(e){}
@@ -479,10 +547,15 @@ $('bk_in').onclick=function(){$('bk_file').click()};
 $('bk_file').onchange=function(){var f=this.files[0];this.value='';if(!f)return;f.text().then(function(t){var j=JSON.parse(t),inc=j&&j.devis;if(!inc||typeof inc!=='object')throw 0;
   var d=drafts(),add=0,upd=0;Object.keys(inc).forEach(function(k){if(!d[k]){add++;d[k]=inc[k]}else if((inc[k].updated||0)>(d[k].updated||0)){upd++;d[k]=inc[k]}claimNum(k)});
   store(KEY,JSON.stringify(d));renderList();alert('Sauvegarde restaurée : '+add+' devis ajouté(s), '+upd+' mis à jour.')}).catch(function(){alert("Ce fichier n'est pas une sauvegarde de devis valide.")})};
-$('b_mail').onclick=function(){if(STATUS==='brouillon')STATUS='envoye';save();var tot=$('p_total').textContent,sub='Votre devis '+$('d_num').value+' – Alex Juan Live Événement';
+$('b_mail').onclick=function(){if(KIND==='facture'){mailInvoice();return}if(STATUS==='brouillon')STATUS='envoye';save();var tot=$('p_total').textContent,sub='Votre devis '+$('d_num').value+' – Alex Juan Live Événement';
  var body='Bonjour'+($('c_nom').value?' '+$('c_nom').value:'')+',\n\nMerci pour votre demande. Vous trouverez ci-joint notre devis n° '+$('d_num').value+' pour votre '+$('e_type').value.toLowerCase()+(($('e_date').value)?' du '+fdate($('e_date').value):'')+(($('e_lieu').value)?' à '+$('e_lieu').value:'')+'.\n\nMontant total : '+tot+' (acompte de '+$('p_acompte').textContent+' à la réservation).\n\nPour bloquer votre date, il vous suffit de réserver en ligne et de régler l\'acompte ici :\nhttps://cal.com/alexjuanliveevenement/reservationlive\n\nNous restons à votre disposition pour toute question.\n\nBien musicalement,\nAlex Juan\nAlex Juan Live Événement\n06 27 33 03 80 · live.alexjuan.com';
  alert('Votre messagerie va s\'ouvrir avec le message prêt. Pensez à joindre le PDF du devis (bouton « Télécharger le PDF »).');
  location.href='mailto:'+encodeURIComponent($('c_email').value)+'?subject='+encodeURIComponent(sub)+'&body='+encodeURIComponent(body)};
+
+function mailInvoice(){save();var n=$('d_num').value,sub='Votre facture '+n+' – Alex Juan Live Événement',payee=$('f_status').value==='payee';
+ var body='Bonjour'+($('c_nom').value?' '+$('c_nom').value:'')+',\n\nMerci encore pour votre confiance. Vous trouverez ci-joint la facture n° '+n+' pour votre '+$('e_type').value.toLowerCase()+(($('e_date').value)?' du '+fdate($('e_date').value):'')+'.\n\nMontant total : '+$('p_total').textContent+'\nAcompte déjà réglé : '+$('p_paid').textContent.replace('– ','')+'\n'+(payee?'Cette facture est entièrement réglée, merci !':'Reste à payer : '+$('p_rest').textContent+' ('+($('f_due').value||'à réception').toLowerCase()+')\nMoyens de paiement : '+$('f_pay').value)+'\n\nBien musicalement,\nAlex Juan\nAlex Juan Live Événement\n06 27 33 03 80 · live.alexjuan.com';
+ alert('Votre messagerie va s\'ouvrir avec le message prêt. Pensez à joindre le PDF de la facture (bouton « Télécharger le PDF »).');
+ location.href='mailto:'+encodeURIComponent($('c_email').value)+'?subject='+encodeURIComponent(sub)+'&body='+encodeURIComponent(body)}
 
 // Fill the quote from a request email pasted as text (labels and values on the same line or on consecutive lines).
 var MONTHS={janvier:1,'février':2,fevrier:2,mars:3,avril:4,mai:5,juin:6,juillet:7,'août':8,aout:8,septembre:9,octobre:10,novembre:11,'décembre':12,decembre:12};
