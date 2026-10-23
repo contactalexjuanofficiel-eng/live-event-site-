@@ -87,6 +87,33 @@ h2{font-size:clamp(32px,6vw,48px);margin-bottom:14px}
 .step::before{content:"";position:absolute;left:-34px;top:8px;width:15px;height:15px;border-radius:50%;background:var(--sky);border:2px solid var(--gold)}
 .step h3{font-size:26px}.step p{margin:4px 0 0;color:var(--mute)}
 .team .card{text-align:center}
+.team .card[data-bio]{cursor:pointer}
+.team .card .more{display:inline-flex;align-items:center;gap:6px;margin-top:16px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.team .card .more::after{content:"→";transition:transform .3s}
+.team .card[data-bio]:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+@media(hover:hover) and (pointer:fine){.team .card[data-bio]:hover .more::after{transform:translateX(4px)}}
+/* Artist bio pop-up */
+.bio{border:0;padding:0;width:min(560px,calc(100% - 32px));max-height:calc(100dvh - 40px);background:#fff;color:var(--txt);box-shadow:0 30px 80px -20px rgba(20,32,56,.6);border-top:3px solid var(--gold2)}
+.bio::backdrop{background:rgba(20,32,56,.62);backdrop-filter:blur(3px)}
+.bio[open]{animation:bioIn .35s ease}
+@keyframes bioIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.bio-in{padding:34px 30px 28px;text-align:left}
+.bio-x{position:absolute;top:10px;right:10px;width:40px;height:40px;border:0;background:transparent;font-size:28px;line-height:1;color:var(--mute);cursor:pointer}
+.bio-head{display:flex;align-items:center;gap:18px;margin-bottom:18px}
+.bio-head img{width:92px;height:92px;border-radius:50%;object-fit:cover;border:1px solid var(--gold);flex:none}
+.bio-head h3{font-size:32px;margin:0}
+.bio-head small{display:block;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin-top:4px}
+.bio p{margin:0 0 12px;color:var(--mute);font-size:16px}
+.bio h4{font:500 13px Jost,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--deep);margin:20px 0 8px}
+.bio ul{margin:0;padding:0;list-style:none}
+.bio li{position:relative;padding-left:22px;margin:6px 0;color:var(--mute);font-size:15.5px}
+.bio li::before{content:"";position:absolute;left:2px;top:.7em;width:8px;height:8px;border:1px solid var(--gold);transform:rotate(45deg)}
+.bio-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.bio-links a{padding:7px 12px;border:1px solid rgba(184,147,74,.5);font-size:14px;color:var(--deep);text-decoration:none}
+.bio .btn{margin-top:22px;display:inline-block}
+@media(max-width:480px){.bio-in{padding:30px 20px 24px}.bio-head img{width:74px;height:74px}.bio-head h3{font-size:28px}}
+html.modal-open{overflow:hidden}
+
 .avatar{width:84px;height:84px;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;font-family:"Cormorant Garamond",serif;font-size:34px;color:var(--deep);background:radial-gradient(circle at 30% 25%,#fff,var(--sky3));border:1px solid var(--gold);transition:transform .8s ease}
 .contact{background:var(--deep);color:#e9eef6;text-align:center}
 .contact h2{color:#fff}
@@ -460,11 +487,13 @@ nav .langmenu a[aria-current]::after{content:"✓"}
 <h2 class="split">Two talents, one team</h2>
 <p class="lead rv">A team that works together, from set-up to the final encore.</p>
 <div class="grid">
-<div class="card rv"><div class="avatar"><img src="../assets/avatar-alex.jpg?v=2" alt="Alex Juan"></div><h3>Alex Juan</h3><p>Lead singer and voice of the show. He carries the performance and builds the setlist with you.</p></div>
-<div class="card rv"><div class="avatar"><img src="../assets/avatar-antonin.jpg?v=2" alt="Antonin" loading="lazy"></div><h3>Antonin</h3><p>Sound and lighting engineer. Part of every show, he sets up, tunes and makes sure every guest hears and sees perfectly.</p></div>
+<div class="card rv" data-bio="bio-alex" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Discover Alex Juan"><div class="avatar"><img src="../assets/avatar-alex.jpg?v=2" alt="Alex Juan"></div><h3>Alex Juan</h3><p>Lead singer and voice of the show. He carries the performance and builds the setlist with you.</p><span class="more" aria-hidden="true">Discover</span></div>
+<div class="card rv" data-bio="bio-antonin" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Discover Antonin"><div class="avatar"><img src="../assets/avatar-antonin.jpg?v=2" alt="Antonin" loading="lazy"></div><h3>Antonin</h3><p>Sound and lighting engineer. Part of every show, he sets up, tunes and makes sure every guest hears and sees perfectly.</p><span class="more" aria-hidden="true">Discover</span></div>
 </div>
 </div>
 </section>
+<dialog class="bio" id="bio-alex" aria-labelledby="bio-alex-t"><div class="bio-in"><button type="button" class="bio-x" data-close aria-label="Close">×</button><div class="bio-head"><img src="../assets/avatar-alex.jpg?v=2" alt="" loading="lazy"><div><h3 id="bio-alex-t">Alex Juan</h3><small>Singer · voice of the show</small></div></div><p>Alex Juan is a singer based in Bruges, near Bordeaux. He created Alex Juan Live Événement to give couples, companies and families a true live moment: a voice, emotion and a show designed for your guests.</p><p>He leads the show. Together with you, he builds the repertoire, in French and English, from the ceremony to the last song of the night, including your favourite songs.</p><h4>With you, Alex…</h4><ul><li>talks with you to understand your day and your tastes</li><li>prepares a tailor-made repertoire of French and English songs</li><li>sings live at the key moments: ceremony, cocktail hour, dinner, party</li><li>creates a warm atmosphere and gets your guests involved</li></ul><h4>Listen to Alex</h4><div class="bio-links"><a href="https://www.instagram.com/alexjuanoff/" target="_blank" rel="noopener">Instagram</a><a href="https://www.tiktok.com/@alexjuanoff" target="_blank" rel="noopener">TikTok</a><a href="https://www.youtube.com/@alexjuanofficiel" target="_blank" rel="noopener">YouTube</a><a href="https://open.spotify.com/artist/4G3rz3swIwkBHNyaX5E4CF" target="_blank" rel="noopener">Spotify</a></div><a href="#contact" class="btn" data-close>Request a quote</a></div></dialog>
+<dialog class="bio" id="bio-antonin" aria-labelledby="bio-antonin-t"><div class="bio-in"><button type="button" class="bio-x" data-close aria-label="Close">×</button><div class="bio-head"><img src="../assets/avatar-antonin.jpg?v=2" alt="" loading="lazy"><div><h3 id="bio-antonin-t">Antonin</h3><small>Sound and lighting engineer</small></div></div><p>Antonin is the team's sound and lighting engineer. He is there at every show: he makes Alex's voice sound great and puts your highlights in the spotlight.</p><p>Discreet but essential, he takes care of all the technical side so you can enjoy your event with peace of mind.</p><h4>On the day, Antonin…</h4><ul><li>sets up and tunes the sound and lighting before your guests arrive</li><li>makes sure the sound is clear and balanced, near the stage and at the back of the room</li><li>adapts the lighting to each moment: soft mood for dinner, a real show for the party</li><li>packs everything away discreetly at the end</li></ul><a href="#contact" class="btn" data-close>Request a quote</a></div></dialog>
 
 <div class="perks" aria-label="Our commitments"><div class="perks-in">
 <div class="perk rv"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="14" y="6" width="20" height="36" rx="3"/><circle cx="24" cy="30" r="6"/><circle cx="24" cy="15" r="3"/></svg><b>Sound &amp; lighting included</b><span>Sound and lighting by our engineer</span></div>
@@ -691,6 +720,14 @@ function set(o){s.classList.toggle('open',o);b.setAttribute('aria-expanded',o)}
 b.addEventListener('click',function(e){e.stopPropagation();set(!s.classList.contains('open'))});
 document.addEventListener('click',function(e){if(!s.contains(e.target))set(false)});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false)})})();
+</script>
+<script>
+// Team cards open a short bio in a pop-up (tap/click, Enter or Space).
+(function(){[].forEach.call(document.querySelectorAll('.team .card[data-bio]'),function(c){var d=document.getElementById(c.dataset.bio);if(!d||!d.showModal)return;
+ function open(){d.showModal();document.documentElement.classList.add('modal-open')}
+ c.addEventListener('click',open);c.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}});
+ d.addEventListener('close',function(){document.documentElement.classList.remove('modal-open');c.focus({preventScroll:true})});
+ d.addEventListener('click',function(e){if(e.target===d||e.target.closest('[data-close]'))d.close()})})})();
 </script>
 </body>
 </html>

@@ -86,6 +86,33 @@ h2{font-size:clamp(32px,6vw,48px);margin-bottom:14px}
 .step::before{content:"";position:absolute;left:-34px;top:8px;width:15px;height:15px;border-radius:50%;background:var(--sky);border:2px solid var(--gold)}
 .step h3{font-size:26px}.step p{margin:4px 0 0;color:var(--mute)}
 .team .card{text-align:center}
+.team .card[data-bio]{cursor:pointer}
+.team .card .more{display:inline-flex;align-items:center;gap:6px;margin-top:16px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.team .card .more::after{content:"→";transition:transform .3s}
+.team .card[data-bio]:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+@media(hover:hover) and (pointer:fine){.team .card[data-bio]:hover .more::after{transform:translateX(4px)}}
+/* Artist bio pop-up */
+.bio{border:0;padding:0;width:min(560px,calc(100% - 32px));max-height:calc(100dvh - 40px);background:#fff;color:var(--txt);box-shadow:0 30px 80px -20px rgba(20,32,56,.6);border-top:3px solid var(--gold2)}
+.bio::backdrop{background:rgba(20,32,56,.62);backdrop-filter:blur(3px)}
+.bio[open]{animation:bioIn .35s ease}
+@keyframes bioIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.bio-in{padding:34px 30px 28px;text-align:left}
+.bio-x{position:absolute;top:10px;right:10px;width:40px;height:40px;border:0;background:transparent;font-size:28px;line-height:1;color:var(--mute);cursor:pointer}
+.bio-head{display:flex;align-items:center;gap:18px;margin-bottom:18px}
+.bio-head img{width:92px;height:92px;border-radius:50%;object-fit:cover;border:1px solid var(--gold);flex:none}
+.bio-head h3{font-size:32px;margin:0}
+.bio-head small{display:block;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin-top:4px}
+.bio p{margin:0 0 12px;color:var(--mute);font-size:16px}
+.bio h4{font:500 13px Jost,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--deep);margin:20px 0 8px}
+.bio ul{margin:0;padding:0;list-style:none}
+.bio li{position:relative;padding-left:22px;margin:6px 0;color:var(--mute);font-size:15.5px}
+.bio li::before{content:"";position:absolute;left:2px;top:.7em;width:8px;height:8px;border:1px solid var(--gold);transform:rotate(45deg)}
+.bio-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.bio-links a{padding:7px 12px;border:1px solid rgba(184,147,74,.5);font-size:14px;color:var(--deep);text-decoration:none}
+.bio .btn{margin-top:22px;display:inline-block}
+@media(max-width:480px){.bio-in{padding:30px 20px 24px}.bio-head img{width:74px;height:74px}.bio-head h3{font-size:28px}}
+html.modal-open{overflow:hidden}
+
 .avatar{width:84px;height:84px;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;font-family:"Cormorant Garamond",serif;font-size:34px;color:var(--deep);background:radial-gradient(circle at 30% 25%,#fff,var(--sky3));border:1px solid var(--gold);transition:transform .8s ease}
 .contact{background:var(--deep);color:#e9eef6;text-align:center}
 .contact h2{color:#fff}
@@ -460,11 +487,13 @@ nav .langmenu a[aria-current]::after{content:"✓"}
 <h2 class="split">Deux talents, une seule équipe</h2>
 <p class="lead rv">Une équipe qui travaille ensemble, de l'installation au dernier rappel.</p>
 <div class="grid">
-<div class="card rv"><div class="avatar"><img src="assets/avatar-alex.jpg?v=2" alt="Alex Juan"></div><h3>Alex Juan</h3><p>Chanteur et voix du show. Il porte le spectacle et construit le répertoire avec vous.</p></div>
-<div class="card rv"><div class="avatar"><img src="assets/avatar-antonin.jpg?v=2" alt="Antonin" loading="lazy"></div><h3>Antonin</h3><p>Ingénieur son et lumière. Présent à chaque prestation, il installe, règle et veille à ce que chaque invité entende et voie parfaitement.</p></div>
+<div class="card rv" data-bio="bio-alex" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Découvrir Alex Juan"><div class="avatar"><img src="assets/avatar-alex.jpg?v=2" alt="Alex Juan"></div><h3>Alex Juan</h3><p>Chanteur et voix du show. Il porte le spectacle et construit le répertoire avec vous.</p><span class="more" aria-hidden="true">Découvrir</span></div>
+<div class="card rv" data-bio="bio-antonin" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Découvrir Antonin"><div class="avatar"><img src="assets/avatar-antonin.jpg?v=2" alt="Antonin" loading="lazy"></div><h3>Antonin</h3><p>Ingénieur son et lumière. Présent à chaque prestation, il installe, règle et veille à ce que chaque invité entende et voie parfaitement.</p><span class="more" aria-hidden="true">Découvrir</span></div>
 </div>
 </div>
 </section>
+<dialog class="bio" id="bio-alex" aria-labelledby="bio-alex-t"><div class="bio-in"><button type="button" class="bio-x" data-close aria-label="Fermer">×</button><div class="bio-head"><img src="assets/avatar-alex.jpg?v=2" alt="" loading="lazy"><div><h3 id="bio-alex-t">Alex Juan</h3><small>Chanteur · voix du show</small></div></div><p>Alex Juan est chanteur, basé à Bruges, près de Bordeaux. Il a créé Alex Juan Live Événement pour offrir aux mariés, aux entreprises et aux familles un vrai moment de live : une voix, de l'émotion et un show pensé pour vos invités.</p><p>C'est lui qui porte le spectacle. Avec vous, il construit le répertoire, en français et en anglais, de la cérémonie à la dernière chanson de la soirée, avec vos titres coup de cœur.</p><h4>Avec vous, Alex…</h4><ul><li>échange avec vous pour comprendre votre journée et vos goûts</li><li>prépare un répertoire sur mesure, chansons françaises et anglaises</li><li>chante en live aux moments clés : cérémonie, vin d'honneur, dîner, soirée</li><li>crée une ambiance chaleureuse et fait participer vos invités</li></ul><h4>Écouter Alex</h4><div class="bio-links"><a href="https://www.instagram.com/alexjuanoff/" target="_blank" rel="noopener">Instagram</a><a href="https://www.tiktok.com/@alexjuanoff" target="_blank" rel="noopener">TikTok</a><a href="https://www.youtube.com/@alexjuanofficiel" target="_blank" rel="noopener">YouTube</a><a href="https://open.spotify.com/artist/4G3rz3swIwkBHNyaX5E4CF" target="_blank" rel="noopener">Spotify</a></div><a href="#contact" class="btn" data-close>Demander un devis</a></div></dialog>
+<dialog class="bio" id="bio-antonin" aria-labelledby="bio-antonin-t"><div class="bio-in"><button type="button" class="bio-x" data-close aria-label="Fermer">×</button><div class="bio-head"><img src="assets/avatar-antonin.jpg?v=2" alt="" loading="lazy"><div><h3 id="bio-antonin-t">Antonin</h3><small>Ingénieur son et lumière</small></div></div><p>Antonin est l'ingénieur son et lumière de l'équipe. Il est présent à chaque prestation : c'est lui qui fait sonner la voix d'Alex et qui met en lumière vos moments forts.</p><p>Discret mais indispensable, il s'occupe de toute la technique pour que vous profitiez de votre événement l'esprit tranquille.</p><h4>Le jour J, Antonin…</h4><ul><li>installe et règle le son et les lumières avant l'arrivée des invités</li><li>veille à un son clair et équilibré, près de la scène comme au fond de la salle</li><li>adapte les lumières à chaque moment : ambiance douce au dîner, vrai show pour la soirée</li><li>démonte le matériel en toute discrétion à la fin</li></ul><a href="#contact" class="btn" data-close>Demander un devis</a></div></dialog>
 
 <div class="perks" aria-label="Nos engagements"><div class="perks-in">
 <div class="perk rv"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="14" y="6" width="20" height="36" rx="3"/><circle cx="24" cy="30" r="6"/><circle cx="24" cy="15" r="3"/></svg><b>Son et lumière inclus</b><span>Son et lumière réglés par notre ingénieur</span></div>
@@ -691,6 +720,14 @@ function set(o){s.classList.toggle('open',o);b.setAttribute('aria-expanded',o)}
 b.addEventListener('click',function(e){e.stopPropagation();set(!s.classList.contains('open'))});
 document.addEventListener('click',function(e){if(!s.contains(e.target))set(false)});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false)})})();
+</script>
+<script>
+// Team cards open a short bio in a pop-up (tap/click, Enter or Space).
+(function(){[].forEach.call(document.querySelectorAll('.team .card[data-bio]'),function(c){var d=document.getElementById(c.dataset.bio);if(!d||!d.showModal)return;
+ function open(){d.showModal();document.documentElement.classList.add('modal-open')}
+ c.addEventListener('click',open);c.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}});
+ d.addEventListener('close',function(){document.documentElement.classList.remove('modal-open');c.focus({preventScroll:true})});
+ d.addEventListener('click',function(e){if(e.target===d||e.target.closest('[data-close]'))d.close()})})})();
 </script>
 </body>
 </html>
