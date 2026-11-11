@@ -197,6 +197,19 @@ small{display:block;margin-top:34px;color:#8fa1bd;font-size:13px}
 .hero h1{color:#fff}.hero h1.split{opacity:1;animation:none}
 .hero p{color:#e3ebf6}
 .hero .btn{color:#fff;border-color:var(--gold2)}
+/* "Book my date" card in the hero: the booker's direct contact. */
+.bookme{display:flex;align-items:center;gap:14px;width:min(540px,100%);margin:24px auto 0;padding:10px 12px 10px 10px;background:rgba(10,20,40,.5);border:1px solid rgba(226,198,130,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);text-align:left;opacity:0;animation:fadeup 1.1s ease 2.3s forwards}
+.bookme img{width:54px;height:54px;border-radius:50%;object-fit:cover;border:1px solid var(--gold2);flex:none}
+.bm-txt{flex:1;min-width:0;display:grid;line-height:1.3}
+.bm-txt b{font:500 23px "Cormorant Garamond",Georgia,serif;color:#fff}
+.bm-txt span{font-size:13.5px;color:#c8d4e6}
+.bm-act{display:flex;gap:8px;flex:none}
+.bm-act a{padding:8px 13px;border:1px solid var(--gold2);color:#fff;text-decoration:none;font-size:14px;white-space:nowrap}
+@media(hover:hover) and (pointer:fine){.bm-act a:hover{background:var(--gold2);color:var(--deep)}}
+@media(max-width:640px){.bookme{order:-1;margin:0 auto 16px;padding:7px 8px 7px 7px;gap:10px;animation-delay:.6s}.bookme img{width:42px;height:42px}.bm-txt b{font-size:20px}.bm-txt span{font-size:12px}.bm-act a{padding:8px 11px;font-size:13.5px}.bm-act a+a{display:none}}
+@media(prefers-reduced-motion:reduce){.bookme{opacity:1;animation:none}}
+@media(max-width:360px){.bm-txt b{font-size:19px;white-space:nowrap}.bm-txt span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.bm-act a{padding:8px 9px}}
+
 .split .w{display:inline-block;opacity:0;transform:translateY(.55em);filter:blur(7px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.2,1),filter .9s ease;transition-delay:calc(var(--i)*65ms)}
 .split.on .w{opacity:1;transform:none;filter:none}
 h2.split::after{content:"";display:block;width:96px;height:2px;margin-top:16px;background:var(--gold2);transform:scaleX(0);transform-origin:center;transition:transform 1.4s ease .6s}
@@ -430,6 +443,7 @@ nav .langmenu a[aria-current]::after{content:"✓"}
 <h1 class="split">Un show live <span class="gold">d'exception</span> pour vos plus beaux moments</h1>
 <p>Alex Juan en live, avec son et lumière inclus : mariages, séminaires et soirées d'entreprise, depuis Bordeaux et partout en France.</p>
 <a href="#contact" class="btn">Demander un devis gratuit</a>
+<div class="bookme" role="group" aria-label="Booker ma date"><img src="assets/avatar-booking.jpg?v=2" alt="" width="54" height="54"><span class="bm-txt"><b>Booker ma date</b><span>NBC Booking · 06 35 48 14 60</span></span><span class="bm-act"><a href="tel:+33635481460">📞 Appeler</a><a href="mailto:nbc.booking.co@gmail.com">✉️ Écrire</a></span></div>
 <div class="eq" aria-hidden="true"></div>
 </div>
 
