@@ -119,9 +119,9 @@ def head(lang, path, key, title, desc, ld=None, robots=None):
 <title>{title}</title>
 <meta name="description" content="{desc}">
 {'<meta name="robots" content="' + robots + '">' + chr(10) if robots else ''}<link rel="canonical" href="{canon}">
-{links}{'<meta name="google-site-verification" content="6WojCkor57sUuy-3zMINFPxUgfbvyihNKsbsoh0MQLg">' + chr(10) if path == '' else ''}<link rel="icon" href="{p}favicon.ico?v=2" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="{p}assets/favicon-32.png?v=2">
-<link rel="apple-touch-icon" sizes="180x180" href="{p}assets/apple-touch-icon.png?v=2">
+{links}{'<meta name="google-site-verification" content="6WojCkor57sUuy-3zMINFPxUgfbvyihNKsbsoh0MQLg">' + chr(10) if path == '' else ''}<link rel="icon" href="{p}favicon.ico?v=3" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="{p}assets/favicon-32.png?v=3">
+<link rel="apple-touch-icon" sizes="180x180" href="{p}assets/apple-touch-icon.png?v=3">
 <meta name="theme-color" content="#0e1116">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="{T[lang]['locale']}">
