@@ -282,7 +282,7 @@ window.ajConfirm=function(text,o,yes){show(text,o,true,yes)};})();
 <section class="stats" id="v_stats" hidden>
 <div class="lhead"><h2>Statistiques du site</h2><div class="seg" role="group" aria-label="Période" id="st_range" style="margin:0"><button type="button" data-d="7">7 jours</button><button type="button" data-d="30" class="on">30 jours</button><button type="button" data-d="90">3 mois</button><button type="button" data-d="365">1 an</button></div></div>
 <div id="st_body"><p class="empty">Chargement…</p></div>
-<p class="st-note">Statistiques anonymes, sans cookie : on ne sait pas qui est le visiteur, seulement ce qu'il fait sur le site. Les chiffres démarrent le 11 novembre 2026.</p>
+<p class="st-note">Statistiques anonymes, sans cookie : on ne sait pas qui est le visiteur, seulement ce qu'il fait sur le site. Une même personne compte une seule fois par jour. Cet appareil (et tout appareil qui ouvre l'espace pro) n'est pas compté.</p>
 </section>
 
 <div class="app" id="v_edit" hidden>
@@ -420,12 +420,13 @@ window.ajConfirm=function(text,o,yes){show(text,o,true,yes)};})();
 function sha(t){return crypto.subtle.digest('SHA-256',new TextEncoder().encode('aj-pro:'+t)).then(function(b){return Array.prototype.map.call(new Uint8Array(b),function(x){return x.toString(16).padStart(2,'0')}).join('')})}
 function unlock(){try{localStorage.setItem('aj-pro-ok',AJ_LOCK)}catch(e){}document.documentElement.classList.remove('locked');dispatchEvent(new Event('resize'))}
 function fail(el,msg){$(el.id==='lk_ans'?'lk_err2':'lk_err').textContent=msg;var f=$('lk_form');f.classList.remove('shake');void f.offsetWidth;f.classList.add('shake');el.value='';el.focus()}
-function check(v,el,msg){v=String(v||'').replace(/\D/g,'');if(!v){el.focus();return}sha(v).then(function(h){if(h===AJ_LOCK){try{localStorage.setItem('aj-stats-key',v)}catch(e){}unlock()}else fail(el,msg)})}
+function check(v,el,msg){v=String(v||'').replace(/\D/g,'');if(!v){el.focus();return}sha(v).then(function(h){if(h===AJ_LOCK){try{localStorage.setItem('aj-stats-key',v);localStorage.setItem('aj-me','1')}catch(e){}unlock()}else fail(el,msg)})}
 $('lk_go').onclick=function(){check($('lk_code').value,$('lk_code'),'Code incorrect. Réessayez ou appuyez sur « Code oublié ? ».')};
 $('lk_forgot').onclick=function(){$('lk_q').classList.add('on');$('lk_err').textContent='';$('lk_err2').textContent='';$('lk_ans').focus()};
 // The answer (a date picked as YYYY-MM-DD) is turned into DDMMYYYY and checked like the code.
 $('lk_ans_go').onclick=function(){var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec($('lk_ans').value);if(!m){$('lk_err2').textContent='Choisissez une date.';return}check(m[3]+m[2]+m[1],$('lk_ans'),'Mauvaise réponse.')};
 $('lk_lock').onclick=function(){try{localStorage.removeItem('aj-pro-ok');localStorage.removeItem('aj-stats-key')}catch(e){}$('lk_code').value='';$('lk_err').textContent='';$('lk_q').classList.remove('on');document.documentElement.classList.add('locked');scrollTo(0,0)};
+if(!document.documentElement.classList.contains('locked')){try{localStorage.setItem('aj-me','1')}catch(e){}}
 if(document.documentElement.classList.contains('locked'))setTimeout(function(){$('lk_code').focus()},50);
 })();
 </script>

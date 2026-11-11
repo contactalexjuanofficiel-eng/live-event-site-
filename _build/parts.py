@@ -197,7 +197,7 @@ def foot(lang, path, extra_js=''):
 <div class="bottom"><span>© 2026 Alex Juan Live Événement</span><nav aria-label="{t["legal_label"]}">{legal}</nav></div>
 </div></footer>
 <a class="wa" href="{wa(lang)}" target="_blank" rel="noopener" aria-label="{t["wa_label"]}">{ic("whatsapp")}</a>
-<script src="{p}assets/site.js?v=3" defer></script>
+<script src="{p}assets/site.js?v=4" defer></script>
 {extra_js}<!-- Cloudflare Web Analytics: visit statistics without cookies -->
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{{"token": "2add43b340f4457ebb4f646436ea3a8f"}}'></script>
 </body>

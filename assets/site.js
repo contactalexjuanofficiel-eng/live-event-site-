@@ -44,7 +44,8 @@
   // Anonymous visit statistics for the pro space: no cookie, no storage, no IP kept.
   // One row per page view and per key action (call, WhatsApp, quote, form sent...).
   var host=location.hostname;
-  if(/(^|\.)alexjuan\.com$/.test(host)&&!navigator.webdriver){
+  var me=false;try{me=!!localStorage.getItem('aj-me')}catch(e){}// devices that opened the pro space are not counted
+  if(/(^|\.)alexjuan\.com$/.test(host)&&!navigator.webdriver&&!me){
     var API='https://hsdjmyngjqpszfvxxova.supabase.co/rest/v1/rpc/track',KEY='sb_publishable_krUr-a-gDTCVow3-hMD1kQ_0eUyWUTH';
     var dev=matchMedia('(max-width:760px)').matches?'Téléphone':matchMedia('(max-width:1100px)').matches?'Tablette':'Ordinateur';
     var lang=root.lang&&root.lang.slice(0,2)||'fr',path=location.pathname.replace(/index\.html$/,'')||'/';
