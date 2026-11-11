@@ -40,4 +40,33 @@
   // Hero video: lighter file, never blocks the page
   var v=document.querySelector('.hero video');
   if(v){var p=v.play&&v.play();if(p&&p.catch)p.catch(function(){})}
+
+  // Anonymous visit statistics for the pro space: no cookie, no storage, no IP kept.
+  // One row per page view and per key action (call, WhatsApp, quote, form sent...).
+  var host=location.hostname;
+  if(/(^|\.)alexjuan\.com$/.test(host)&&!navigator.webdriver){
+    var API='https://hsdjmyngjqpszfvxxova.supabase.co/rest/v1/rpc/track',KEY='sb_publishable_krUr-a-gDTCVow3-hMD1kQ_0eUyWUTH';
+    var dev=matchMedia('(max-width:760px)').matches?'Téléphone':matchMedia('(max-width:1100px)').matches?'Tablette':'Ordinateur';
+    var lang=root.lang&&root.lang.slice(0,2)||'fr',path=location.pathname.replace(/index\.html$/,'')||'/';
+    var send=function(k,l,extra){var b={k:k,p:path,l:l||'',d:dev,g:lang};for(var x in extra)b[x]=extra[x];
+      try{fetch(API,{method:'POST',keepalive:true,headers:{'apikey':KEY,'Content-Type':'application/json'},body:JSON.stringify(b)}).catch(function(){})}catch(e){}};
+    window.ajTrack=function(l){send(l==='form'?'form':'click',l==='form'?'':l)};
+    // Where the visitor comes from (a visit starts when the previous page is not on this site)
+    var ref='',entry=true;try{var r=document.referrer&&new URL(document.referrer);if(r){if(r.hostname===host)entry=false;else ref=r.hostname.replace(/^www\.|^l\.|^lm\.|^m\./,'')}}catch(e){}
+    var utm=new URLSearchParams(location.search).get('utm_source'),src='Direct';
+    var NAMES=[[/google\./,'Google'],[/bing\./,'Bing'],[/instagram/,'Instagram'],[/facebook|fb\.com/,'Facebook'],[/tiktok/,'TikTok'],[/youtube/,'YouTube'],[/linkedin|lnkd/,'LinkedIn'],[/whatsapp/,'WhatsApp'],[/mariages\.net/,'Mariages.net'],[/yahoo|qwant|duckduckgo|ecosia/,'Autre moteur']];
+    if(utm)src=utm.slice(0,40);else if(ref){src=ref;NAMES.some(function(n){if(n[0].test(ref)){src=n[1];return true}})}
+    send('view','',{s:entry?src:'',e:entry});
+    // Key clicks
+    document.addEventListener('click',function(ev){var a=ev.target.closest&&ev.target.closest('a,.player button');if(!a)return;
+      var h=a.getAttribute('href')||'',l='';
+      if(a.tagName==='BUTTON')l='Vidéo regardée';
+      else if(/^tel:/.test(h))l='Appel téléphone';
+      else if(/wa\.me|whatsapp/.test(h))l='WhatsApp';
+      else if(/^mailto:/.test(h))l='Email';
+      else if(/cal\.com/.test(h))l='Rendez-vous Cal.com';
+      else if(/instagram|facebook|tiktok|youtube\.com\/@|linkedin/.test(h))l='Réseaux sociaux';
+      else if(/(reserver|booking)\/?(#.*)?$/.test(h))l='Bouton Devis';
+      if(l)send('click',l)},true);
+  }
 })();

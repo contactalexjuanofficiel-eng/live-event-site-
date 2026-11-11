@@ -136,7 +136,7 @@ def head(lang, path, key, title, desc, ld=None, robots=None):
 <link rel="preload" href="{p}assets/fonts/cormorant-garamond-500-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{p}assets/fonts/jost-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{p}assets/fonts.css">
-<link rel="stylesheet" href="{p}assets/site.css?v=2">
+<link rel="stylesheet" href="{p}assets/site.css?v=3">
 ''' + ''.join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>\n' for x in (ld or [])) + '</head>\n<body>\n'
 
 
@@ -170,10 +170,9 @@ def top(lang, path, key):
 <button class="burger" type="button" aria-label="{t["menu_open"]}" aria-expanded="false" aria-controls="drawer">{ic("menu")}</button></div>
 </div></header>
 <div class="drawer" id="drawer" aria-hidden="true" role="dialog" aria-label="Menu">
-<div class="d-top">{brand}<button class="burger d-close" type="button" aria-label="{t["menu_close"]}">{ic("close")}</button></div>
+<div class="d-top">{brand}<div class="d-r"><nav class="lang" aria-label="{t["lang_label"]}">{lang_links}</nav><button class="burger d-close" type="button" aria-label="{t["menu_close"]}">{ic("close")}</button></div></div>
 <nav aria-label="Menu">{dlinks}</nav>
-<div class="d-foot"><a href="tel:{TEL}">{ic("phone")}NBC Booking · {t["tel_txt"]}</a><a href="{wa(lang)}" target="_blank" rel="noopener">{ic("whatsapp")}WhatsApp</a><a href="mailto:{MAIL}">{ic("mail")}{MAIL}</a>
-<nav class="lang" aria-label="{t["lang_label"]}">{lang_links.replace(">FR<", ">Français<").replace(">EN<", ">English<")}</nav></div>
+<div class="d-foot"><a href="tel:{TEL}">{ic("phone")}NBC Booking · {t["tel_txt"]}</a><a href="{wa(lang)}" target="_blank" rel="noopener">{ic("whatsapp")}WhatsApp</a><a href="mailto:{MAIL}">{ic("mail")}{MAIL}</a></div>
 </div>
 ''')
 
@@ -196,7 +195,7 @@ def foot(lang, path, extra_js=''):
 <div class="bottom"><span>© 2026 Alex Juan Live Événement</span><nav aria-label="{t["legal_label"]}">{legal}</nav></div>
 </div></footer>
 <a class="wa" href="{wa(lang)}" target="_blank" rel="noopener" aria-label="{t["wa_label"]}">{ic("whatsapp")}</a>
-<script src="{p}assets/site.js?v=2" defer></script>
+<script src="{p}assets/site.js?v=3" defer></script>
 {extra_js}<!-- Cloudflare Web Analytics: visit statistics without cookies -->
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{{"token": "2add43b340f4457ebb4f646436ea3a8f"}}'></script>
 </body>

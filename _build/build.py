@@ -215,7 +215,7 @@ def contact(lang):
 <ul><li><a href="tel:{TEL}">{ic("phone")}{T[lang]["tel_txt"]}</a></li><li><a href="{wa(lang)}" target="_blank" rel="noopener">{ic("whatsapp")}WhatsApp</a></li><li><a href="mailto:{MAIL}">{ic("mail")}{MAIL}</a></li></ul>
 <p style="margin-top:24px">{X["aside_note"]}</p></aside>
 </div></section>'''
-    js = '<script>window.AJ_FORM=' + json.dumps(F['js'], ensure_ascii=False) + ';</script>\n<script src="' + p + 'assets/form.js?v=1" defer></script>\n'
+    js = '<script>window.AJ_FORM=' + json.dumps(F['js'], ensure_ascii=False) + ';</script>\n<script src="' + p + 'assets/form.js?v=2" defer></script>\n'
     return page(lang, 'contact', X['quote_page_title'], X['quote_page_desc'], body, extra_js=js)
 
 

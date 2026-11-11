@@ -43,7 +43,7 @@
     btn.disabled=true;say(L.sending);
     fetch('https://formsubmit.co/ajax/'+FORM_ID,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)})
       .then(function(r){return r.json().then(function(j){if(!r.ok||String(j.success)!=='true')throw 0})})
-      .then(function(){say(L.ok,'ok');form.reset()})
+      .then(function(){say(L.ok,'ok');form.reset();if(window.ajTrack)window.ajTrack('form')})
       .catch(function(){say(L.fail,'err');
         var body='Nom : '+data['Nom']+'\nEmail : '+data['Email']+'\nTéléphone : '+data['Téléphone']+'\nDate : '+dd+'\nLieu : '+data['Lieu']+'\nType : '+type+'\n\n'+data['Message'];
         location.href='mailto:'+MAIL+'?subject='+encodeURIComponent(data._subject)+'&body='+encodeURIComponent(body)})

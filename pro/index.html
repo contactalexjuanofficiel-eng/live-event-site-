@@ -192,6 +192,37 @@ td.n,th.n{text-align:right;white-space:nowrap}
 .ajd-b .btn{min-width:110px}
 .ajd .btn.danger{background:#8f3a2f;border-color:#8f3a2f}
 @media(prefers-reduced-motion:reduce){.ajd[open]{animation:none}}
+/* Statistiques */
+.stats{max-width:1080px;margin:0 auto;padding:22px 16px 60px}
+.st-key{background:#fff;border:1px solid var(--line);padding:18px;max-width:420px}
+.st-key input{margin:8px 0;text-align:center;letter-spacing:.3em;font-size:18px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:6px 0 14px}
+.kpi{background:#fff;border:1px solid var(--line);padding:14px 16px}
+.kpi small{display:block;color:var(--mute);font-size:13px}
+.kpi b{display:block;font:500 38px/1.1 "Cormorant Garamond",serif;color:var(--deep);margin-top:2px}
+.kpi i{font-style:normal;font-size:12.5px;color:var(--mute)}
+.kpi i.up{color:#2e7d4f}.kpi i.down{color:#a8432f}
+.card{background:#fff;border:1px solid var(--line);padding:16px;margin-bottom:12px}
+.card h3{font:500 22px "Cormorant Garamond",serif;margin-bottom:2px}
+.card .sub{font-size:13px;color:var(--mute);margin-bottom:10px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+.lc{position:relative}
+.lc svg{display:block;width:100%;overflow:visible;touch-action:pan-y}
+.lc .ax{font:11px Jost,sans-serif;fill:var(--mute)}
+.lc .tip{position:absolute;top:0;pointer-events:none;background:var(--deep);color:#fff;padding:6px 10px;font-size:12.5px;white-space:nowrap;transform:translateX(-50%);display:none}
+.lc .tip b{font-size:15px;font-weight:500}
+.bars{display:grid;gap:8px}
+.bar{display:grid;grid-template-columns:minmax(90px,38%) 1fr auto;align-items:center;gap:10px;font-size:14px}
+.bar span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar em{display:block;height:12px;background:#b07a2e;border-radius:0 4px 4px 0;min-width:3px}
+.bar b{font-weight:500;min-width:28px;text-align:right}
+.empty{color:var(--mute);font-size:14px;padding:6px 0}
+.feed{list-style:none;margin:0;padding:0;max-height:440px;overflow:auto}
+.feed li{display:grid;grid-template-columns:86px 1fr;gap:10px;padding:9px 0;border-bottom:1px solid #eee6d8;font-size:14px}
+.feed time{color:var(--mute);font-size:12.5px}
+.feed .tag{display:inline-block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8a5d1f;margin-right:6px}
+.st-note{font-size:12.5px;color:var(--mute);margin-top:6px}
+@media(max-width:760px){.kpis{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}.kpi b{font-size:32px}.stats .seg button{padding:8px 11px;font-size:14px}}
 </style>
 </head>
 <body>
@@ -229,6 +260,7 @@ window.ajConfirm=function(text,o,yes){show(text,o,true,yes)};})();
 <nav class="tabs" aria-label="Espace pro">
 <button type="button" id="t_list"><span class="lg">Devis &amp; factures</span><span class="sm">Documents</span><span class="cnt" id="t_cnt">0</span></button>
 <button type="button" id="t_edit">En cours</button>
+<button type="button" id="t_stats"><span class="lg">Statistiques</span><span class="sm">Stats</span></button>
 <button type="button" class="plus" id="t_new">+ Nouveau<span class="lg"> devis</span></button>
 </nav>
 
@@ -245,6 +277,12 @@ window.ajConfirm=function(text,o,yes){show(text,o,true,yes)};})();
 <p>Vos devis et factures sont gardés sur cet appareil. Pour les mettre à l'abri ou les retrouver sur un autre appareil (téléphone ↔ ordinateur) : créez un fichier de sauvegarde, puis ouvrez-le avec « Restaurer » sur l'autre appareil.</p>
 <div class="row2"><button type="button" class="btn light" id="bk_out">Créer une sauvegarde</button><button type="button" class="btn light" id="bk_in">Restaurer une sauvegarde</button><input type="file" id="bk_file" accept=".json,application/json" hidden></div>
 </div>
+</section>
+
+<section class="stats" id="v_stats" hidden>
+<div class="lhead"><h2>Statistiques du site</h2><div class="seg" role="group" aria-label="Période" id="st_range" style="margin:0"><button type="button" data-d="7">7 jours</button><button type="button" data-d="30" class="on">30 jours</button><button type="button" data-d="90">3 mois</button><button type="button" data-d="365">1 an</button></div></div>
+<div id="st_body"><p class="empty">Chargement…</p></div>
+<p class="st-note">Statistiques anonymes, sans cookie : on ne sait pas qui est le visiteur, seulement ce qu'il fait sur le site. Les chiffres démarrent le 11 novembre 2026.</p>
 </section>
 
 <div class="app" id="v_edit" hidden>
@@ -382,13 +420,102 @@ window.ajConfirm=function(text,o,yes){show(text,o,true,yes)};})();
 function sha(t){return crypto.subtle.digest('SHA-256',new TextEncoder().encode('aj-pro:'+t)).then(function(b){return Array.prototype.map.call(new Uint8Array(b),function(x){return x.toString(16).padStart(2,'0')}).join('')})}
 function unlock(){try{localStorage.setItem('aj-pro-ok',AJ_LOCK)}catch(e){}document.documentElement.classList.remove('locked');dispatchEvent(new Event('resize'))}
 function fail(el,msg){$(el.id==='lk_ans'?'lk_err2':'lk_err').textContent=msg;var f=$('lk_form');f.classList.remove('shake');void f.offsetWidth;f.classList.add('shake');el.value='';el.focus()}
-function check(v,el,msg){v=String(v||'').replace(/\D/g,'');if(!v){el.focus();return}sha(v).then(function(h){if(h===AJ_LOCK)unlock();else fail(el,msg)})}
+function check(v,el,msg){v=String(v||'').replace(/\D/g,'');if(!v){el.focus();return}sha(v).then(function(h){if(h===AJ_LOCK){try{localStorage.setItem('aj-stats-key',v)}catch(e){}unlock()}else fail(el,msg)})}
 $('lk_go').onclick=function(){check($('lk_code').value,$('lk_code'),'Code incorrect. Réessayez ou appuyez sur « Code oublié ? ».')};
 $('lk_forgot').onclick=function(){$('lk_q').classList.add('on');$('lk_err').textContent='';$('lk_err2').textContent='';$('lk_ans').focus()};
 // The answer (a date picked as YYYY-MM-DD) is turned into DDMMYYYY and checked like the code.
 $('lk_ans_go').onclick=function(){var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec($('lk_ans').value);if(!m){$('lk_err2').textContent='Choisissez une date.';return}check(m[3]+m[2]+m[1],$('lk_ans'),'Mauvaise réponse.')};
-$('lk_lock').onclick=function(){try{localStorage.removeItem('aj-pro-ok')}catch(e){}$('lk_code').value='';$('lk_err').textContent='';$('lk_q').classList.remove('on');document.documentElement.classList.add('locked');scrollTo(0,0)};
+$('lk_lock').onclick=function(){try{localStorage.removeItem('aj-pro-ok');localStorage.removeItem('aj-stats-key')}catch(e){}$('lk_code').value='';$('lk_err').textContent='';$('lk_q').classList.remove('on');document.documentElement.classList.add('locked');scrollTo(0,0)};
 if(document.documentElement.classList.contains('locked'))setTimeout(function(){$('lk_code').focus()},50);
+})();
+</script>
+<script>
+// Site statistics tab: reads anonymous counts from the site's Supabase project (needs the access code).
+(function(){
+var API='https://hsdjmyngjqpszfvxxova.supabase.co/rest/v1/rpc/stats',PK='sb_publishable_krUr-a-gDTCVow3-hMD1kQ_0eUyWUTH';
+var $=function(i){return document.getElementById(i)},DAYS=30,busy=0;
+var PAGES={'/':'Accueil','/prestations/':'Prestations','/le-show/':'Le show','/equipe/':"L'équipe",'/reserver/':'Réserver','/contact/':'Page devis',
+  '/chanteur-mariage-bordeaux/':'Mariage','/animation-musicale-entreprise-bordeaux/':'Entreprise','/chanteur-anniversaire-soiree-privee-bordeaux/':'Soirée privée',
+  '/en/':'Accueil (anglais)','/en/services/':'Services (anglais)','/en/the-show/':'Le show (anglais)','/en/team/':'Équipe (anglais)','/en/booking/':'Réserver (anglais)','/en/contact/':'Contact (anglais)',
+  '/mentions-legales.html':'Mentions légales','/confidentialite.html':'Confidentialité','/cgu.html':'CGU','/cgv.html':'CGV'};
+var pname=function(p){return PAGES[p]||p};
+var CN;try{CN=new Intl.DisplayNames(['fr'],{type:'region'})}catch(e){}
+var cname=function(c){if(!c||c==='XX'||c==='T1')return 'Inconnu';try{return CN?CN.of(c):c}catch(e){return c}};
+var el=function(t,cls,txt){var e=document.createElement(t);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e};
+var fmt=function(n){return Number(n||0).toLocaleString('fr-FR')};
+function key(){try{return localStorage.getItem('aj-stats-key')||''}catch(e){return ''}}
+
+function askKey(msg){var b=$('st_body');b.innerHTML='';var f=el('form','st-key');f.onsubmit=function(){return false};
+  f.appendChild(el('p',null,msg||'Entrez votre code d\'accès pour voir les statistiques.'));
+  var i=el('input');i.type='password';i.inputMode='numeric';i.placeholder='••••••••';i.setAttribute('aria-label','Code d\'accès');f.appendChild(i);
+  var go=el('button','btn','Voir les statistiques');go.type='submit';go.onclick=function(){var v=i.value.replace(/\D/g,'');if(!v)return;try{localStorage.setItem('aj-stats-key',v)}catch(e){}load()};
+  f.appendChild(go);b.appendChild(f);i.focus()}
+
+function load(){var k=key();if(!k){askKey();return}var me=++busy;
+  if(!$('st_body').querySelector('.kpis'))$('st_body').innerHTML='<p class="empty">Chargement…</p>';
+  fetch(API,{method:'POST',headers:{'apikey':PK,'Content-Type':'application/json'},body:JSON.stringify({key:k,days:DAYS})})
+    .then(function(r){return r.json().then(function(j){if(!r.ok){var e=new Error(j&&j.message||'err');e.bad=/bad key/.test(j&&j.message||'');throw e}return j})})
+    .then(function(d){if(me===busy)render(d)})
+    .catch(function(e){if(me!==busy)return;if(e.bad){try{localStorage.removeItem('aj-stats-key')}catch(x){}askKey('Code incorrect. Réessayez.')}
+      else $('st_body').innerHTML='<p class="empty">Impossible de charger les statistiques (pas de connexion Internet ?). Réessayez dans un instant.</p>'})}
+
+function kpi(label,n,prev){var k=el('div','kpi');k.appendChild(el('small',null,label));k.appendChild(el('b',null,fmt(n)));
+  if(prev!=null){var t='',c='';if(prev===0&&n===0)t='—';else if(prev===0)t='nouveau';else{var p=Math.round((n-prev)/prev*100);t=(p>0?'+':'')+p+' % vs période d\'avant';c=p>0?'up':p<0?'down':''}k.appendChild(el('i',c,t))}
+  return k}
+
+function bars(title,sub,rows,name){var c=el('div','card');c.appendChild(el('h3',null,title));if(sub)c.appendChild(el('p','sub',sub));
+  if(!rows.length){c.appendChild(el('p','empty','Pas encore de données.'));return c}
+  var max=Math.max.apply(null,rows.map(function(r){return r.n})),tot=rows.reduce(function(a,r){return a+r.n},0),w=el('div','bars');
+  rows.forEach(function(r){var b=el('div','bar'),lab=name?name(r.k):(r.k||'—'),pc=Math.round(r.n/tot*100);b.title=lab+' : '+fmt(r.n)+' ('+pc+' %)';
+    b.appendChild(el('span',null,lab));var t=el('div');var m=el('em');m.style.width=(r.n/max*100)+'%';t.appendChild(m);b.appendChild(t);b.appendChild(el('b',null,fmt(r.n)));w.appendChild(b)});
+  c.appendChild(w);return c}
+
+function line(daily){var c=el('div','card');c.appendChild(el('h3',null,'Visites par jour'));c.appendChild(el('p','sub','Une visite = une personne qui arrive sur le site (elle peut voir plusieurs pages).'));
+  var box=el('div','lc'),W=Math.max(280,($('st_body').clientWidth||900)-34),H=W<600?180:220,P={l:34,r:8,t:12,b:26},n=daily.length,max=Math.max(4,Math.max.apply(null,daily.map(function(d){return d.v})));
+  var step=Math.pow(10,Math.floor(Math.log10(max)));var nice=[1,2,5,10].map(function(m){return m*step}).filter(function(s){return max/s<=5})[0]||step;max=Math.ceil(max/nice)*nice;
+  var x=function(i){return P.l+(n<2?0:i*(W-P.l-P.r)/(n-1))},y=function(v){return P.t+(1-v/max)*(H-P.t-P.b)};
+  var ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg');svg.setAttribute('viewBox','0 0 '+W+' '+H);svg.style.height=H+'px';svg.setAttribute('role','img');
+  svg.setAttribute('aria-label','Visites par jour sur '+n+' jours, maximum '+Math.max.apply(null,daily.map(function(d){return d.v})));
+  var add=function(t,a){var e=document.createElementNS(ns,t);for(var k in a)e.setAttribute(k,a[k]);svg.appendChild(e);return e};
+  for(var g=0;g<=max;g+=nice){add('line',{x1:P.l,x2:W-P.r,y1:y(g),y2:y(g),stroke:'#ece6db','stroke-width':1,'vector-effect':'non-scaling-stroke'});var tx=add('text',{x:P.l-8,y:y(g)+4,'text-anchor':'end','class':'ax'});tx.textContent=g}
+  var pts=daily.map(function(d,i){return x(i).toFixed(1)+','+y(d.v).toFixed(1)});
+  add('path',{d:'M'+x(0)+','+y(0)+' L'+pts.join(' L')+' L'+x(n-1)+','+y(0)+'Z',fill:'rgba(176,122,46,.12)'});
+  add('polyline',{points:pts.join(' '),fill:'none',stroke:'#b07a2e','stroke-width':2,'stroke-linejoin':'round','vector-effect':'non-scaling-stroke'});
+  var dl=function(s,o){return new Date(s+'T12:00').toLocaleDateString('fr-FR',o||{day:'numeric',month:'short'})};
+  var lab=[0,Math.floor((n-1)/2),n-1].filter(function(v,i,a){return a.indexOf(v)===i});
+  lab.forEach(function(i){var t=add('text',{x:x(i),y:H-6,'text-anchor':i===0?'start':i===n-1?'end':'middle','class':'ax'});t.textContent=dl(daily[i].d)});
+  var hair=add('line',{y1:P.t,y2:H-P.b,stroke:'#0e1116','stroke-width':1,'vector-effect':'non-scaling-stroke',visibility:'hidden'});
+  box.appendChild(svg);var tip=el('div','tip');box.appendChild(tip);
+  function at(ev){var r=svg.getBoundingClientRect(),px=(ev.clientX-r.left)/r.width*W,i=Math.max(0,Math.min(n-1,Math.round((px-P.l)/((W-P.l-P.r)/Math.max(1,n-1)))));
+    hair.setAttribute('x1',x(i));hair.setAttribute('x2',x(i));hair.setAttribute('visibility','visible');var d=daily[i];
+    tip.innerHTML='';tip.appendChild(el('b',null,fmt(d.v)+' visite'+(d.v>1?'s':'')));tip.appendChild(document.createTextNode(' · '+fmt(d.p)+' page'+(d.p>1?'s':'')+' vue'+(d.p>1?'s':'')));tip.appendChild(el('div',null,dl(d.d,{weekday:'long',day:'numeric',month:'long'})));
+    tip.style.display='block';tip.style.left=Math.max(70,Math.min(r.width-70,x(i)/W*r.width))+'px'}
+  svg.addEventListener('pointermove',at);svg.addEventListener('pointerdown',at);svg.addEventListener('pointerleave',function(){tip.style.display='none';hair.setAttribute('visibility','hidden')});
+  c.appendChild(box);return c}
+
+function feed(rows){var c=el('div','card');c.appendChild(el('h3',null,'Ce que font les visiteurs, en direct'));c.appendChild(el('p','sub','Les 40 dernières arrivées et actions importantes.'));
+  if(!rows.length){c.appendChild(el('p','empty','Pas encore d\'activité.'));return c}
+  var ul=el('ul','feed');rows.forEach(function(r){var li=el('li'),d=new Date(r.t),today=new Date().toDateString()===d.toDateString();
+    li.appendChild(el('time',null,(today?'Auj. ':d.toLocaleDateString('fr-FR',{day:'numeric',month:'short'})+' ')+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})));
+    var t=el('div');
+    if(r.k==='view'){t.appendChild(el('span','tag','Visite'));t.appendChild(document.createTextNode('Arrive sur « '+pname(r.p)+' »'+(r.s?' depuis '+r.s:'')+' · '+(r.d||'')+(r.c?' · '+cname(r.c):'')))}
+    else if(r.k==='form'){t.appendChild(el('span','tag','Demande'));t.appendChild(document.createTextNode('Formulaire de devis envoyé (page « '+pname(r.p)+' »)'))}
+    else{t.appendChild(el('span','tag','Clic'));t.appendChild(document.createTextNode(r.l+' · page « '+pname(r.p)+' » · '+(r.d||'')))}
+    li.appendChild(t);ul.appendChild(li)});c.appendChild(ul);return c}
+
+var LAST,rt;addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){if(LAST&&!$('v_stats').hidden)render(LAST)},200)});
+function render(d){LAST=d;var b=$('st_body');b.innerHTML='';
+  var k=el('div','kpis');k.appendChild(kpi('Visites',d.visits,d.prev.visits));k.appendChild(kpi('Pages vues',d.views));k.appendChild(kpi('Clics importants',d.clicks,d.prev.clicks));k.appendChild(kpi('Demandes de devis',d.forms,d.prev.forms));b.appendChild(k);
+  b.appendChild(line(d.daily));
+  var g=el('div','grid2');
+  g.appendChild(bars('Ce qu\'ils font','Clics sur les boutons importants et formulaires envoyés.',d.actions));
+  g.appendChild(bars('D\'où ils viennent','Direct = lien tapé, favori, ou partagé par message (WhatsApp, SMS…).',d.sources));
+  g.appendChild(bars('Pages les plus vues',null,d.pages,pname));
+  var g2=el('div');g2.appendChild(bars('Appareils',null,d.devices));g2.appendChild(bars('Pays',null,d.countries,cname));g.appendChild(g2);
+  b.appendChild(g);b.appendChild(feed(d.recent))}
+
+[].forEach.call(document.querySelectorAll('#st_range button'),function(bt){bt.onclick=function(){DAYS=+bt.dataset.d;[].forEach.call(document.querySelectorAll('#st_range button'),function(x){x.classList.toggle('on',x===bt)});load()}});
+window.ajStats=load;
 })();
 </script>
 <script src="vendor/html2canvas.min.js"></script>
@@ -480,7 +607,7 @@ function autoSave(){if(!dirty||!$('c_nom').value.trim())return;if(save()){var t=
 
 // "Mes devis" dashboard: search, filter by status, open, duplicate, delete.
 var FILTER='tous',LK='devis';
-function view(v){if(v==='list'&&dirty)autoSave();$('v_list').hidden=v!=='list';$('v_edit').hidden=v!=='edit';$('t_list').classList.toggle('on',v==='list');$('t_edit').classList.toggle('on',v==='edit');if(v==='list')renderList();else{sigDraw('pro');sigDraw('cli')}try{sessionStorage.setItem('aj-view',v)}catch(e){}scrollTo(0,0)}
+function view(v){if(v!=='edit'&&dirty)autoSave();$('v_list').hidden=v!=='list';$('v_edit').hidden=v!=='edit';$('v_stats').hidden=v!=='stats';$('t_list').classList.toggle('on',v==='list');$('t_edit').classList.toggle('on',v==='edit');$('t_stats').classList.toggle('on',v==='stats');if(v==='list')renderList();else if(v==='stats')window.ajStats();else{sigDraw('pro');sigDraw('cli')}try{sessionStorage.setItem('aj-view',v)}catch(e){}scrollTo(0,0)}
 function kindOf(o){return o.kind||'devis'}
 function stOf(o){return o.status||(kindOf(o)==='facture'?'a_payer':(o.sig_cli?'signe':'brouillon'))}
 function setLK(k){LK=k;FILTER='tous';renderList()}
@@ -557,7 +684,7 @@ $('b_pdf').onclick=makePdf;
 $('b_print').onclick=function(){save();window.print()};
 $('b_save').onclick=saveClick;
 $('b_list').onclick=function(){view('list')};
-$('t_list').onclick=function(){view('list')};$('t_edit').onclick=function(){view('edit')};$('t_new').onclick=newDraft;$('l_new').onclick=newDraft;
+$('t_list').onclick=function(){view('list')};$('t_stats').onclick=function(){view('stats')};$('t_edit').onclick=function(){view('edit')};$('t_new').onclick=newDraft;$('l_new').onclick=newDraft;
 $('l_q').oninput=renderList;
 $('k_dev').onclick=function(){setLK('devis')};$('k_fac').onclick=function(){setLK('facture')};
 $('b_fac').onclick=function(){if(!$('c_nom').value.trim()){ajAlert('Indiquez d\'abord le nom du client.');return}save();makeInvoice($('d_num').value)};
