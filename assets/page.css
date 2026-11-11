@@ -82,6 +82,7 @@ section.blk.white{background:#fff}
 .cta .btn{color:#fff;border-color:var(--gold2)}
 .cta .btn.solid{background:var(--gold);border-color:var(--gold)}
 .cta .tel{display:block;margin-top:22px;color:var(--gold2);font:500 26px "Cormorant Garamond",serif;text-decoration:none;letter-spacing:.06em}
+.cta .who{display:block;margin-top:6px;font-size:13px;letter-spacing:.08em;color:#c8d4e6;word-break:break-word}
 .others{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:26px}
 .others a{display:block;padding:20px 22px;background:#fff;border:1px solid var(--line);text-decoration:none}
 .others b{display:block;font:500 23px "Cormorant Garamond",serif;color:var(--deep)}
