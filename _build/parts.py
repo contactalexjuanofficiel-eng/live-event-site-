@@ -8,6 +8,7 @@ import json
 SITE = 'https://live.alexjuan.com/'
 TEL, TEL_TXT, TEL_INTL = '+33635481460', '06 35 48 14 60', '+33 6 35 48 14 60'
 MAIL = 'nbc.booking.co@gmail.com'
+IG_AJ = 'https://www.instagram.com/ajliveevenement/'
 CAL = 'https://cal.com/alexjuanliveevenement/reservationlive'
 SOCIAL = [
     ('instagram', 'Instagram', 'https://www.instagram.com/alexjuanoff/'),
@@ -136,7 +137,7 @@ def head(lang, path, key, title, desc, ld=None, robots=None):
 <link rel="preload" href="{p}assets/fonts/cormorant-garamond-500-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{p}assets/fonts/jost-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{p}assets/fonts.css">
-<link rel="stylesheet" href="{p}assets/site.css?v=3">
+<link rel="stylesheet" href="{p}assets/site.css?v=4">
 ''' + ''.join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>\n' for x in (ld or [])) + '</head>\n<body>\n'
 
 
@@ -144,7 +145,7 @@ def business_ld(lang):
     return {'@context': 'https://schema.org', '@type': ['MusicGroup', 'LocalBusiness'], 'name': 'Alex Juan Live Événement',
             'description': T[lang]['foot_about'], 'url': SITE, 'email': MAIL, 'telephone': TEL, 'image': SITE + 'assets/og-image.jpg?v=4',
             'address': {'@type': 'PostalAddress', 'streetAddress': '6 avenue Maryse Bastié', 'addressLocality': 'Bruges', 'postalCode': '33520', 'addressRegion': 'Gironde', 'addressCountry': 'FR'},
-            'areaServed': {'@type': 'Country', 'name': 'France'}, 'genre': ['Chanson française', 'Pop'], 'sameAs': [u for _, _, u in SOCIAL]}
+            'areaServed': {'@type': 'Country', 'name': 'France'}, 'genre': ['Chanson française', 'Pop'], 'sameAs': [IG_AJ] + [u for _, _, u in SOCIAL]}
 
 
 def top(lang, path, key):
@@ -172,7 +173,7 @@ def top(lang, path, key):
 <div class="drawer" id="drawer" aria-hidden="true" role="dialog" aria-label="Menu">
 <div class="d-top">{brand}<div class="d-r"><nav class="lang" aria-label="{t["lang_label"]}">{lang_links}</nav><button class="burger d-close" type="button" aria-label="{t["menu_close"]}">{ic("close")}</button></div></div>
 <nav aria-label="Menu">{dlinks}</nav>
-<div class="d-foot"><a href="tel:{TEL}">{ic("phone")}NBC Booking · {t["tel_txt"]}</a><a href="{wa(lang)}" target="_blank" rel="noopener">{ic("whatsapp")}WhatsApp</a><a href="mailto:{MAIL}">{ic("mail")}{MAIL}</a></div>
+<div class="d-foot"><a href="tel:{TEL}">{ic("phone")}NBC Booking · {t["tel_txt"]}</a><a href="{wa(lang)}" target="_blank" rel="noopener">{ic("whatsapp")}WhatsApp</a><a href="mailto:{MAIL}">{ic("mail")}{MAIL}</a><a href="{IG_AJ}" target="_blank" rel="noopener">{ic("instagram")}@ajliveevenement</a></div>
 </div>
 ''')
 
@@ -187,6 +188,7 @@ def foot(lang, path, extra_js=''):
 <div class="cols">
 <div><a class="brand" href="{url(lang, "home", p)}" aria-label="{t["brand_home"]}"><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#mono"/></svg><span><b>Alex Juan</b><small>Live événement</small></span></a>
 <p class="f-about">{t["foot_about"]}</p>
+<a class="f-ig" href="{IG_AJ}" target="_blank" rel="noopener">{ic("instagram")}@ajliveevenement</a>
 <div class="soc">{soc}</div></div>
 <div><h4>{t["foot_services"]}</h4><ul>{svc}</ul></div>
 <div><h4>{t["foot_site"]}</h4><ul>{nav}<li><a href="{url(lang, "contact", p)}">{t["quote"]}</a></li></ul></div>

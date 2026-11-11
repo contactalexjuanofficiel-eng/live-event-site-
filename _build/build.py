@@ -6,7 +6,7 @@ The private quote tool in pro/ is not generated here.
 """
 import json, os, re, sys
 sys.path.insert(0, os.path.dirname(__file__))
-from parts import head, top, foot, ic, url, prefix, business_ld, PATHS, T, TEL, MAIL, CAL, SITE, wa
+from parts import head, top, foot, ic, url, prefix, business_ld, PATHS, T, TEL, MAIL, CAL, SITE, wa, IG_AJ
 import content as C
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -212,7 +212,7 @@ def contact(lang):
 </form>
 <aside class="aside fade"><span class="eyebrow">{T[lang]["booking"]}</span><h3>{X["aside_title"]}</h3><p>{X["aside_text"]}</p>
 <div class="who"><img src="{p}assets/avatar-booking.jpg?v=2" alt="" width="64" height="64" loading="lazy"><div><b>NBC Booking</b><span>{X["aside_role"]}</span></div></div>
-<ul><li><a href="tel:{TEL}">{ic("phone")}{T[lang]["tel_txt"]}</a></li><li><a href="{wa(lang)}" target="_blank" rel="noopener">{ic("whatsapp")}WhatsApp</a></li><li><a href="mailto:{MAIL}">{ic("mail")}{MAIL}</a></li></ul>
+<ul><li><a href="tel:{TEL}">{ic("phone")}{T[lang]["tel_txt"]}</a></li><li><a href="{wa(lang)}" target="_blank" rel="noopener">{ic("whatsapp")}WhatsApp</a></li><li><a href="mailto:{MAIL}">{ic("mail")}{MAIL}</a></li><li><a href="{IG_AJ}" target="_blank" rel="noopener">{ic("instagram")}@ajliveevenement</a></li></ul>
 <p style="margin-top:24px">{X["aside_note"]}</p></aside>
 </div></section>'''
     js = '<script>window.AJ_FORM=' + json.dumps(F['js'], ensure_ascii=False) + ';</script>\n<script src="' + p + 'assets/form.js?v=2" defer></script>\n'
