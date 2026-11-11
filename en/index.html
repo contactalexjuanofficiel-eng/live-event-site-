@@ -729,7 +729,9 @@ sl.forEach(function(s,i){var b=s.querySelector('.vcard');b.addEventListener('cli
 var f=document.createElement('iframe');f.src='https://www.youtube-nocookie.com/embed/'+b.dataset.id+'?autoplay=1&playsinline=1&rel=0&modestbranding=1';f.title='Alex Juan show video';
 f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';f.allowFullscreen=true;f._card=b;s.replaceChild(f,b)})});
 var stopT;tr.addEventListener('scroll',function(){clearTimeout(stopT);stopT=setTimeout(function(){sl.forEach(function(s,i){if(i!==cur){var f=s.querySelector('iframe');if(f)s.replaceChild(f._card,f)}})},200)},{passive:true});
-upd()})();
+// Open on a middle video, centred, so there are videos on both sides.
+var mid=Math.floor((sl.length-1)/2);function centre(){tr.scrollLeft=sl[mid].offsetLeft-(tr.clientWidth-sl[mid].offsetWidth)/2;upd()}
+centre();requestAnimationFrame(centre);addEventListener('load',function(){if(cur===mid||tr.scrollLeft<5)centre()})})();
 </script>
 <!-- Cloudflare Web Analytics: visit statistics without cookies -->
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "2add43b340f4457ebb4f646436ea3a8f"}'></script>
