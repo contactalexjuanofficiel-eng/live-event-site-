@@ -294,6 +294,11 @@ window.ajConfirm=function(text,o,yes){show(text,o,true,yes)};})();
 <label for="f_status">Statut</label><select id="f_status"><option value="a_payer">À payer</option><option value="payee">Payée</option></select>
 </fieldset>
 
+<fieldset><legend>Prestataire (qui facture)</legend>
+<p class="hint" style="margin:0">Apparaît en haut du devis et de la facture. Complétez l'adresse (numéro et rue) : elle est obligatoire sur une facture. Vos modifications sont gardées pour les prochains documents.</p>
+<label for="v_info">Coordonnées du prestataire</label><textarea id="v_info" rows="5"></textarea>
+</fieldset>
+
 <fieldset><legend><span class="only-dev">Devis</span><span class="only-fac">Numéro et mentions</span></legend>
 <div class="row"><div><label for="d_num"><span class="only-dev">N° de devis</span><span class="only-fac">N° de facture</span></label><input id="d_num"></div><div class="only-dev"><label for="d_valid">Valable (jours)</label><input id="d_valid" type="number" min="1" value="30"></div></div>
 <label for="d_tva">Mention TVA</label><input id="d_tva" value="TVA non applicable, art. 293 B du CGI">
@@ -321,11 +326,7 @@ window.ajConfirm=function(text,o,yes){show(text,o,true,yes)};})();
 </div>
 
 <div class="parties">
-<div><h3>Prestataire</h3><p>Alex Juan Live Événement
-Alex Juan, entrepreneur individuel
-6 avenue Maryse Bastié, 33520 Bruges
-06 27 33 03 80 · contact@alexjuan.com
-SIRET : en cours d'attribution</p></div>
+<div><h3>Prestataire</h3><p id="p_presta"></p></div>
 <div><h3>Client</h3><p id="p_client"></p></div>
 </div>
 
@@ -363,7 +364,7 @@ SIRET : en cours d'attribution</p></div>
 </div>
 
 <div class="sign only-dev">
-<div><b class="who">Le prestataire · Alex Juan</b><span class="when" id="when_pro"></span>
+<div><b class="who">Le prestataire · NBC Booking &amp; Co</b><span class="when" id="when_pro"></span>
 <canvas class="pad" id="pad_pro" aria-label="Signature du prestataire"></canvas><img class="sigimg" id="img_pro" alt="">
 <div class="sigbar"><button type="button" data-clear="pro">Effacer</button><button type="button" id="b_sig_keep">Mémoriser ma signature</button></div>
 <p class="sighint">Signez avec le doigt ou la souris.</p></div>
@@ -372,7 +373,7 @@ SIRET : en cours d'attribution</p></div>
 <div class="sigbar"><button type="button" data-clear="cli">Effacer</button></div>
 <p class="sighint">Faites signer le client ici, sur votre téléphone ou votre ordinateur.</p></div>
 </div>
-<div class="foot">Alex Juan Live Événement · live.alexjuan.com · contact@alexjuan.com · 06 27 33 03 80</div>
+<div class="foot">NBC Booking &amp; Co · booking d'Alex Juan Live Événement · nbc.booking.co@gmail.com · 06 35 48 14 60 · live.alexjuan.com</div>
 </div>
 </div>
 
@@ -425,6 +426,7 @@ function renderLines(){var box=$('lines');box.innerHTML='';
   box.appendChild(r)})}
 
 function paint(){
+ $('p_presta').textContent=$('v_info').value;
  var today=new Date(),valid=new Date(today.getTime()+(parseInt($('d_valid').value,10)||30)*864e5);
  $('p_num').textContent=$('d_num').value;$('p_today').textContent=today.toLocaleDateString('fr-FR');$('p_valid').textContent=valid.toLocaleDateString('fr-FR');
  $('p_client').textContent=[$('c_nom').value,$('c_adr').value,$('c_email').value,$('c_tel').value].filter(Boolean).join('\n')||'—';
@@ -461,10 +463,12 @@ function sigDraw(who){var c=$('pad_'+who),x=sigSize(c);if(!SIG[who])return;var i
 $('b_sig_keep').onclick=function(){if(!SIG.pro){ajAlert('Signez d\'abord dans le cadre « Le prestataire ».');return}store(PROKEY,SIG.pro);ajAlert('Votre signature est mémorisée sur cet appareil : elle sera ajoutée automatiquement à vos prochains devis.')};
 var rsT;addEventListener('resize',function(){clearTimeout(rsT);rsT=setTimeout(function(){sigDraw('pro');sigDraw('cli')},150)});
 
-var FIELDS=['c_nom','c_email','c_tel','c_adr','e_type','e_date','e_lieu','e_artiste','e_duree','e_horaires','remise','acompte','d_num','d_valid','d_tva','d_note'];
+var PRESTA_KEY='aj-presta',PRESTA_DEF="NBC Booking & Co\nNadège Coron, entrepreneur individuel (EI)\n82210 Saint-Nicolas-de-la-Grave\n06 35 48 14 60 · nbc.booking.co@gmail.com\nSIRET : 798 637 609 00016";
+function presta(){return store(PRESTA_KEY)||PRESTA_DEF}
+var FIELDS=['v_info','c_nom','c_email','c_tel','c_adr','e_type','e_date','e_lieu','e_artiste','e_duree','e_horaires','remise','acompte','d_num','d_valid','d_tva','d_note'];
 function snapshot(){var o={lines:lines.slice(),sig_pro:SIG.pro,sig_cli:SIG.cli,sig_cli_date:SIG.cliDate,status:STATUS,updated:Date.now(),kind:KIND};if(KIND==='facture'){o.from=FROM;o.status=$('f_status').value;Object.keys(FAC_FIELDS).forEach(function(f){o[f]=$(f).value})}else{var prev=drafts()[$('d_num').value];if(prev&&prev.facture)o.facture=prev.facture}FIELDS.forEach(function(f){o[f]=$(f).value});o.total=totalOf(o);return o}
 function totalOf(o){var sub=(o.lines||[]).reduce(function(a,l){return a+(+l.q||0)*(+l.u||0)},0);return Math.max(0,sub-Math.max(0,parseFloat(o.remise)||0))}
-function load(o){KIND=o.kind||'devis';FROM=o.from||'';STATUS=o.status||(KIND==='facture'?'a_payer':(o.sig_cli?'signe':'brouillon'));Object.keys(FAC_FIELDS).forEach(function(f){$(f).value=o[f]!=null?o[f]:FAC_FIELDS[f]});$('f_status').value=KIND==='facture'?STATUS:'a_payer';FIELDS.forEach(function(f){if(o[f]!=null)$(f).value=o[f]});lines=(o.lines||[]).map(function(l){return{d:l.d,q:l.q,u:l.u}});SIG.cliDate=o.sig_cli_date||'';sigSet('pro',o.sig_pro!=null?o.sig_pro:(store(PROKEY)||''));sigSet('cli',o.sig_cli||'');renderLines();paint();dirty=false;$('autosave').textContent='';edTitle()}
+function load(o){if(!o.v_info)o.v_info=presta();KIND=o.kind||'devis';FROM=o.from||'';STATUS=o.status||(KIND==='facture'?'a_payer':(o.sig_cli?'signe':'brouillon'));Object.keys(FAC_FIELDS).forEach(function(f){$(f).value=o[f]!=null?o[f]:FAC_FIELDS[f]});$('f_status').value=KIND==='facture'?STATUS:'a_payer';FIELDS.forEach(function(f){if(o[f]!=null)$(f).value=o[f]});lines=(o.lines||[]).map(function(l){return{d:l.d,q:l.q,u:l.u}});SIG.cliDate=o.sig_cli_date||'';sigSet('pro',o.sig_pro!=null?o.sig_pro:(store(PROKEY)||''));sigSet('cli',o.sig_cli||'');renderLines();paint();dirty=false;$('autosave').textContent='';edTitle()}
 function drafts(){try{return JSON.parse(store(KEY)||'{}')}catch(e){return{}}}
 function edTitle(){var n=$('d_num').value,saved=!!drafts()[n];try{sessionStorage.setItem('aj-cur',saved?n:'')}catch(e){}var w=KIND==='facture'?'Facture ':'Devis ';$('ed_title').textContent=saved?w+n+($('c_nom').value?' – '+$('c_nom').value:''):'Nouveau devis';$('t_edit').innerHTML=saved?'<span class="lg">'+w+'</span>'+n:'En cours'}
 function save(){var d=drafts(),n=$('d_num').value||nextNum(KIND==='facture'?'FAC':'DEV');$('d_num').value=n;if(KIND==='devis'&&SIG.cli)STATUS='signe';d[n]=snapshot();store(KEY,JSON.stringify(d));claimNum(n);var ok=!!drafts()[n];if(ok){dirty=false;$('saved').textContent=''}paint();edTitle();renderList();return ok}
@@ -520,7 +524,7 @@ function makeInvoice(k){if(dirty)autoSave();var d=drafts(),o=d[k];if(!o)return;
 function newDraft(){if(dirty)autoSave();fresh();view('edit')}
 function toast(t){var e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(function(){e.classList.remove('on')},3000)}
 
-function fresh(){var o={kind:'devis',d_num:nextNum(),d_valid:30,acompte:100,remise:0,d_tva:'TVA non applicable, art. 293 B du CGI',lines:[]};
+function fresh(){var o={v_info:presta(),kind:'devis',d_num:nextNum(),d_valid:30,acompte:100,remise:0,d_tva:'TVA non applicable, art. 293 B du CGI',lines:[]};
  FIELDS.forEach(function(f){if(!(f in o))o[f]=''});o.e_type='Mariage';o.e_artiste='Alex Juan';load(o);
  lines=[PRESETS.artist(),PRESETS.son()];lines[1].u=0;renderLines();paint()}
 
@@ -561,7 +565,7 @@ $('f_status').onchange=function(){STATUS=this.value;paint();markDirty()};
 $('l_chips').onclick=function(e){var b=e.target.closest('button');if(!b)return;FILTER=b.dataset.f;renderList()};
 $('l_cards').addEventListener('click',function(e){var b=e.target.closest('button[data-a]');if(!b)return;var k=b.closest('.card').dataset.k;({open:openDraft,dup:dupDraft,del:delDraft,fac:makeInvoice})[b.dataset.a](k)});
 $('l_cards').addEventListener('change',function(e){if(e.target.dataset.a==='status')setStatus(e.target.closest('.card').dataset.k,e.target.value)});
-$('ed').addEventListener('input',markDirty);Object.keys(FAC_FIELDS).forEach(function(f){$(f).addEventListener('input',paint)});$('ed').addEventListener('change',markDirty);
+$('ed').addEventListener('input',markDirty);$('v_info').addEventListener('input',function(){store(PRESTA_KEY,this.value)});Object.keys(FAC_FIELDS).forEach(function(f){$(f).addEventListener('input',paint)});$('ed').addEventListener('change',markDirty);
 // Backup file: lets the quotes travel between devices.
 $('bk_out').onclick=function(){var d=drafts(),n=Object.keys(d).length;if(!n){ajAlert('Aucun devis à sauvegarder pour l\'instant.');return}
  var name='Sauvegarde-devis-'+new Date().toISOString().slice(0,10)+'.json',blob=new Blob([JSON.stringify({app:'aj-devis',v:1,devis:d})],{type:'application/json'}),file;try{file=new File([blob],name,{type:'application/json'})}catch(e){}
@@ -572,11 +576,11 @@ $('bk_file').onchange=function(){var f=this.files[0];this.value='';if(!f)return;
   var d=drafts(),add=0,upd=0;Object.keys(inc).forEach(function(k){if(!d[k]){add++;d[k]=inc[k]}else if((inc[k].updated||0)>(d[k].updated||0)){upd++;d[k]=inc[k]}claimNum(k)});
   store(KEY,JSON.stringify(d));renderList();ajAlert('Sauvegarde restaurée : '+add+' devis ajouté(s), '+upd+' mis à jour.')}).catch(function(){ajAlert("Ce fichier n'est pas une sauvegarde de devis valide.")})};
 $('b_mail').onclick=function(){if(KIND==='facture'){mailInvoice();return}if(STATUS==='brouillon')STATUS='envoye';save();var tot=$('p_total').textContent,sub='Votre devis '+$('d_num').value+' – Alex Juan Live Événement';
- var body='Bonjour'+($('c_nom').value?' '+$('c_nom').value:'')+',\n\nMerci pour votre demande. Vous trouverez ci-joint notre devis n° '+$('d_num').value+' pour votre '+$('e_type').value.toLowerCase()+(($('e_date').value)?' du '+fdate($('e_date').value):'')+(($('e_lieu').value)?' à '+$('e_lieu').value:'')+'.\n\nMontant total : '+tot+' (acompte de '+$('p_acompte').textContent+' à la réservation).\n\nPour bloquer votre date, il vous suffit de réserver en ligne et de régler l\'acompte ici :\nhttps://cal.com/alexjuanliveevenement/reservationlive\n\nNous restons à votre disposition pour toute question.\n\nBien musicalement,\nAlex Juan\nAlex Juan Live Événement\n06 27 33 03 80 · live.alexjuan.com';
+ var body='Bonjour'+($('c_nom').value?' '+$('c_nom').value:'')+',\n\nMerci pour votre demande. Vous trouverez ci-joint notre devis n° '+$('d_num').value+' pour votre '+$('e_type').value.toLowerCase()+(($('e_date').value)?' du '+fdate($('e_date').value):'')+(($('e_lieu').value)?' à '+$('e_lieu').value:'')+'.\n\nMontant total : '+tot+' (acompte de '+$('p_acompte').textContent+' à la réservation).\n\nPour bloquer votre date, il vous suffit de réserver en ligne et de régler l\'acompte ici :\nhttps://cal.com/alexjuanliveevenement/reservationlive\n\nNous restons à votre disposition pour toute question.\n\nBien musicalement,\nNBC Booking & Co\nBooking d\'Alex Juan Live Événement\n06 35 48 14 60 · nbc.booking.co@gmail.com\nlive.alexjuan.com';
  ajAlert('Votre messagerie va s\'ouvrir avec le message prêt. Pensez à joindre le PDF du devis (bouton « Télécharger le PDF »).',{title:'Message prêt'},function(){location.href='mailto:'+encodeURIComponent($('c_email').value)+'?subject='+encodeURIComponent(sub)+'&body='+encodeURIComponent(body)});};
 
 function mailInvoice(){save();var n=$('d_num').value,sub='Votre facture '+n+' – Alex Juan Live Événement',payee=$('f_status').value==='payee';
- var body='Bonjour'+($('c_nom').value?' '+$('c_nom').value:'')+',\n\nMerci encore pour votre confiance. Vous trouverez ci-joint la facture n° '+n+' pour votre '+$('e_type').value.toLowerCase()+(($('e_date').value)?' du '+fdate($('e_date').value):'')+'.\n\nMontant total : '+$('p_total').textContent+'\nAcompte déjà réglé : '+$('p_paid').textContent.replace('– ','')+'\n'+(payee?'Cette facture est entièrement réglée, merci !':'Reste à payer : '+$('p_rest').textContent+' ('+($('f_due').value||'à réception').toLowerCase()+')\nMoyens de paiement : '+$('f_pay').value)+'\n\nBien musicalement,\nAlex Juan\nAlex Juan Live Événement\n06 27 33 03 80 · live.alexjuan.com';
+ var body='Bonjour'+($('c_nom').value?' '+$('c_nom').value:'')+',\n\nMerci encore pour votre confiance. Vous trouverez ci-joint la facture n° '+n+' pour votre '+$('e_type').value.toLowerCase()+(($('e_date').value)?' du '+fdate($('e_date').value):'')+'.\n\nMontant total : '+$('p_total').textContent+'\nAcompte déjà réglé : '+$('p_paid').textContent.replace('– ','')+'\n'+(payee?'Cette facture est entièrement réglée, merci !':'Reste à payer : '+$('p_rest').textContent+' ('+($('f_due').value||'à réception').toLowerCase()+')\nMoyens de paiement : '+$('f_pay').value)+'\n\nBien musicalement,\nNBC Booking & Co\nBooking d\'Alex Juan Live Événement\n06 35 48 14 60 · nbc.booking.co@gmail.com\nlive.alexjuan.com';
  ajAlert('Votre messagerie va s\'ouvrir avec le message prêt. Pensez à joindre le PDF de la facture (bouton « Télécharger le PDF »).',{title:'Message prêt'},function(){location.href='mailto:'+encodeURIComponent($('c_email').value)+'?subject='+encodeURIComponent(sub)+'&body='+encodeURIComponent(body)});}
 
 // Fill the quote from a request email pasted as text (labels and values on the same line or on consecutive lines).
