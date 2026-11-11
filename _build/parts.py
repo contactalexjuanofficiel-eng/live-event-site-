@@ -129,7 +129,7 @@ def head(lang, path, key, title, desc, ld=None, robots=None):
 <meta property="og:title" content="{title.split(' | ')[0]}">
 <meta property="og:description" content="{desc}">
 <meta property="og:url" content="{canon}">
-<meta property="og:image" content="{SITE}assets/og-image.jpg?v=3">
+<meta property="og:image" content="{SITE}assets/og-image.jpg?v=4">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
@@ -142,7 +142,7 @@ def head(lang, path, key, title, desc, ld=None, robots=None):
 
 def business_ld(lang):
     return {'@context': 'https://schema.org', '@type': ['MusicGroup', 'LocalBusiness'], 'name': 'Alex Juan Live Événement',
-            'description': T[lang]['foot_about'], 'url': SITE, 'email': MAIL, 'telephone': TEL, 'image': SITE + 'assets/og-image.jpg?v=3',
+            'description': T[lang]['foot_about'], 'url': SITE, 'email': MAIL, 'telephone': TEL, 'image': SITE + 'assets/og-image.jpg?v=4',
             'address': {'@type': 'PostalAddress', 'streetAddress': '6 avenue Maryse Bastié', 'addressLocality': 'Bruges', 'postalCode': '33520', 'addressRegion': 'Gironde', 'addressCountry': 'FR'},
             'areaServed': {'@type': 'Country', 'name': 'France'}, 'genre': ['Chanson française', 'Pop'], 'sameAs': [u for _, _, u in SOCIAL]}
 
