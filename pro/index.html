@@ -533,7 +533,7 @@ var PRESETS={
  free:function(){return {d:'',q:1,u:0}}};
 var lines=[],STATUS='brouillon',KIND='devis',FROM='',dirty=false,asT;
 var FST={a_payer:'À payer',payee:'Payée'};
-var FAC_FIELDS={f_date:'',f_due:'À réception',f_paid:'0',f_pay:'Virement bancaire, chèque ou espèces.'};
+var FAC_FIELDS={f_date:'',f_due:'À réception',f_paid:'0',f_pay:'Virement bancaire (IBAN FR76 1120 6201 1100 9347 7573 259 · BIC AGRIFRPP812), chèque ou espèces.'};
 function isoToday(){var t=new Date();return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0')}
 var ST={brouillon:'Brouillon',envoye:'Envoyé',signe:'Accepté (signé)',refuse:'Refusé'};
 function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
@@ -591,8 +591,9 @@ function sigDraw(who){var c=$('pad_'+who),x=sigSize(c);if(!SIG[who])return;var i
 $('b_sig_keep').onclick=function(){if(!SIG.pro){ajAlert('Signez d\'abord dans le cadre « Le prestataire ».');return}store(PROKEY,SIG.pro);ajAlert('Votre signature est mémorisée sur cet appareil : elle sera ajoutée automatiquement à vos prochains devis.')};
 var rsT;addEventListener('resize',function(){clearTimeout(rsT);rsT=setTimeout(function(){sigDraw('pro');sigDraw('cli')},150)});
 
-var PRESTA_KEY='aj-presta',PRESTA_DEF="NBC Booking & Co\nNadège Coron, entrepreneur individuel (EI)\n82210 Saint-Nicolas-de-la-Grave\n06 35 48 14 60 · nbc.booking.co@gmail.com\nSIRET : 798 637 609 00016";
-function presta(){return store(PRESTA_KEY)||PRESTA_DEF}
+var PRESTA_KEY='aj-presta',PRESTA_DEF="NBC Booking & Co\nNadège Coron, entrepreneur individuel (EI)\n20 rue de la Salicaire, 82210 Saint-Nicolas-de-la-Grave\n06 35 48 14 60 · nbc.booking.co@gmail.com\nSIRET : 798 637 609 00016";
+// A copy saved before the street address was known is upgraded to the full address.
+function presta(){var v=store(PRESTA_KEY);if(v&&v.indexOf("\n82210 Saint-Nicolas-de-la-Grave\n")>=0){v=v.replace("\n82210 Saint-Nicolas-de-la-Grave\n","\n20 rue de la Salicaire, 82210 Saint-Nicolas-de-la-Grave\n");store(PRESTA_KEY,v)}return v||PRESTA_DEF}
 var FIELDS=['v_info','c_nom','c_email','c_tel','c_adr','e_type','e_date','e_lieu','e_artiste','e_duree','e_horaires','remise','acompte','d_num','d_valid','d_tva','d_note'];
 function snapshot(){var o={lines:lines.slice(),sig_pro:SIG.pro,sig_cli:SIG.cli,sig_cli_date:SIG.cliDate,status:STATUS,updated:Date.now(),kind:KIND};if(KIND==='facture'){o.from=FROM;o.status=$('f_status').value;Object.keys(FAC_FIELDS).forEach(function(f){o[f]=$(f).value})}else{var prev=drafts()[$('d_num').value];if(prev&&prev.facture)o.facture=prev.facture}FIELDS.forEach(function(f){o[f]=$(f).value});o.total=totalOf(o);return o}
 function totalOf(o){var sub=(o.lines||[]).reduce(function(a,l){return a+(+l.q||0)*(+l.u||0)},0);return Math.max(0,sub-Math.max(0,parseFloat(o.remise)||0))}
