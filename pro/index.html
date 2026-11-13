@@ -223,6 +223,7 @@ td.n,th.n{text-align:right;white-space:nowrap}
 .feed .tag{display:inline-block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8a5d1f;margin-right:6px}
 .st-note{font-size:12.5px;color:var(--mute);margin-top:6px}
 @media(max-width:760px){.kpis{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}.kpi b{font-size:32px}.stats .seg button{padding:8px 11px;font-size:14px}}
+.payopts{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;margin:4px 0 6px}.payopts label{display:flex;align-items:center;gap:8px;margin:0;font-size:14.5px;color:var(--txt);cursor:pointer;min-height:36px}.payopts input{width:18px;height:18px;accent-color:#b08d57;flex:none}.lbl{display:block;font-size:13px;color:var(--mute);margin:8px 0 3px}
 </style>
 </head>
 <body>
@@ -328,7 +329,9 @@ window.ajConfirm=function(text,o,yes){show(text,o,true,yes)};})();
 <p class="hint" style="margin:0">Facture créée à partir du devis <b id="f_from_t"></b>. Le numéro de facture est définitif.</p>
 <div class="row"><div><label for="f_date">Date de la facture</label><input id="f_date" type="date"></div><div><label for="f_due">Échéance</label><input id="f_due" placeholder="ex. À réception"></div></div>
 <label for="f_paid">Acompte déjà réglé (€)</label><input id="f_paid" type="number" min="0" step="1">
-<label for="f_pay">Moyens de paiement</label><textarea id="f_pay" rows="2"></textarea>
+<span class="lbl" id="pay_l">Moyens de paiement acceptés</span>
+<div class="payopts" id="pay_opts" role="group" aria-labelledby="pay_l"><label><input type="checkbox" data-k="iban"> Virement (avec le RIB)</label><label><input type="checkbox" data-k="carte"> Carte bancaire</label><label><input type="checkbox" data-k="cheque"> Chèque</label><label><input type="checkbox" data-k="especes"> Espèces</label></div>
+<label for="f_pay">Texte affiché sur la facture <small style="color:var(--mute)">(modifiable)</small></label><textarea id="f_pay" rows="2"></textarea>
 <label for="f_status">Statut</label><select id="f_status"><option value="a_payer">À payer</option><option value="payee">Payée</option></select>
 </fieldset>
 
@@ -571,7 +574,7 @@ function paint(){
   $('p_fdate').textContent=$('f_date').value?new Date($('f_date').value+'T12:00').toLocaleDateString('fr-FR'):'';
   $('p_from').textContent=FROM;$('p_from_row').style.display=FROM?'':'none';$('f_from_t').textContent=FROM||'—';
   $('p_paid').textContent='– '+eur(paid);$('p_rest').textContent=eur(payee?0:tot-paid);$('p_rest_l').textContent=payee?'Facture acquittée':'Reste à payer';
-  $('p_stamp_row').style.display=payee?'':'none';$('p_due').textContent=$('f_due').value||'À réception';$('p_pay').textContent=$('f_pay').value}
+  $('p_stamp_row').style.display=payee?'':'none';$('p_due').textContent=$('f_due').value||'À réception';$('p_pay').textContent=$('f_pay').value;if(window.paySync&&document.activeElement&&!document.activeElement.closest('#pay_opts'))paySync()}
  document.title=(fac?'Facture ':'Devis ')+$('d_num').value+($('c_nom').value?' – '+$('c_nom').value:'')}
 
 // Hand-written signatures: drawn with a finger, stylus or mouse on a canvas, kept as an image so they print in the PDF and save with the draft.
@@ -667,6 +670,13 @@ function fromUrl(){var q=new URLSearchParams(location.search);if(![...q.keys()].
  history.replaceState(null,'',location.pathname);markDirty();$('saved').textContent='Devis pré-rempli à partir de la demande. Ajoutez vos prix.';return true}
 
 FIELDS.forEach(function(f){$(f).addEventListener('input',paint);$(f).addEventListener('change',paint)});
+// Payment methods: ticking a box rewrites the payment line of the invoice (the RIB only goes on invoices).
+var PAY=[['iban','virement bancaire (IBAN FR76 1120 6201 1100 9347 7573 259 · BIC AGRIFRPP812)',/IBAN/i],['carte','carte bancaire',/carte/i],['cheque','chèque',/chèque|cheque/i],['especes','espèces',/espèces|especes/i]];
+var payBoxes=[].slice.call(document.querySelectorAll('#pay_opts input'));
+function payText(){var t=PAY.filter(function(p,i){return payBoxes[i].checked}).map(function(p){return p[1]});if(!t.length)return '';var s=t.length>1?t.slice(0,-1).join(', ')+' ou '+t[t.length-1]:t[0];return s.charAt(0).toUpperCase()+s.slice(1)+'.'}
+window.paySync=paySync;function paySync(){var v=$('f_pay').value;payBoxes.forEach(function(b,i){b.checked=PAY[i][2].test(v)})}
+payBoxes.forEach(function(b){b.addEventListener('change',function(){$('f_pay').value=payText();$('f_pay').dispatchEvent(new Event('input',{bubbles:true}))})});
+
 [].forEach.call(document.querySelectorAll('.presets button'),function(b){b.onclick=function(){lines.push(PRESETS[b.dataset.p]());renderLines();paint();markDirty()}});
 // Builds a real PDF file (one A4 page) from the quote preview: downloaded on a computer, shared/saved via the share sheet on a phone.
 function pdfName(){var n=($('c_nom').value||'client').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9]+/g,'-').replace(/^-|-$/g,'');return (KIND==='facture'?'Facture-':'Devis-')+($('d_num').value||'brouillon')+'-'+n+'.pdf'}
