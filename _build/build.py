@@ -86,7 +86,7 @@ def home(lang):
     X, p = C.TXT[lang], prefix(PATHS[lang]['home'])
     team = ''.join(f'<div class="fade"><div class="ph"><img src="{p}assets/{i}" alt="{n}" loading="lazy" width="320" height="320"></div><b>{n}</b><span>{r}</span></div>' for i, n, r in X['team_row'])
     # Full-screen reel: Alex's own clip first, then atmosphere clips (portrait files for phones, landscape for computers)
-    clips = [None, 'r2', 'r3', 'r4', 'r5']
+    clips = [None, 'r2', 'r3', 'r4', 'r6']
     slides = ''
     for k, (small, big) in enumerate(X['reel']):
         if k == 0:
