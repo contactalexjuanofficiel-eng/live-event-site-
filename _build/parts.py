@@ -152,7 +152,7 @@ def head(lang, path, key, title, desc, ld=None, robots=None):
 <link rel="preload" href="{p}assets/fonts/cormorant-garamond-500-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{p}assets/fonts/jost-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{p}assets/fonts.css">
-<link rel="stylesheet" href="{p}assets/site.css?v=14">
+<link rel="stylesheet" href="{p}assets/site.css?v=15">
 ''' + (INTRO_HEAD if key == 'home' else '') + ''.join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>\n' for x in (ld or [])) + '</head>\n<body>\n'
 
 
@@ -179,6 +179,7 @@ def top(lang, path, key):
                   f'<a href="{en_href}" lang="en" hreflang="en"{" aria-current=\"true\"" if lang == "en" else ""}>EN</a>')
     return (sprite() + f'''
 <a class="skip" href="#main">{t["skip"]}</a>
+<div class="topbar"><div class="wrap"><b>{t["booking"]}</b><a href="tel:{TEL}">{ic("phone")}NBC Booking · {t["tel_txt"]}</a><span class="t-sep" aria-hidden="true">·</span><a class="t-mail" href="mailto:{MAIL}">{ic("mail")}{MAIL}</a><span class="t-sep" aria-hidden="true">·</span><a class="t-mail" href="{IG_AJ}" target="_blank" rel="noopener">{ic("instagram")}@ajliveevenement</a></div></div>
 <header class="head"><div class="wrap">{brand}
 <nav class="menu" aria-label="{t["main_menu"]}">{links}</nav>
 <div class="head-r"><nav class="lang" aria-label="{t["lang_label"]}">{lang_links}</nav>
