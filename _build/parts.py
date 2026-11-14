@@ -107,11 +107,15 @@ def wa(lang):
 # Home page intro: the logo draws itself once per visit (skipped on reduced motion or a repeat view).
 INTRO_HEAD = ("<script>try{if(!sessionStorage.getItem('aj-intro')&&!matchMedia('(prefers-reduced-motion:reduce)').matches)"
               "{document.documentElement.classList.add('intro-on');sessionStorage.setItem('aj-intro','1')}}catch(e){}</script>\n")
-INTRO = ('<div class="intro" id="intro" aria-hidden="true"><div class="in-box"><div class="in-logo"><svg viewBox="0 0 120 120"><defs><g id="in-m" font-family="Cormorant Garamond,Georgia,serif" font-size="50" font-weight="500"><path fill-rule="evenodd" d="M60,2.799999999999997 A57.2,57.2 0 1,1 59.999,2.799999999999997 Z M60,5.200000000000003 A54.8,54.8 0 1,0 60.001,5.200000000000003 Z"/><path fill-rule="evenodd" d="M60,9.5 A50.5,50.5 0 1,1 59.999,9.5 Z M60,10.5 A49.5,49.5 0 1,0 60.001,10.5 Z"/><text x="61.5" y="76" text-anchor="end">A</text><text x="58.5" y="76" text-anchor="start">J</text></g><linearGradient id="in-rim" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="120" y2="120"><stop offset="0" stop-color="#fff3d6" stop-opacity="0"/><stop offset=".42" stop-color="#fff3d6" stop-opacity="0"/><stop offset=".5" stop-color="#fff6e6"/><stop offset=".58" stop-color="#fff3d6" stop-opacity="0"/><stop offset="1" stop-color="#fff3d6" stop-opacity="0"/><animateTransform attributeName="gradientTransform" type="rotate" from="0 60 60" to="360 60 60" dur="3.2s" repeatCount="indefinite"/></linearGradient></defs><use class="m-base" href="#in-m"/><use class="m-edge" href="#in-m"/><use class="m-rim" href="#in-m"/><use class="m-gold" href="#in-m"/></svg></div>'
-         '<p class="in-name">Alex Juan</p><p class="in-sub">Live Événement</p></div></div>\n'
-         "<script>(function(){var r=document.documentElement,i=document.getElementById('intro');if(!r.classList.contains('intro-on')){i.remove();return}"
-         "function end(){if(!i.parentNode)return;i.classList.add('out');setTimeout(function(){i.remove();r.classList.remove('intro-on')},900)}"
-         "i.addEventListener('click',end);setTimeout(end,8200)})();</script>\n")
+INTRO = ('<div class="intro" id="intro" aria-hidden="true"><video id="intro-v" muted playsinline preload="auto">'
+         '<source src="/assets/intro-aj.webm" type="video/webm"><source src="/assets/intro-aj.mp4" type="video/mp4"></video></div>\n'
+         # Plays the 3D logo film once; any hiccup (blocked autoplay, slow network, error) just opens the site.
+         "<script>(function(){var r=document.documentElement,i=document.getElementById('intro'),v=document.getElementById('intro-v');"
+         "if(!r.classList.contains('intro-on')){i.remove();return}"
+         "function end(){if(!i.parentNode||i.classList.contains('out'))return;i.classList.add('out');setTimeout(function(){i.remove();r.classList.remove('intro-on')},900)}"
+         "i.addEventListener('click',end);v.addEventListener('ended',function(){setTimeout(end,250)});v.addEventListener('error',end,true);"
+         "var go=setTimeout(end,3000);v.addEventListener('playing',function(){clearTimeout(go);setTimeout(end,10000)});"
+         "var p=v.play();if(p&&p.catch)p.catch(end)})();</script>\n")
 
 
 def head(lang, path, key, title, desc, ld=None, robots=None):
@@ -147,7 +151,7 @@ def head(lang, path, key, title, desc, ld=None, robots=None):
 <link rel="preload" href="{p}assets/fonts/cormorant-garamond-500-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{p}assets/fonts/jost-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{p}assets/fonts.css">
-<link rel="stylesheet" href="{p}assets/site.css?v=9">
+<link rel="stylesheet" href="{p}assets/site.css?v=10">
 ''' + (INTRO_HEAD if key == 'home' else '') + ''.join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>\n' for x in (ld or [])) + '</head>\n<body>\n'
 
 
