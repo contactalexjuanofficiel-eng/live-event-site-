@@ -107,14 +107,15 @@ def wa(lang):
 # Home page intro: the logo draws itself once per visit (skipped on reduced motion or a repeat view).
 INTRO_HEAD = ("<script>try{if(!sessionStorage.getItem('aj-intro')&&!matchMedia('(prefers-reduced-motion:reduce)').matches)"
               "{document.documentElement.classList.add('intro-on');sessionStorage.setItem('aj-intro','1')}}catch(e){}</script>\n")
-INTRO = ('<div class="intro" id="intro" aria-hidden="true"><video id="intro-v" muted playsinline preload="auto">'
-         '<source src="/assets/intro-aj.webm" type="video/webm"><source src="/assets/intro-aj.mp4" type="video/mp4"></video></div>\n'
+INTRO = ('<div class="intro" id="intro" aria-hidden="true"><video id="intro-v" muted playsinline autoplay preload="auto">'
+         '<source src="/assets/intro-aj.mp4?v=2" type="video/mp4"><source src="/assets/intro-aj.webm?v=2" type="video/webm"></video>'
+         '<svg class="in-wait" viewBox="0 0 120 120"><use href="#mono"/></svg></div>\n'
          # Plays the 3D logo film once; any hiccup (blocked autoplay, slow network, error) just opens the site.
          "<script>(function(){var r=document.documentElement,i=document.getElementById('intro'),v=document.getElementById('intro-v');"
          "if(!r.classList.contains('intro-on')){i.remove();return}"
          "function end(){if(!i.parentNode||i.classList.contains('out'))return;i.classList.add('out');setTimeout(function(){i.remove();r.classList.remove('intro-on')},900)}"
          "i.addEventListener('click',end);v.addEventListener('ended',function(){setTimeout(end,250)});v.addEventListener('error',end,true);"
-         "var go=setTimeout(end,3000);v.addEventListener('playing',function(){clearTimeout(go);setTimeout(end,10000)});"
+         "var go=setTimeout(end,4000);v.addEventListener('playing',function(){clearTimeout(go);i.classList.add('on');setTimeout(end,10000)});"
          "var p=v.play();if(p&&p.catch)p.catch(end)})();</script>\n")
 
 
@@ -151,7 +152,7 @@ def head(lang, path, key, title, desc, ld=None, robots=None):
 <link rel="preload" href="{p}assets/fonts/cormorant-garamond-500-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{p}assets/fonts/jost-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{p}assets/fonts.css">
-<link rel="stylesheet" href="{p}assets/site.css?v=10">
+<link rel="stylesheet" href="{p}assets/site.css?v=11">
 ''' + (INTRO_HEAD if key == 'home' else '') + ''.join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>\n' for x in (ld or [])) + '</head>\n<body>\n'
 
 
