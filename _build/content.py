@@ -23,6 +23,9 @@ TXT = {
 'fr': dict(
     home_title='Alex Juan · Chanteur live pour mariages et événements, partout en France',
     home_desc="Chant live, son et lumière inclus, pour mariages, événements d'entreprise et soirées privées. Alex Juan et son équipe se déplacent partout en France. Devis gratuit sous 24 h.",
+    reel=[('Alex Juan · Chanteur live', 'La voix de vos événements'), ('Mariages', 'Le plus beau jour, en live'),
+          ('Chanson française & pop', 'Un vrai show live'), ('Entreprises · Soirées privées', 'Des soirées inoubliables'),
+          ('Son & lumière inclus', 'Partout en France')],
     hero=('Alex Juan · Chanteur live', "Un show live d'exception pour vos plus beaux moments",
           "Chanson française et pop, son et lumière inclus. Mariages, événements d'entreprise et soirées privées, partout en France."),
     ask_quote='Demander un devis', see_show='Voir le show', discover='Découvrir',
@@ -121,6 +124,9 @@ TXT = {
 'en': dict(
     home_title='Alex Juan · Live singer for weddings and events, anywhere in France',
     home_desc='Live singing, sound and lighting included, for weddings, corporate events and private parties. Alex Juan and his team travel anywhere in France. Free quote within 24 hours.',
+    reel=[('Alex Juan · Live singer', 'The voice of your events'), ('Weddings', 'Your big day, live'),
+          ('French songs & pop', 'A true live show'), ('Corporate · Private parties', 'Unforgettable evenings'),
+          ('Sound & lighting included', 'All over France')],
     hero=('Alex Juan · Live singer', 'An exceptional live show for your most beautiful moments',
           'French chanson and pop, sound and lighting included. Weddings, corporate events and private parties, anywhere in France.'),
     ask_quote='Request a quote', see_show='See the show', discover='Discover',

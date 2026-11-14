@@ -152,7 +152,7 @@ def head(lang, path, key, title, desc, ld=None, robots=None):
 <link rel="preload" href="{p}assets/fonts/cormorant-garamond-500-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{p}assets/fonts/jost-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{p}assets/fonts.css">
-<link rel="stylesheet" href="{p}assets/site.css?v=17">
+<link rel="stylesheet" href="{p}assets/site.css?v=18">
 ''' + (INTRO_HEAD if key == 'home' else '') + ''.join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>\n' for x in (ld or [])) + '</head>\n<body>\n'
 
 
@@ -213,7 +213,7 @@ def foot(lang, path, extra_js=''):
 <div class="bottom"><span>© 2026 Alex Juan Live Événement</span><nav aria-label="{t["legal_label"]}">{legal}</nav></div>
 </div></footer>
 <a class="wa" href="{wa(lang)}" target="_blank" rel="noopener" aria-label="{t["wa_label"]}">{ic("whatsapp")}</a>
-<script src="{p}assets/site.js?v=5" defer></script>
+<script src="{p}assets/site.js?v=6" defer></script>
 {extra_js}<!-- Cloudflare Web Analytics: visit statistics without cookies -->
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{{"token": "2add43b340f4457ebb4f646436ea3a8f"}}'></script>
 </body>

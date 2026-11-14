@@ -37,6 +37,22 @@
     hide.forEach(function(h){o2.observe(h)});
   }
 
+  // Home reel: every 6 s the next clip (portrait file on phones, landscape on computers) fades in with its line
+  var reel=document.querySelector('.reel');
+  if(reel&&!matchMedia('(prefers-reduced-motion:reduce)').matches){
+    var sl=[].slice.call(reel.querySelectorAll('.slide')),cur=0,tick=null,vis=true,port=matchMedia('(orientation:portrait)').matches;
+    var src=function(v){return v.dataset[port?'m':'d']};
+    var prep=function(s){var v=s.querySelector('video');if(v&&!v.getAttribute('src')&&v.dataset.d){v.src=src(v);v.load()}return v};
+    var go=function(){var n=(cur+1)%sl.length,v=prep(sl[n]),old=sl[cur];
+      var show=function(){if(v){try{v.currentTime=0}catch(e){}var pr=v.play();if(pr&&pr.catch)pr.catch(function(){})}
+        sl[n].classList.add('on');old.classList.remove('on');cur=n;prep(sl[(n+1)%sl.length]);
+        setTimeout(function(){var ov=old.querySelector('video');if(ov&&n!==0&&ov!==v)ov.pause()},1500)};
+      if(!v||v.readyState>=3)show();else{var done=false,f=function(){if(!done){done=true;show()}};v.addEventListener('canplay',f,{once:true});setTimeout(f,2500)}};
+    var start=function(){if(!tick)tick=setInterval(function(){if(vis&&!document.hidden&&!document.documentElement.classList.contains('intro-on'))go()},6000)};
+    prep(sl[1]);start();
+    if('IntersectionObserver' in window)new IntersectionObserver(function(es){vis=es[0].isIntersecting}).observe(reel);
+  }
+
   // Hero video: lighter file, never blocks the page
   var v=document.querySelector('.hero video');
   if(v){var p=v.play&&v.play();if(p&&p.catch)p.catch(function(){})}

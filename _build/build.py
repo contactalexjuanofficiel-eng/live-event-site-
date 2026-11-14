@@ -85,16 +85,27 @@ def crumbs(lang, p, name):
 def home(lang):
     X, p = C.TXT[lang], prefix(PATHS[lang]['home'])
     team = ''.join(f'<div class="fade"><div class="ph"><img src="{p}assets/{i}" alt="{n}" loading="lazy" width="320" height="320"></div><b>{n}</b><span>{r}</span></div>' for i, n, r in X['team_row'])
-    body = f'''<section class="hero">
-<video autoplay muted loop playsinline preload="metadata" poster="{p}assets/hero-poster-2.jpg" aria-hidden="true"><source src="{p}assets/hero-720.webm" type="video/webm"><source src="{p}assets/hero-720.mp4" type="video/mp4"></video>
-<div class="wrap">
-<span class="eyebrow">{X["hero"][0]}</span>
-<h1 class="h1">{X["hero"][1]}</h1>
-<p class="lead">{X["hero"][2]}</p>
-<div class="actions"><a class="btn gold" href="{url(lang, "contact", p)}">{X["ask_quote"]}</a>{link(url(lang, "show", p), X["see_show"])}</div>
+    # Full-screen reel: Alex's own clip first, then atmosphere clips (portrait files for phones, landscape for computers)
+    clips = [None, 'r2', 'r3', 'r4', 'r5']
+    slides = ''
+    for k, (small, big) in enumerate(X['reel']):
+        if k == 0:
+            vid = (f'<video autoplay muted loop playsinline preload="metadata" poster="{p}assets/hero-poster-2.jpg" aria-hidden="true">'
+                   f'<source src="{p}assets/hero-720.webm" type="video/webm"><source src="{p}assets/hero-720.mp4" type="video/mp4"></video>')
+        else:
+            c = clips[k]
+            vid = f'<video muted playsinline preload="none" aria-hidden="true" data-d="{p}assets/reel/{c}-d.mp4" data-m="{p}assets/reel/{c}-m.mp4"></video>'
+        slides += f'<div class="slide{" on" if k == 0 else ""}">{vid}<p class="slide-t" aria-hidden="true"><small>{small}</small><span>{big}</span></p></div>'
+    body = f'''<section class="hero reel">
+{slides}
+<div class="wrap reel-ui">
+<h1 class="sr-only">{X["hero"][1]}</h1>
+<div class="actions"><a class="btn gold" href="{url(lang, "contact", p)}">{X["ask_quote"]}</a></div>
 </div>
+<a class="reel-down" href="#suite" aria-label="{'Découvrir' if lang == 'fr' else 'Discover'}"><svg viewBox="0 0 40 20" aria-hidden="true"><path d="M2 3l18 14L38 3"/></svg></a>
 </section>
 
+<div id="suite"></div>
 <section class="sec"><div class="wrap">
 <div class="sec-head fade"><span class="eyebrow">{T[lang]["nav"][0][1]}</span><h2 class="h2">{X["svc_title"]}</h2><p class="lead">{X["svc_lead"]}</p></div>
 {svc_cards(lang, p)}
