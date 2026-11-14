@@ -152,7 +152,7 @@ def head(lang, path, key, title, desc, ld=None, robots=None):
 <link rel="preload" href="{p}assets/fonts/cormorant-garamond-500-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{p}assets/fonts/jost-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{p}assets/fonts.css">
-<link rel="stylesheet" href="{p}assets/site.css?v=16">
+<link rel="stylesheet" href="{p}assets/site.css?v=17">
 ''' + (INTRO_HEAD if key == 'home' else '') + ''.join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>\n' for x in (ld or [])) + '</head>\n<body>\n'
 
 

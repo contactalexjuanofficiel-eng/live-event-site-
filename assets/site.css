@@ -76,6 +76,18 @@ button,input,select,textarea{font:inherit;color:inherit}
 .b-lines{display:block;width:30px}.b-lines i{display:block;height:2px;background:currentColor;width:100%;margin-left:auto;transition:width .3s ease}.b-lines i+i{width:60%;margin-top:6px}
 .head .burger:hover .b-lines i+i,.head .burger:focus-visible .b-lines i+i{width:100%}
 @media(max-width:1060px){.menu{display:none}.burger{display:inline-flex}.head .btn{display:none}}
+/* Computers: airy header across the full width, menu centred in small spaced capitals */
+@media(min-width:1061px){
+.head .wrap,.topbar .wrap{max-width:none;padding-left:clamp(32px,4.5vw,88px);padding-right:clamp(32px,4.5vw,88px)}
+.head .wrap{display:grid;grid-template-columns:1fr auto 1fr;height:84px}
+.head .brand{justify-self:start}.head .head-r{justify-self:end;gap:28px}
+.menu{gap:clamp(36px,4.2vw,76px)}
+.menu a{font-size:12px;font-weight:500;letter-spacing:.32em;text-transform:uppercase;color:#ece6db;padding:12px 0 12px .32em}
+.topbar .wrap{gap:clamp(28px,3.5vw,64px)}
+.topbar .t-sep{display:none}
+.head .btn{white-space:nowrap}
+}
+@media(min-width:1061px) and (max-width:1200px){.menu{gap:26px}.menu a{letter-spacing:.22em}.head .head-r{gap:14px}.head .btn{padding:0 16px}}
 
 /* Mobile drawer */
 .drawer{position:fixed;inset:0;z-index:60;background:#000;color:var(--ivory);display:flex;flex-direction:column;overflow-y:auto;overscroll-behavior:contain;padding:calc(env(safe-area-inset-top,0px) + 12px) var(--gut-r) calc(env(safe-area-inset-bottom,0px) + 22px) var(--gut);opacity:0;visibility:hidden;transition:opacity .4s ease .5s,visibility 0s .9s}
