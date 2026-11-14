@@ -108,7 +108,7 @@ def wa(lang):
 INTRO_HEAD = ("<script>try{if(!sessionStorage.getItem('aj-intro')&&!matchMedia('(prefers-reduced-motion:reduce)').matches)"
               "{document.documentElement.classList.add('intro-on');sessionStorage.setItem('aj-intro','1')}}catch(e){}</script>\n")
 INTRO = ('<div class="intro" id="intro" aria-hidden="true"><video id="intro-v" muted playsinline autoplay preload="auto">'
-         '<source src="/assets/intro-aj.mp4?v=3" type="video/mp4"><source src="/assets/intro-aj.webm?v=3" type="video/webm"></video>'
+         '<source src="/assets/intro-aj.mp4?v=4" type="video/mp4"><source src="/assets/intro-aj.webm?v=4" type="video/webm"></video>'
          '<svg class="in-wait" viewBox="0 0 120 120"><use href="#mono"/></svg></div>\n'
          # Plays the 3D logo film once; any hiccup (blocked autoplay, slow network, error) just opens the site.
          "<script>(function(){var r=document.documentElement,i=document.getElementById('intro'),v=document.getElementById('intro-v');"
