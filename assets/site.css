@@ -55,7 +55,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 @media(max-width:700px){.topbar .t-mail,.topbar .t-sep{display:none}}
 
 /* Header */
-.head{position:sticky;top:0;z-index:40;background:rgba(14,17,22,.96);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid rgba(207,180,137,.14);color:var(--ivory)}
+.head{position:sticky;top:0;z-index:40;padding-top:env(safe-area-inset-top,0px);background:rgba(14,17,22,.96);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid rgba(207,180,137,.14);color:var(--ivory)}
 .head .wrap{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);height:var(--head)}
 .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ivory)}
 .brand svg{width:40px;height:40px;flex:none}
@@ -71,6 +71,10 @@ button,input,select,textarea{font:inherit;color:inherit}
 .head .btn{min-height:42px;padding:0 20px}
 .burger{display:none;width:44px;height:44px;align-items:center;justify-content:center;background:none;border:0;color:var(--ivory);cursor:pointer;margin-right:-10px}
 .burger .icon{width:26px;height:26px}
+.head .burger{width:auto;min-width:44px;flex-direction:column;align-items:flex-end;gap:6px;margin-right:-4px}
+.b-txt{font:400 11px/1 var(--sans);letter-spacing:.24em;text-transform:uppercase;margin-right:-.24em}
+.b-lines{display:block;width:30px}.b-lines i{display:block;height:2px;background:currentColor;width:100%;margin-left:auto;transition:width .3s ease}.b-lines i+i{width:60%;margin-top:6px}
+.head .burger:hover .b-lines i+i,.head .burger:focus-visible .b-lines i+i{width:100%}
 @media(max-width:1060px){.menu{display:none}.burger{display:inline-flex}.head .btn{display:none}}
 
 /* Mobile drawer */
