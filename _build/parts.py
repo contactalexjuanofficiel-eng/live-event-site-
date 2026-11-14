@@ -108,12 +108,12 @@ def wa(lang):
 INTRO_HEAD = ("<script>try{if(!sessionStorage.getItem('aj-intro')&&!matchMedia('(prefers-reduced-motion:reduce)').matches)"
               "{document.documentElement.classList.add('intro-on');sessionStorage.setItem('aj-intro','1')}}catch(e){}</script>\n")
 INTRO = ('<div class="intro" id="intro" aria-hidden="true"><div class="in-box">'
-         '<svg viewBox="0 0 120 120"><circle class="c1" cx="60" cy="60" r="56"/><circle class="c2" cx="60" cy="60" r="50"/>'
-         '<text class="la" x="61.5" y="76" text-anchor="end">A</text><text class="lj" x="58.5" y="76" text-anchor="start">J</text></svg>'
-         '<p class="in-name" aria-label="Alex Juan"><span style="--i:0">A</span><span style="--i:1">l</span><span style="--i:2">e</span><span style="--i:3">x</span><span style="--i:4">&nbsp;</span><span style="--i:5">J</span><span style="--i:6">u</span><span style="--i:7">a</span><span style="--i:8">n</span><small>Live Événement</small></p></div></div>\n'
+         '<div class="in-logo"><svg class="ol" viewBox="0 0 120 120"><circle class="c1" cx="60" cy="60" r="56"/><circle class="c2" cx="60" cy="60" r="50"/><text class="la" x="61.5" y="76" text-anchor="end">A</text><text class="lj" x="58.5" y="76" text-anchor="start">J</text></svg>'
+         '<svg class="fl" viewBox="0 0 120 120"><defs><linearGradient id="in-gold" gradientUnits="userSpaceOnUse" x1="0" y1="20" x2="120" y2="100"><stop offset="0" stop-color="#cfb489"/><stop offset=".38" stop-color="#cfb489"/><stop offset=".5" stop-color="#fff6e3"/><stop offset=".62" stop-color="#cfb489"/><stop offset="1" stop-color="#cfb489"/><animateTransform attributeName="gradientTransform" type="translate" from="-130 0" to="130 0" begin="1.7s" dur="1.2s" fill="freeze"/></linearGradient></defs><circle class="c1" cx="60" cy="60" r="56"/><circle class="c2" cx="60" cy="60" r="50"/><text class="la" x="61.5" y="76" text-anchor="end">A</text><text class="lj" x="58.5" y="76" text-anchor="start">J</text></svg></div>'
+         '<p class="in-name">Alex Juan</p><p class="in-sub">Live Événement</p></div></div>\n'
          "<script>(function(){var r=document.documentElement,i=document.getElementById('intro');if(!r.classList.contains('intro-on')){i.remove();return}"
          "function end(){if(!i.parentNode)return;i.classList.add('out');setTimeout(function(){i.remove();r.classList.remove('intro-on')},700)}"
-         "i.addEventListener('click',end);setTimeout(end,3300)})();</script>\n")
+         "i.addEventListener('click',end);setTimeout(end,4000)})();</script>\n")
 
 
 def head(lang, path, key, title, desc, ld=None, robots=None):
@@ -149,7 +149,7 @@ def head(lang, path, key, title, desc, ld=None, robots=None):
 <link rel="preload" href="{p}assets/fonts/cormorant-garamond-500-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{p}assets/fonts/jost-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{p}assets/fonts.css">
-<link rel="stylesheet" href="{p}assets/site.css?v=6">
+<link rel="stylesheet" href="{p}assets/site.css?v=8">
 ''' + (INTRO_HEAD if key == 'home' else '') + ''.join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>\n' for x in (ld or [])) + '</head>\n<body>\n'
 
 
