@@ -104,6 +104,18 @@ def wa(lang):
     return 'https://wa.me/33635481460?text=' + T[lang]['wa_text']
 
 
+# Home page intro: the logo draws itself once per visit (skipped on reduced motion or a repeat view).
+INTRO_HEAD = ("<script>try{if(!sessionStorage.getItem('aj-intro')&&!matchMedia('(prefers-reduced-motion:reduce)').matches)"
+              "{document.documentElement.classList.add('intro-on');sessionStorage.setItem('aj-intro','1')}}catch(e){}</script>\n")
+INTRO = ('<div class="intro" id="intro" aria-hidden="true"><div class="in-box">'
+         '<svg viewBox="0 0 120 120"><circle class="c1" cx="60" cy="60" r="56"/><circle class="c2" cx="60" cy="60" r="50"/>'
+         '<text x="60" y="76" text-anchor="middle">AJ</text></svg>'
+         '<p class="in-name">Alex Juan<small>Live Événement</small></p></div></div>\n'
+         "<script>(function(){var r=document.documentElement,i=document.getElementById('intro');if(!r.classList.contains('intro-on')){i.remove();return}"
+         "function end(){if(!i.parentNode)return;i.classList.add('out');setTimeout(function(){i.remove();r.classList.remove('intro-on')},700)}"
+         "i.addEventListener('click',end);setTimeout(end,2300)})();</script>\n")
+
+
 def head(lang, path, key, title, desc, ld=None, robots=None):
     p = prefix(path)
     canon = SITE + path
@@ -137,8 +149,8 @@ def head(lang, path, key, title, desc, ld=None, robots=None):
 <link rel="preload" href="{p}assets/fonts/cormorant-garamond-500-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{p}assets/fonts/jost-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{p}assets/fonts.css">
-<link rel="stylesheet" href="{p}assets/site.css?v=4">
-''' + ''.join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>\n' for x in (ld or [])) + '</head>\n<body>\n'
+<link rel="stylesheet" href="{p}assets/site.css?v=5">
+''' + (INTRO_HEAD if key == 'home' else '') + ''.join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>\n' for x in (ld or [])) + '</head>\n<body>\n'
 
 
 def business_ld(lang):

@@ -319,3 +319,22 @@ ol.steps{padding:0;margin:0}
 @media(max-width:600px){.btn{padding:14px 24px}}
 @media(max-width:520px){.vgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.vgrid .player{width:100%}.vgrid .player .play{width:56px;height:56px;margin:-28px 0 0 -28px}}
 .f-ig{display:inline-flex;align-items:center;gap:10px;margin:2px 0 14px;color:var(--gold-l);text-decoration:none;font-size:15px;min-height:44px}.f-ig:hover{color:var(--ivory)}
+
+/* Home intro: logo draws, name appears, curtain lifts (once per visit) */
+.intro{display:none}
+html.intro-on{overflow:hidden}
+html.intro-on .intro{display:flex;position:fixed;inset:0;z-index:100;background:var(--ink);align-items:center;justify-content:center;cursor:pointer;transition:transform .7s cubic-bezier(.7,0,.2,1),opacity .7s ease}
+.intro.out{transform:translateY(-100%)}
+.in-box{text-align:center;transition:opacity .35s ease,transform .5s ease}
+.intro.out .in-box{opacity:0;transform:translateY(-24px)}
+.intro svg{width:min(150px,38vw);height:auto;overflow:visible}
+.intro circle{fill:none;stroke:var(--gold-l);stroke-linecap:round;transform:rotate(-90deg);transform-origin:60px 60px}
+.intro .c1{stroke-width:1.6;stroke-dasharray:352;stroke-dashoffset:352;animation:in-draw 1s cubic-bezier(.6,0,.2,1) .1s forwards}
+.intro .c2{stroke-width:.6;stroke-dasharray:315;stroke-dashoffset:315;animation:in-draw 1s cubic-bezier(.6,0,.2,1) .3s forwards}
+.intro text{font:500 50px "Cormorant Garamond",Georgia,serif;letter-spacing:-3px;fill:var(--gold-l);opacity:0;animation:in-fade .7s ease .75s forwards}
+.in-name{margin:22px 0 0;font:500 clamp(28px,7vw,40px)/1.1 var(--serif);color:var(--ivory);opacity:0;animation:in-up .7s ease 1.15s forwards}
+.in-name small{display:block;margin-top:10px;font:400 12px var(--sans);letter-spacing:.42em;text-transform:uppercase;color:var(--gold-l)}
+@keyframes in-draw{to{stroke-dashoffset:0}}
+@keyframes in-fade{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+@keyframes in-up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.intro{display:none!important}}

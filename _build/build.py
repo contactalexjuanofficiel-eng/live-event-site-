@@ -6,7 +6,7 @@ The private quote tool in pro/ is not generated here.
 """
 import json, os, re, sys
 sys.path.insert(0, os.path.dirname(__file__))
-from parts import head, top, foot, ic, url, prefix, business_ld, PATHS, T, TEL, MAIL, CAL, SITE, wa, IG_AJ
+from parts import INTRO, head, top, foot, ic, url, prefix, business_ld, PATHS, T, TEL, MAIL, CAL, SITE, wa, IG_AJ
 import content as C
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -22,7 +22,7 @@ def write(rel, html):
 
 def page(lang, key, title, desc, body, ld=None, extra_js='', path=None, robots=None):
     path = path if path is not None else PATHS[lang][key]
-    return head(lang, path, key, title, desc, ld, robots) + top(lang, path, key) + '<main id="main">\n' + body + '\n</main>\n' + foot(lang, path, extra_js)
+    return head(lang, path, key, title, desc, ld, robots) + (INTRO if key == 'home' else '') + top(lang, path, key) + '<main id="main">\n' + body + '\n</main>\n' + foot(lang, path, extra_js)
 
 
 def link(href, text):
