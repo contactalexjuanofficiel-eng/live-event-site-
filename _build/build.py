@@ -210,7 +210,7 @@ def contact(lang):
 <div class="full" style="display:flex;flex-wrap:wrap;align-items:center;gap:16px 24px"><button class="btn" id="send" type="submit">{F["send"]}</button><p class="fstatus" id="f-status" role="status" aria-live="polite"></p></div>
 <p class="note full">{F["privacy"].format(p=p)}</p>
 </form>
-<aside class="aside fade"><span class="eyebrow">{T[lang]["booking"]}</span><h3>{X["aside_title"]}</h3><p>{X["aside_text"]}</p>
+<aside class="aside fade" id="nous-contacter"><span class="eyebrow">{T[lang]["booking"]}</span><h3>{X["aside_title"]}</h3><p>{X["aside_text"]}</p>
 <div class="who"><img src="{p}assets/avatar-booking.jpg?v=2" alt="" width="64" height="64" loading="lazy"><div><b>NBC Booking</b><span>{X["aside_role"]}</span></div></div>
 <ul><li><a href="tel:{TEL}">{ic("phone")}{T[lang]["tel_txt"]}</a></li><li><a href="{wa(lang)}" target="_blank" rel="noopener">{ic("whatsapp")}WhatsApp</a></li><li><a href="mailto:{MAIL}">{ic("mail")}{MAIL}</a></li><li><a href="{IG_AJ}" target="_blank" rel="noopener">{ic("instagram")}@ajliveevenement</a></li></ul>
 <p style="margin-top:24px">{X["aside_note"]}</p></aside>

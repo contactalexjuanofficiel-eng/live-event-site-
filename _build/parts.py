@@ -29,7 +29,7 @@ LEGAL = ['mentions-legales.html', 'confidentialite.html', 'cgu.html', 'cgv.html'
 T = {
     'fr': dict(
         nav=[('prestations', 'Prestations'), ('show', 'Le show'), ('team', "L'équipe"), ('booking', 'Réserver')],
-        home='Accueil', quote='Devis gratuit', booking='Booking', menu_open='Ouvrir le menu', menu_close='Fermer le menu',
+        home='Accueil', contact_us='Nous contacter', quote='Devis gratuit', booking='Booking', menu_open='Ouvrir le menu', menu_close='Fermer le menu',
         skip='Aller au contenu', main_menu='Menu principal', lang_label='Langue',
         services=[('mariage', 'Mariage'), ('entreprise', "Événements d'entreprise"), ('prive', 'Soirées privées')],
         foot_about="Chant live, son et lumière inclus, pour vos mariages, événements d'entreprise et soirées privées, partout en France.",
@@ -40,7 +40,7 @@ T = {
         tel_txt=TEL_TXT, locale='fr_FR'),
     'en': dict(
         nav=[('prestations', 'Services'), ('show', 'The show'), ('team', 'The team'), ('booking', 'Booking')],
-        home='Home', quote='Free quote', booking='Booking', menu_open='Open menu', menu_close='Close menu',
+        home='Home', contact_us='Contact us', quote='Free quote', booking='Booking', menu_open='Open menu', menu_close='Close menu',
         skip='Skip to content', main_menu='Main menu', lang_label='Language',
         services=[('mariage', 'Weddings'), ('entreprise', 'Corporate events'), ('prive', 'Private parties')],
         foot_about='Live singing, sound and lighting included, for weddings, corporate events and private parties, anywhere in France.',
@@ -172,7 +172,8 @@ def top(lang, path, key):
     fr_href, en_href = (here, to_other) if lang == 'fr' else (to_other, here)
     def cur(k): return ' aria-current="page"' if k == key else ''
     links = ''.join(f'<a href="{url(lang, k, p)}"{cur(k)}>{n}</a>' for k, n in t['nav'])
-    dlinks = ''.join(f'<a href="{url(lang, k, p)}"{cur(k)}>{n}</a>' for k, n in [('home', t['home'])] + t['nav'] + [('contact', t['quote'])])
+    dlinks = (''.join(f'<a href="{url(lang, k, p)}"{cur(k)}>{n}</a>' for k, n in [('home', t['home'])] + t['nav'] + [('contact', t['quote'])])
+              + f'<a href="{url(lang, "contact", p)}#nous-contacter">{t["contact_us"]}</a>')
     brand = f'<a class="brand" href="{url(lang, "home", p)}" aria-label="{t["brand_home"]}"><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#mono"/></svg><span><b>Alex Juan</b><small>Live événement</small></span></a>'
     lang_links = (f'<a href="{fr_href}" lang="fr" hreflang="fr"{" aria-current=\"true\"" if lang == "fr" else ""}>FR</a>'
                   f'<a href="{en_href}" lang="en" hreflang="en"{" aria-current=\"true\"" if lang == "en" else ""}>EN</a>')
