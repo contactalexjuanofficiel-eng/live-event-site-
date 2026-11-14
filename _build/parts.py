@@ -19,9 +19,9 @@ SOCIAL = [
 
 # Page keys -> path per language. Service and legal pages exist in French only.
 PATHS = {
-    'fr': {'home': '', 'prestations': 'prestations/', 'show': 'le-show/', 'team': 'equipe/', 'booking': 'reserver/', 'contact': 'contact/',
+    'fr': {'home': '', 'prestations': 'prestations/', 'show': 'le-show/', 'team': 'equipe/', 'booking': 'reserver/', 'contact': 'contact/', 'reach': 'nous-contacter/',
            'mariage': 'chanteur-mariage-bordeaux/', 'entreprise': 'animation-musicale-entreprise-bordeaux/', 'prive': 'chanteur-anniversaire-soiree-privee-bordeaux/'},
-    'en': {'home': 'en/', 'prestations': 'en/services/', 'show': 'en/the-show/', 'team': 'en/team/', 'booking': 'en/booking/', 'contact': 'en/contact/',
+    'en': {'home': 'en/', 'prestations': 'en/services/', 'show': 'en/the-show/', 'team': 'en/team/', 'booking': 'en/booking/', 'contact': 'en/contact/', 'reach': 'en/contact-us/',
            'mariage': 'en/services/#weddings', 'entreprise': 'en/services/#corporate', 'prive': 'en/services/#private'},
 }
 LEGAL = ['mentions-legales.html', 'confidentialite.html', 'cgu.html', 'cgv.html']
@@ -152,7 +152,7 @@ def head(lang, path, key, title, desc, ld=None, robots=None):
 <link rel="preload" href="{p}assets/fonts/cormorant-garamond-500-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{p}assets/fonts/jost-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{p}assets/fonts.css">
-<link rel="stylesheet" href="{p}assets/site.css?v=13">
+<link rel="stylesheet" href="{p}assets/site.css?v=14">
 ''' + (INTRO_HEAD if key == 'home' else '') + ''.join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>\n' for x in (ld or [])) + '</head>\n<body>\n'
 
 
@@ -173,7 +173,7 @@ def top(lang, path, key):
     def cur(k): return ' aria-current="page"' if k == key else ''
     links = ''.join(f'<a href="{url(lang, k, p)}"{cur(k)}>{n}</a>' for k, n in t['nav'])
     dlinks = (''.join(f'<a href="{url(lang, k, p)}"{cur(k)}>{n}</a>' for k, n in [('home', t['home'])] + t['nav'] + [('contact', t['quote'])])
-              + f'<a href="{url(lang, "contact", p)}#nous-contacter">{t["contact_us"]}</a>')
+              + f'<a href="{url(lang, "reach", p)}"{cur("reach")}>{t["contact_us"]}</a>')
     brand = f'<a class="brand" href="{url(lang, "home", p)}" aria-label="{t["brand_home"]}"><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#mono"/></svg><span><b>Alex Juan</b><small>Live événement</small></span></a>'
     lang_links = (f'<a href="{fr_href}" lang="fr" hreflang="fr"{" aria-current=\"true\"" if lang == "fr" else ""}>FR</a>'
                   f'<a href="{en_href}" lang="en" hreflang="en"{" aria-current=\"true\"" if lang == "en" else ""}>EN</a>')
@@ -212,7 +212,7 @@ def foot(lang, path, extra_js=''):
 <div class="bottom"><span>© 2026 Alex Juan Live Événement</span><nav aria-label="{t["legal_label"]}">{legal}</nav></div>
 </div></footer>
 <a class="wa" href="{wa(lang)}" target="_blank" rel="noopener" aria-label="{t["wa_label"]}">{ic("whatsapp")}</a>
-<script src="{p}assets/site.js?v=4" defer></script>
+<script src="{p}assets/site.js?v=5" defer></script>
 {extra_js}<!-- Cloudflare Web Analytics: visit statistics without cookies -->
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{{"token": "2add43b340f4457ebb4f646436ea3a8f"}}'></script>
 </body>

@@ -219,6 +219,31 @@ def contact(lang):
     return page(lang, 'contact', X['quote_page_title'], X['quote_page_desc'], body, extra_js=js)
 
 
+def reach(lang):
+    """Contact page: only the ways to reach the booking team, as large tap targets."""
+    X, p = C.TXT[lang], prefix(PATHS[lang]['reach'])
+    fr = lang == 'fr'
+    cards = [
+        ('phone', 'Appeler' if fr else 'Call', T[lang]['tel_txt'], f'tel:{TEL}', ''),
+        ('whatsapp', 'WhatsApp', 'Écrire un message' if fr else 'Send a message', wa(lang), ' target="_blank" rel="noopener"'),
+        ('mail', 'Email', MAIL, f'mailto:{MAIL}', ''),
+        ('instagram', 'Instagram', '@ajliveevenement', IG_AJ, ' target="_blank" rel="noopener"'),
+    ]
+    grid = ''.join(f'<a class="ct-card fade" href="{h}"{x}>{ic(i)}<span><small>{l}</small><b>{v}</b></span></a>' for i, l, v, h, x in cards)
+    body = page_hero('Contact', T[lang]['contact_us'],
+                     "Une question, une date à vérifier ? NBC Booking gère l’agenda d’Alex Juan et vous répond rapidement." if fr else
+                     "A question or a date to check? NBC Booking manages Alex Juan’s calendar and gets back to you quickly.")
+    body += f'''<section class="sec"><div class="wrap">
+<div class="ct-who fade"><img src="{p}assets/avatar-booking.jpg?v=2" alt="" width="72" height="72" loading="lazy"><div><b>NBC Booking</b><span>{X["aside_role"]}</span></div></div>
+<div class="ct-grid">{grid}</div>
+<p class="ct-more fade">{"Vous avez déjà une date et un lieu ?" if fr else "Already have a date and a venue?"} <a href="{url(lang, "contact", p)}">{"Demander un devis gratuit" if fr else "Request a free quote"}</a> · <a href="{url(lang, "booking", p)}">{"Réserver ma date" if fr else "Book my date"}</a></p>
+</div></section>'''
+    title = ('Nous contacter · Alex Juan Live Événement' if fr else 'Contact us · Alex Juan Live Événement')
+    desc = ("Contactez NBC Booking, le booking d’Alex Juan Live Événement : téléphone, WhatsApp, email ou Instagram." if fr else
+            "Contact NBC Booking, Alex Juan Live Événement’s booking agency: phone, WhatsApp, email or Instagram.")
+    return page(lang, 'reach', title, desc, body)
+
+
 def service(key):
     S = C.FR_SERVICES[key]
     path = PATHS['fr'][key]
@@ -286,13 +311,13 @@ def not_found():
     body += '<section class="sec tight"><div class="wrap"><a class="btn" href="/">Retour à l\'accueil</a></div></section>'
     html = page('fr', None, 'Page introuvable · Alex Juan Live Événement', 'Page introuvable.', body, path='', robots='noindex')
     # served from any depth: make root-relative links absolute
-    return re.sub(r'(href|src)="(?:\./)?(?=assets/|favicon|prestations/|le-show/|equipe/|reserver/|contact/|chanteur-|animation-|mentions-|confidentialite|cgu|cgv|en/)', r'\1="/', html).replace('href="./"', 'href="/"')
+    return re.sub(r'(href|src)="(?:\./)?(?=assets/|favicon|prestations/|le-show/|equipe/|reserver/|contact/|nous-contacter/|chanteur-|animation-|mentions-|confidentialite|cgu|cgv|en/)', r'\1="/', html).replace('href="./"', 'href="/"')
 
 
 if __name__ == '__main__':
     for lang in ('fr', 'en'):
         write(PATHS[lang]['home'] + 'index.html', home(lang))
-        for k, fn in (('prestations', prestations), ('show', show), ('team', team), ('booking', booking), ('contact', contact)):
+        for k, fn in (('prestations', prestations), ('show', show), ('team', team), ('booking', booking), ('contact', contact), ('reach', reach)):
             write(PATHS[lang][k] + 'index.html', fn(lang))
     for k in ('mariage', 'entreprise', 'prive'):
         write(PATHS['fr'][k] + 'index.html', service(k))

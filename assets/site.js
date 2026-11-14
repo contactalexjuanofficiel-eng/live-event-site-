@@ -31,7 +31,7 @@
   });
 
   // WhatsApp button steps aside over the footer and the quote form
-  var wa=document.querySelector('.wa'),hide=[].slice.call(document.querySelectorAll('.foot,#devis-form'));
+  var wa=document.querySelector('.wa'),hide=[].slice.call(document.querySelectorAll('.foot,#devis-form,.ct-grid'));
   if(wa&&hide.length&&'IntersectionObserver' in window){var seen=new Set();
     var o2=new IntersectionObserver(function(es){es.forEach(function(e){e.isIntersecting?seen.add(e.target):seen.delete(e.target)});wa.classList.toggle('away',seen.size>0)});
     hide.forEach(function(h){o2.observe(h)});

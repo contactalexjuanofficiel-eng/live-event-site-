@@ -338,3 +338,18 @@ html.intro-on .intro{display:flex;position:fixed;inset:0;z-index:100;background:
 .intro.out{transform:translateY(-100%)}
 .intro.out video{opacity:0}
 @media(prefers-reduced-motion:reduce){.intro{display:none!important}}
+/* Contact page */
+.ct-who{display:flex;align-items:center;gap:18px;margin-bottom:var(--s4)}
+.ct-who img{width:72px;height:72px;border-radius:50%;object-fit:cover;border:1px solid var(--line)}
+.ct-who b{display:block;font:500 26px/1.2 var(--serif)}
+.ct-who span{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+.ct-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.ct-card{display:flex;flex-direction:column;gap:18px;padding:30px 26px;background:var(--ink);color:var(--ivory);text-decoration:none;border:1px solid transparent;transition:border-color .25s,transform .25s}
+.ct-card:hover,.ct-card:focus-visible{border-color:var(--gold-l);transform:translateY(-2px)}
+.ct-card .icon{flex:none;width:28px;height:28px;color:var(--gold-l)}
+.ct-card span{display:flex;flex-direction:column;gap:6px;min-width:0}
+.ct-card small{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-l)}
+.ct-card b{font:500 24px/1.25 var(--serif);word-break:break-word}
+@media(max-width:700px){.ct-grid{gap:10px}.ct-card{flex-direction:row;align-items:center;gap:18px;padding:20px}.ct-card b{font-size:21px}}
+.ct-more{margin-top:var(--s4);color:var(--mute)}
+
