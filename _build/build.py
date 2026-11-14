@@ -94,7 +94,7 @@ def home(lang):
                    f'<source src="{p}assets/hero-720.webm" type="video/webm"><source src="{p}assets/hero-720.mp4" type="video/mp4"></video>')
         else:
             c = clips[k]
-            vid = f'<video muted playsinline preload="none" aria-hidden="true" data-d="{p}assets/reel/{c}-d.mp4" data-m="{p}assets/reel/{c}-m.mp4"></video>'
+            vid = f'<video muted loop playsinline preload="none" aria-hidden="true" data-d="{p}assets/reel/{c}-d" data-m="{p}assets/reel/{c}-m"></video>'
         slides += f'<div class="slide{" on" if k == 0 else ""}">{vid}<p class="slide-t" aria-hidden="true"><small>{small}</small><span>{big}</span></p></div>'
     body = f'''<section class="hero reel">
 {slides}

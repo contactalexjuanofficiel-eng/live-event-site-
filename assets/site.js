@@ -37,19 +37,18 @@
     hide.forEach(function(h){o2.observe(h)});
   }
 
-  // Home reel: every 6 s the next clip (portrait file on phones, landscape on computers) fades in with its line
+  // Home reel: every 6 s the next clip (portrait files on phones, landscape on computers) fades in with its line.
+  // iPhones only start a video that is visible, so the slide is shown first, with a still image under it, then played.
   var reel=document.querySelector('.reel');
   if(reel&&!matchMedia('(prefers-reduced-motion:reduce)').matches){
-    var sl=[].slice.call(reel.querySelectorAll('.slide')),cur=0,tick=null,vis=true,port=matchMedia('(orientation:portrait)').matches;
-    var src=function(v){return v.dataset[port?'m':'d']};
-    var prep=function(s){var v=s.querySelector('video');if(v&&!v.getAttribute('src')&&v.dataset.d){v.src=src(v);v.load()}return v};
-    var go=function(){var n=(cur+1)%sl.length,v=prep(sl[n]),old=sl[cur];
-      var show=function(){if(v){try{v.currentTime=0}catch(e){}var pr=v.play();if(pr&&pr.catch)pr.catch(function(){})}
-        sl[n].classList.add('on');old.classList.remove('on');cur=n;prep(sl[(n+1)%sl.length]);
-        setTimeout(function(){var ov=old.querySelector('video');if(ov&&n!==0&&ov!==v)ov.pause()},1500)};
-      if(!v||v.readyState>=3)show();else{var done=false,f=function(){if(!done){done=true;show()}};v.addEventListener('canplay',f,{once:true});setTimeout(f,2500)}};
-    var start=function(){if(!tick)tick=setInterval(function(){if(vis&&!document.hidden&&!document.documentElement.classList.contains('intro-on'))go()},6000)};
-    prep(sl[1]);start();
+    var sl=[].slice.call(reel.querySelectorAll('.slide')),cur=0,vis=true,port=matchMedia('(orientation:portrait)').matches;
+    var prep=function(s){var v=s.querySelector('video');if(v&&v.dataset.d&&!v.getAttribute('src')){var b=v.dataset[port?'m':'d'];v.poster=b+'.jpg';v.preload='auto';v.src=b+'.mp4'}return v};
+    var play=function(v){if(!v)return;try{v.currentTime=0}catch(e){}try{var pr=v.play();if(pr&&pr.catch)pr.catch(function(){})}catch(e){}};
+    var go=function(){var n=(cur+1)%sl.length,old=sl[cur],v=prep(sl[n]);
+      sl[n].classList.add('on');old.classList.remove('on');cur=n;play(v);prep(sl[(n+1)%sl.length]);
+      setTimeout(function(){var ov=old.querySelector('video');if(ov&&ov!==v&&old!==sl[0])try{ov.pause()}catch(e){}},1600)};
+    var loop=function(){setTimeout(function(){try{if(vis&&!document.hidden&&!document.documentElement.classList.contains('intro-on'))go()}catch(e){}loop()},6000)};
+    prep(sl[1]);loop();
     if('IntersectionObserver' in window)new IntersectionObserver(function(es){vis=es[0].isIntersecting}).observe(reel);
   }
 
