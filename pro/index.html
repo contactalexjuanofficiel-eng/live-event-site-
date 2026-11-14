@@ -325,7 +325,7 @@ window.ajConfirm=function(text,o,yes){show(text,o,true,yes)};})();
 <label for="f_paid">Acompte déjà réglé (€)</label><input id="f_paid" type="number" min="0" step="1">
 <span class="lbl" id="pay_l">Moyens de paiement acceptés</span>
 <div class="payopts" id="pay_opts" role="group" aria-labelledby="pay_l"><label><input type="checkbox" data-k="iban"> Virement (avec le RIB)</label><label><input type="checkbox" data-k="carte"> Carte bancaire</label><label><input type="checkbox" data-k="cheque"> Chèque</label><label><input type="checkbox" data-k="especes"> Espèces</label></div>
-<label for="f_bank">Vos coordonnées bancaires <small style="color:var(--mute)">(déjà remplies, modifiables)</small></label><input id="f_bank" placeholder="IBAN FR76 … · BIC …" autocomplete="off" spellcheck="false">
+<input id="f_bank" type="hidden">
 <label for="f_pay">Texte affiché sur la facture <small style="color:var(--mute)">(modifiable)</small></label><textarea id="f_pay" rows="2"></textarea>
 <label for="f_status">Statut</label><select id="f_status"><option value="a_payer">À payer</option><option value="payee">Payée</option></select>
 </fieldset>
