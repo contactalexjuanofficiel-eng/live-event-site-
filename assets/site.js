@@ -42,13 +42,14 @@
   var reel=document.querySelector('.reel');
   if(reel&&!matchMedia('(prefers-reduced-motion:reduce)').matches){
     var sl=[].slice.call(reel.querySelectorAll('.slide')),cur=0,vis=true,port=matchMedia('(orientation:portrait)').matches;
+    var cn=navigator.connection,slow=!!(cn&&(cn.saveData||/2g/.test(cn.effectiveType||'')));// on slow data, load each clip only when it is shown
     var prep=function(s){var v=s.querySelector('video');if(v&&v.dataset.d&&!v.getAttribute('src')){var b=v.dataset[port?'m':'d'];v.poster=b+'.jpg';v.preload='auto';v.src=b+'.mp4'}return v};
     var play=function(v){if(!v)return;try{v.currentTime=0}catch(e){}try{var pr=v.play();if(pr&&pr.catch)pr.catch(function(){})}catch(e){}};
     var go=function(){var n=(cur+1)%sl.length,old=sl[cur],v=prep(sl[n]);
-      sl[n].classList.add('on');old.classList.remove('on');cur=n;play(v);prep(sl[(n+1)%sl.length]);
+      sl[n].classList.add('on');old.classList.remove('on');cur=n;play(v);if(!slow)prep(sl[(n+1)%sl.length]);
       setTimeout(function(){var ov=old.querySelector('video');if(ov&&ov!==v&&old!==sl[0])try{ov.pause()}catch(e){}},1600)};
     var loop=function(){setTimeout(function(){try{if(vis&&!document.hidden&&!document.documentElement.classList.contains('intro-on'))go()}catch(e){}loop()},6000)};
-    prep(sl[1]);loop();
+    if(!slow)prep(sl[1]);loop();
     if('IntersectionObserver' in window)new IntersectionObserver(function(es){vis=es[0].isIntersecting}).observe(reel);
   }
 

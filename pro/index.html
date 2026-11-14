@@ -9,7 +9,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png?v=3">
 <meta name="theme-color" content="#0e1116">
 <script>/* Access code: the page stays hidden until the code (stored only as a hash) has been entered once on this device. */
-var AJ_LOCK='e0eaea7f69bd713bd4522d207ed4b365a05c0a6be2d09653cc533c3db415e4af';try{if(localStorage.getItem('aj-pro-ok')!==AJ_LOCK)document.documentElement.classList.add('locked')}catch(e){document.documentElement.classList.add('locked')}</script>
+var AJ_LOCK='6bccb85d3abdcca539949f81cbf05b8c5603af7d405fe3deecf96514b12fdabb';try{if(localStorage.getItem('aj-pro-ok')!==AJ_LOCK)document.documentElement.classList.add('locked')}catch(e){document.documentElement.classList.add('locked')}</script>
 <link rel="stylesheet" href="../assets/fonts.css">
 <style>
 :root{--sky:#f6f2ea;--sky2:#ece6db;--deep:#0e1116;--gold:#b08d57;--gold2:#cfb489;--txt:#262420;--mute:#6b6760;--line:rgba(176,141,87,.38)}
@@ -245,16 +245,10 @@ window.ajConfirm=function(text,o,yes){show(text,o,true,yes)};})();
 <div class="aj">AJ</div>
 <h1>Espace pro</h1>
 <p>Entrez votre code d'accès</p>
-<input id="lk_code" type="password" inputmode="numeric" autocomplete="off" aria-label="Code d'accès" placeholder="••••••••">
+<input id="lk_code" type="password" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Code d'accès" placeholder="XXXX-XXXX-XXXX-XXXX">
 <p class="err" id="lk_err" aria-live="polite"></p>
 <button type="submit" class="btn" id="lk_go">Entrer</button>
-<button type="button" class="link" id="lk_forgot">Code oublié ?</button>
-<div class="q" id="lk_q">
-<label for="lk_ans">Question secrète : quelle est la date d'anniversaire de votre fille ?</label>
-<input id="lk_ans" type="date" aria-label="Date d'anniversaire">
-<p class="err" id="lk_err2" aria-live="polite"></p>
-<button type="button" class="btn" id="lk_ans_go">Valider la réponse</button>
-</div>
+<p class="hint" style="margin-top:14px;font-size:13px">Code oublié ? Il est dans vos notes, ou demandez-le à Claude.</p>
 </form>
 </div>
 <div class="top"><b>Espace pro <span>· Devis &amp; factures</span></b><span class="tr"><button type="button" class="lk" id="lk_lock"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" style="vertical-align:-2px;margin-right:6px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round"><rect x="5" y="10.5" width="14" height="10" rx="1.5"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></svg>Verrouiller</button><a href="../"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" style="vertical-align:-2px;margin-right:6px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="M20 12H5M10.5 6.5 5 12l5.5 5.5"/></svg>Retour au site</a></span></div>
@@ -331,6 +325,7 @@ window.ajConfirm=function(text,o,yes){show(text,o,true,yes)};})();
 <label for="f_paid">Acompte déjà réglé (€)</label><input id="f_paid" type="number" min="0" step="1">
 <span class="lbl" id="pay_l">Moyens de paiement acceptés</span>
 <div class="payopts" id="pay_opts" role="group" aria-labelledby="pay_l"><label><input type="checkbox" data-k="iban"> Virement (avec le RIB)</label><label><input type="checkbox" data-k="carte"> Carte bancaire</label><label><input type="checkbox" data-k="cheque"> Chèque</label><label><input type="checkbox" data-k="especes"> Espèces</label></div>
+<label for="f_bank">Vos coordonnées bancaires <small style="color:var(--mute)">(gardées seulement sur cet appareil)</small></label><input id="f_bank" placeholder="IBAN FR76 … · BIC …" autocomplete="off" spellcheck="false">
 <label for="f_pay">Texte affiché sur la facture <small style="color:var(--mute)">(modifiable)</small></label><textarea id="f_pay" rows="2"></textarea>
 <label for="f_status">Statut</label><select id="f_status"><option value="a_payer">À payer</option><option value="payee">Payée</option></select>
 </fieldset>
@@ -422,13 +417,11 @@ window.ajConfirm=function(text,o,yes){show(text,o,true,yes)};})();
 (function(){var $=function(i){return document.getElementById(i)};
 function sha(t){return crypto.subtle.digest('SHA-256',new TextEncoder().encode('aj-pro:'+t)).then(function(b){return Array.prototype.map.call(new Uint8Array(b),function(x){return x.toString(16).padStart(2,'0')}).join('')})}
 function unlock(){try{localStorage.setItem('aj-pro-ok',AJ_LOCK)}catch(e){}document.documentElement.classList.remove('locked');dispatchEvent(new Event('resize'))}
-function fail(el,msg){$(el.id==='lk_ans'?'lk_err2':'lk_err').textContent=msg;var f=$('lk_form');f.classList.remove('shake');void f.offsetWidth;f.classList.add('shake');el.value='';el.focus()}
-function check(v,el,msg){v=String(v||'').replace(/\D/g,'');if(!v){el.focus();return}sha(v).then(function(h){if(h===AJ_LOCK){try{localStorage.setItem('aj-stats-key',v);localStorage.setItem('aj-me','1')}catch(e){}unlock()}else fail(el,msg)})}
-$('lk_go').onclick=function(){check($('lk_code').value,$('lk_code'),'Code incorrect. Réessayez ou appuyez sur « Code oublié ? ».')};
-$('lk_forgot').onclick=function(){$('lk_q').classList.add('on');$('lk_err').textContent='';$('lk_err2').textContent='';$('lk_ans').focus()};
-// The answer (a date picked as YYYY-MM-DD) is turned into DDMMYYYY and checked like the code.
-$('lk_ans_go').onclick=function(){var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec($('lk_ans').value);if(!m){$('lk_err2').textContent='Choisissez une date.';return}check(m[3]+m[2]+m[1],$('lk_ans'),'Mauvaise réponse.')};
-$('lk_lock').onclick=function(){try{localStorage.removeItem('aj-pro-ok');localStorage.removeItem('aj-stats-key')}catch(e){}$('lk_code').value='';$('lk_err').textContent='';$('lk_q').classList.remove('on');document.documentElement.classList.add('locked');scrollTo(0,0)};
+function fail(el,msg){$('lk_err').textContent=msg;var f=$('lk_form');f.classList.remove('shake');void f.offsetWidth;f.classList.add('shake');el.value='';el.focus()}
+function norm(v){return String(v||'').toUpperCase().replace(/[^A-Z0-9]/g,'')}
+function check(v,el,msg){v=norm(v);if(!v){el.focus();return}sha(v).then(function(h){if(h===AJ_LOCK){try{localStorage.setItem('aj-stats-key',v);localStorage.setItem('aj-me','1')}catch(e){}unlock()}else fail(el,msg)})}
+$('lk_go').onclick=function(){check($('lk_code').value,$('lk_code'),'Code incorrect. Réessayez.')};
+$('lk_lock').onclick=function(){try{localStorage.removeItem('aj-pro-ok');localStorage.removeItem('aj-stats-key')}catch(e){}$('lk_code').value='';$('lk_err').textContent='';document.documentElement.classList.add('locked');scrollTo(0,0)};
 if(!document.documentElement.classList.contains('locked')){try{localStorage.setItem('aj-me','1')}catch(e){}}
 if(document.documentElement.classList.contains('locked'))setTimeout(function(){$('lk_code').focus()},50);
 })();
@@ -451,8 +444,8 @@ function key(){try{return localStorage.getItem('aj-stats-key')||''}catch(e){retu
 
 function askKey(msg){var b=$('st_body');b.innerHTML='';var f=el('form','st-key');f.onsubmit=function(){return false};
   f.appendChild(el('p',null,msg||'Entrez votre code d\'accès pour voir les statistiques.'));
-  var i=el('input');i.type='password';i.inputMode='numeric';i.placeholder='••••••••';i.setAttribute('aria-label','Code d\'accès');f.appendChild(i);
-  var go=el('button','btn','Voir les statistiques');go.type='submit';go.onclick=function(){var v=i.value.replace(/\D/g,'');if(!v)return;try{localStorage.setItem('aj-stats-key',v)}catch(e){}load()};
+  var i=el('input');i.type='password';i.autocapitalize='characters';i.placeholder='••••••••';i.setAttribute('aria-label','Code d\'accès');f.appendChild(i);
+  var go=el('button','btn','Voir les statistiques');go.type='submit';go.onclick=function(){var v=i.value.toUpperCase().replace(/[^A-Z0-9]/g,'');if(!v)return;try{localStorage.setItem('aj-stats-key',v)}catch(e){}load()};
   f.appendChild(go);b.appendChild(f);i.focus()}
 
 function load(){var k=key();if(!k){askKey();return}var me=++busy;
@@ -536,7 +529,10 @@ var PRESETS={
  free:function(){return {d:'',q:1,u:0}}};
 var lines=[],STATUS='brouillon',KIND='devis',FROM='',dirty=false,asT;
 var FST={a_payer:'À payer',payee:'Payée'};
-var FAC_FIELDS={f_date:'',f_due:'À réception',f_paid:'0',f_pay:'Virement bancaire (IBAN FR76 1120 6201 1100 9347 7573 259 · BIC AGRIFRPP812), chèque ou espèces.'};
+// Bank details are never written in this page: they are typed once and kept only on this device.
+function bank(){try{var b=localStorage.getItem('aj-bank');if(b)return b;var all=localStorage.getItem('aj-devis')||'',m=/IBAN ([A-Z]{2}\d{2}[0-9A-Z ]{10,40}?) · BIC ([A-Z0-9]{8,11})/.exec(all);if(m){b='IBAN '+m[1].trim()+' · BIC '+m[2];localStorage.setItem('aj-bank',b);return b}}catch(e){}return ''}
+function defPay(){var b=bank();return 'Virement bancaire'+(b?' ('+b+')':'')+', chèque ou espèces.'}
+var FAC_FIELDS={f_date:'',f_due:'À réception',f_paid:'0',f_pay:''};
 function isoToday(){var t=new Date();return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0')}
 var ST={brouillon:'Brouillon',envoye:'Envoyé',signe:'Accepté (signé)',refuse:'Refusé'};
 function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
@@ -600,7 +596,7 @@ function presta(){var v=store(PRESTA_KEY);if(v&&v.indexOf("\n82210 Saint-Nicolas
 var FIELDS=['v_info','c_nom','c_email','c_tel','c_adr','e_type','e_date','e_lieu','e_artiste','e_duree','e_horaires','remise','acompte','d_num','d_valid','d_tva','d_note'];
 function snapshot(){var o={lines:lines.slice(),sig_pro:SIG.pro,sig_cli:SIG.cli,sig_cli_date:SIG.cliDate,status:STATUS,updated:Date.now(),kind:KIND};if(KIND==='facture'){o.from=FROM;o.status=$('f_status').value;Object.keys(FAC_FIELDS).forEach(function(f){o[f]=$(f).value})}else{var prev=drafts()[$('d_num').value];if(prev&&prev.facture)o.facture=prev.facture}FIELDS.forEach(function(f){o[f]=$(f).value});o.total=totalOf(o);return o}
 function totalOf(o){var sub=(o.lines||[]).reduce(function(a,l){return a+(+l.q||0)*(+l.u||0)},0);return Math.max(0,sub-Math.max(0,parseFloat(o.remise)||0))}
-function load(o){if(!o.v_info)o.v_info=presta();if(o.f_pay==='Virement bancaire, chèque ou espèces.')o.f_pay=FAC_FIELDS.f_pay;// older invoices get the bank details
+function load(o){if(!o.v_info)o.v_info=presta();if(o.f_pay==='Virement bancaire, chèque ou espèces.'||(o.kind==='facture'&&!o.f_pay))o.f_pay=defPay();// older invoices get the bank details
 KIND=o.kind||'devis';FROM=o.from||'';STATUS=o.status||(KIND==='facture'?'a_payer':(o.sig_cli?'signe':'brouillon'));Object.keys(FAC_FIELDS).forEach(function(f){$(f).value=o[f]!=null?o[f]:FAC_FIELDS[f]});$('f_status').value=KIND==='facture'?STATUS:'a_payer';FIELDS.forEach(function(f){if(o[f]!=null)$(f).value=o[f]});lines=(o.lines||[]).map(function(l){return{d:l.d,q:l.q,u:l.u}});SIG.cliDate=o.sig_cli_date||'';sigSet('pro',o.sig_pro!=null?o.sig_pro:(store(PROKEY)||''));sigSet('cli',o.sig_cli||'');renderLines();paint();dirty=false;$('autosave').textContent='';edTitle()}
 function drafts(){try{return JSON.parse(store(KEY)||'{}')}catch(e){return{}}}
 function edTitle(){var n=$('d_num').value,saved=!!drafts()[n];try{sessionStorage.setItem('aj-cur',saved?n:'')}catch(e){}var w=KIND==='facture'?'Facture ':'Devis ';$('ed_title').textContent=saved?w+n+($('c_nom').value?' – '+$('c_nom').value:''):'Nouveau devis';$('t_edit').innerHTML=saved?'<span class="lg">'+w+'</span>'+n:'En cours'}
@@ -651,7 +647,7 @@ function makeInvoice(k){if(dirty)autoSave();var d=drafts(),o=d[k];if(!o)return;
  if(o.facture&&d[o.facture]){load(d[o.facture]);view('edit');return}
  ajConfirm('Créer la facture du devis '+k+(o.c_nom?' – '+o.c_nom:'')+' ?\n\nElle reprend les prestations et les prix du devis, et reçoit un numéro de facture définitif.',{title:'Créer la facture ?',ok:'Créer la facture'},function(){
  var c=JSON.parse(JSON.stringify(o));c.kind='facture';c.from=k;c.d_num=nextNum('FAC');c.status='a_payer';c.sig_cli='';c.sig_cli_date='';delete c.facture;
- c.f_date=isoToday();c.f_due='À réception';c.f_paid=String(parseFloat(o.acompte)||0);c.f_pay=FAC_FIELDS.f_pay;
+ c.f_date=isoToday();c.f_due='À réception';c.f_paid=String(parseFloat(o.acompte)||0);c.f_pay=defPay();
  d[c.d_num]=c;d[k].facture=c.d_num;if(stOf(d[k])!=='signe'){d[k].status='signe'}d[k].updated=Date.now();store(KEY,JSON.stringify(d));claimNum(c.d_num);
  load(c);save();view('edit');toast('Facture '+c.d_num+' créée')})}
 function newDraft(){if(dirty)autoSave();fresh();view('edit')}
@@ -671,10 +667,11 @@ function fromUrl(){var q=new URLSearchParams(location.search);if(![...q.keys()].
 
 FIELDS.forEach(function(f){$(f).addEventListener('input',paint);$(f).addEventListener('change',paint)});
 // Payment methods: ticking a box rewrites the payment line of the invoice (the RIB only goes on invoices).
-var PAY=[['iban','virement bancaire (IBAN FR76 1120 6201 1100 9347 7573 259 · BIC AGRIFRPP812)',/IBAN/i],['carte','carte bancaire',/carte/i],['cheque','chèque',/chèque|cheque/i],['especes','espèces',/espèces|especes/i]];
+var PAY=[['iban','virement bancaire',/IBAN|virement/i],['carte','carte bancaire',/carte/i],['cheque','chèque',/chèque|cheque/i],['especes','espèces',/espèces|especes/i]];
 var payBoxes=[].slice.call(document.querySelectorAll('#pay_opts input'));
-function payText(){var t=PAY.filter(function(p,i){return payBoxes[i].checked}).map(function(p){return p[1]});if(!t.length)return '';var s=t.length>1?t.slice(0,-1).join(', ')+' ou '+t[t.length-1]:t[0];return s.charAt(0).toUpperCase()+s.slice(1)+'.'}
+function payText(){var t=PAY.filter(function(p,i){return payBoxes[i].checked}).map(function(p){return p[0]==='iban'&&bank()?p[1]+' ('+bank()+')':p[1]});if(!t.length)return '';var s=t.length>1?t.slice(0,-1).join(', ')+' ou '+t[t.length-1]:t[0];return s.charAt(0).toUpperCase()+s.slice(1)+'.'}
 window.paySync=paySync;function paySync(){var v=$('f_pay').value;payBoxes.forEach(function(b,i){b.checked=PAY[i][2].test(v)})}
+$('f_bank').value=bank();$('f_bank').addEventListener('change',function(){var v=this.value.trim().replace(/\s+/g,' ');if(v&&!/^IBAN/i.test(v))v='IBAN '+v;try{v?localStorage.setItem('aj-bank',v):localStorage.removeItem('aj-bank')}catch(e){}this.value=v;$('f_pay').value=payText();$('f_pay').dispatchEvent(new Event('input',{bubbles:true}))});
 payBoxes.forEach(function(b){b.addEventListener('change',function(){$('f_pay').value=payText();$('f_pay').dispatchEvent(new Event('input',{bubbles:true}))})});
 
 [].forEach.call(document.querySelectorAll('.presets button'),function(b){b.onclick=function(){lines.push(PRESETS[b.dataset.p]());renderLines();paint();markDirty()}});
@@ -724,7 +721,7 @@ function mailInvoice(){save();var n=$('d_num').value,sub='Votre facture '+n+' �
  ajAlert('Votre messagerie va s\'ouvrir avec le message prêt. Pensez à joindre le PDF de la facture (bouton « Télécharger le PDF »).',{title:'Message prêt'},function(){location.href='mailto:'+encodeURIComponent($('c_email').value)+'?subject='+encodeURIComponent(sub)+'&body='+encodeURIComponent(body)});}
 
 // Fill the quote from a request email pasted as text (labels and values on the same line or on consecutive lines).
-var MONTHS={janvier:1,'février':2,fevrier:2,mars:3,avril:4,mai:5,juin:6,juillet:7,'août':8,aout:8,septembre:9,octobre:10,novembre:11,'décembre':12,decembre:12};
+var MONTHS={january:1,february:2,march:3,april:4,may:5,june:6,july:7,august:8,september:9,october:10,november:11,december:12,janvier:1,'février':2,fevrier:2,mars:3,avril:4,mai:5,juin:6,juillet:7,'août':8,aout:8,septembre:9,octobre:10,novembre:11,'décembre':12,decembre:12};
 function toIso(t){var m=/(\d{1,2})\s+([a-zéèûô]+)\s+(\d{4})/i.exec(t||'');if(!m)return '';var mo=MONTHS[m[2].toLowerCase()];return mo?m[3]+'-'+String(mo).padStart(2,'0')+'-'+String(+m[1]).padStart(2,'0'):''}
 function parseRequest(txt){var L=['Nom','Email','Téléphone','Date','Lieu','Type','Artiste','Message'],out={};
  var rows=txt.replace(/\r/g,'').split('\n').map(function(x){return x.replace(/ /g,' ').trim()}).filter(Boolean);
@@ -734,6 +731,8 @@ function parseRequest(txt){var L=['Nom','Email','Téléphone','Date','Lieu','Typ
 $('b_import').onclick=function(){var r=parseRequest($('paste').value);if(!Object.keys(r).length){ajAlert("Je n'ai pas reconnu de demande dans ce texte. Copiez tout le tableau de l'email (Nom, Email, Téléphone, Date…).");return}
  fresh();if(r.Nom)$('c_nom').value=r.Nom;if(r.Email)$('c_email').value=r.Email;if(r['Téléphone'])$('c_tel').value=r['Téléphone'];if(r.Lieu)$('e_lieu').value=r.Lieu;
  var iso=toIso(r.Date);if(iso)$('e_date').value=iso;
+ var TY={'mariage':'Mariage','wedding':'Mariage','événement d\'entreprise':'Séminaire / entreprise','evenement d\'entreprise':'Séminaire / entreprise','corporate event':'Séminaire / entreprise','soirée privée':'Événement privé','soiree privee':'Événement privé','private party':'Événement privé'};
+ if(r.Type){var tk=r.Type.toLowerCase().replace(/[’]/g,"'").trim();if(TY[tk])r.Type=TY[tk]}
  [['Type','e_type'],['Artiste','e_artiste']].forEach(function(x){var v=r[x[0]];if(!v)return;[].forEach.call($(x[1]).options,function(o){if(o.text.toLowerCase()===v.toLowerCase())$(x[1]).value=o.text})});
  lines=[PRESETS.artist(),PRESETS.son(),PRESETS.dep()];renderLines();paint();markDirty();$('paste').value='';$('saved').textContent='Devis rempli à partir de la demande. Ajoutez vos prix.'};
 renderList();

@@ -66,6 +66,7 @@ ICONS = {
     'menu': '<path d="M3.5 7.5h17M3.5 12h17M3.5 16.5h17"/>',
     'close': '<path d="m6 6 12 12M18 6 6 18"/>',
     'sound': '<path d="M4 9.5v5h3.5l5 4v-13l-5 4z"/><path d="M16 8.8a4.5 4.5 0 0 1 0 6.4M18.6 6.2a8.2 8.2 0 0 1 0 11.6"/>',
+    'light': '<path d="M12 2.5v3M5.3 5.3l2.1 2.1M18.7 5.3l-2.1 2.1M3 12h3M18 12h3"/><path d="M8 15a4 4 0 1 1 8 0c0 1.6-.9 2.5-1.6 3.3-.4.5-.6 1-.6 1.7h-3.6c0-.7-.2-1.2-.6-1.7C8.9 17.5 8 16.6 8 15z"/><path d="M10.2 22h3.6"/>',
     'note': '<path d="M9 17.5V6l10.5-2v11.5"/><circle cx="6.5" cy="17.5" r="2.5"/><circle cx="17" cy="15.5" r="2.5"/>',
     'pin': '<path d="M12 21s-6.5-6-6.5-11.5a6.5 6.5 0 0 1 13 0C18.5 15 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/>',
     'calendar': '<rect x="3.5" y="5" width="17" height="15.5" rx="1.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/>',
@@ -114,7 +115,7 @@ INTRO = ('<div class="intro" id="intro" aria-hidden="true"><video id="intro-v" m
          "<script>(function(){var r=document.documentElement,i=document.getElementById('intro'),v=document.getElementById('intro-v');"
          "if(!r.classList.contains('intro-on')){i.remove();return}"
          "function end(){if(!i.parentNode||i.classList.contains('out'))return;i.classList.add('out');r.classList.add('intro-reveal');setTimeout(function(){i.remove();r.classList.remove('intro-on','intro-reveal')},1300)}"
-         "i.addEventListener('click',end);v.addEventListener('ended',function(){setTimeout(end,250)});v.addEventListener('error',end,true);"
+         "i.addEventListener('click',end);addEventListener('keydown',function k(e){if(document.getElementById('intro')){end();removeEventListener('keydown',k)}});v.addEventListener('ended',function(){setTimeout(end,250)});v.addEventListener('error',end,true);"
          "var go=setTimeout(end,4000);v.addEventListener('playing',function(){clearTimeout(go);i.classList.add('on');setTimeout(end,10500)});"
          "var p=v.play();if(p&&p.catch)p.catch(end)})();</script>\n")
 
@@ -152,7 +153,7 @@ def head(lang, path, key, title, desc, ld=None, robots=None):
 <link rel="preload" href="{p}assets/fonts/cormorant-garamond-500-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{p}assets/fonts/jost-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{p}assets/fonts.css">
-<link rel="stylesheet" href="{p}assets/site.css?v=19">
+<link rel="stylesheet" href="{p}assets/site.css?v=20">
 ''' + (INTRO_HEAD if key == 'home' else '') + ''.join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>\n' for x in (ld or [])) + '</head>\n<body>\n'
 
 
@@ -213,7 +214,7 @@ def foot(lang, path, extra_js=''):
 <div class="bottom"><span>© 2026 Alex Juan Live Événement</span><nav aria-label="{t["legal_label"]}">{legal}</nav></div>
 </div></footer>
 <a class="wa" href="{wa(lang)}" target="_blank" rel="noopener" aria-label="{t["wa_label"]}">{ic("whatsapp")}</a>
-<script src="{p}assets/site.js?v=7" defer></script>
+<script src="{p}assets/site.js?v=8" defer></script>
 {extra_js}<!-- Cloudflare Web Analytics: visit statistics without cookies -->
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{{"token": "2add43b340f4457ebb4f646436ea3a8f"}}'></script>
 </body>
