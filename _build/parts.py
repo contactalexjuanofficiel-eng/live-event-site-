@@ -109,11 +109,11 @@ INTRO_HEAD = ("<script>try{if(!sessionStorage.getItem('aj-intro')&&!matchMedia('
               "{document.documentElement.classList.add('intro-on');sessionStorage.setItem('aj-intro','1')}}catch(e){}</script>\n")
 INTRO = ('<div class="intro" id="intro" aria-hidden="true"><div class="in-box">'
          '<svg viewBox="0 0 120 120"><circle class="c1" cx="60" cy="60" r="56"/><circle class="c2" cx="60" cy="60" r="50"/>'
-         '<text x="60" y="76" text-anchor="middle">AJ</text></svg>'
-         '<p class="in-name">Alex Juan<small>Live Événement</small></p></div></div>\n'
+         '<text class="la" x="61.5" y="76" text-anchor="end">A</text><text class="lj" x="58.5" y="76" text-anchor="start">J</text></svg>'
+         '<p class="in-name" aria-label="Alex Juan"><span style="--i:0">A</span><span style="--i:1">l</span><span style="--i:2">e</span><span style="--i:3">x</span><span style="--i:4">&nbsp;</span><span style="--i:5">J</span><span style="--i:6">u</span><span style="--i:7">a</span><span style="--i:8">n</span><small>Live Événement</small></p></div></div>\n'
          "<script>(function(){var r=document.documentElement,i=document.getElementById('intro');if(!r.classList.contains('intro-on')){i.remove();return}"
          "function end(){if(!i.parentNode)return;i.classList.add('out');setTimeout(function(){i.remove();r.classList.remove('intro-on')},700)}"
-         "i.addEventListener('click',end);setTimeout(end,2300)})();</script>\n")
+         "i.addEventListener('click',end);setTimeout(end,3300)})();</script>\n")
 
 
 def head(lang, path, key, title, desc, ld=None, robots=None):
@@ -149,7 +149,7 @@ def head(lang, path, key, title, desc, ld=None, robots=None):
 <link rel="preload" href="{p}assets/fonts/cormorant-garamond-500-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{p}assets/fonts/jost-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{p}assets/fonts.css">
-<link rel="stylesheet" href="{p}assets/site.css?v=5">
+<link rel="stylesheet" href="{p}assets/site.css?v=6">
 ''' + (INTRO_HEAD if key == 'home' else '') + ''.join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>\n' for x in (ld or [])) + '</head>\n<body>\n'
 
 
