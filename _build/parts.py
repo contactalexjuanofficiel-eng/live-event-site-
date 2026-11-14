@@ -159,7 +159,7 @@ def head(lang, path, key, title, desc, ld=None, robots=None):
 def business_ld(lang):
     return {'@context': 'https://schema.org', '@type': ['MusicGroup', 'LocalBusiness'], 'name': 'Alex Juan Live Événement',
             'description': T[lang]['foot_about'], 'url': SITE, 'email': MAIL, 'telephone': TEL, 'image': SITE + 'assets/og-image.jpg?v=4',
-            'address': {'@type': 'PostalAddress', 'streetAddress': '6 avenue Maryse Bastié', 'addressLocality': 'Bruges', 'postalCode': '33520', 'addressRegion': 'Gironde', 'addressCountry': 'FR'},
+            'address': {'@type': 'PostalAddress', 'streetAddress': '20 rue de la Salicaire', 'addressLocality': 'Saint-Nicolas-de-la-Grave', 'postalCode': '82210', 'addressRegion': 'Tarn-et-Garonne', 'addressCountry': 'FR'},
             'areaServed': {'@type': 'Country', 'name': 'France'}, 'genre': ['Chanson française', 'Pop'], 'sameAs': [IG_AJ] + [u for _, _, u in SOCIAL]}
 
 
