@@ -113,7 +113,7 @@ INTRO = ('<div class="intro" id="intro" aria-hidden="true"><video id="intro-v" m
          # Plays the 3D logo film once; any hiccup (blocked autoplay, slow network, error) just opens the site.
          "<script>(function(){var r=document.documentElement,i=document.getElementById('intro'),v=document.getElementById('intro-v');"
          "if(!r.classList.contains('intro-on')){i.remove();return}"
-         "function end(){if(!i.parentNode||i.classList.contains('out'))return;i.classList.add('out');setTimeout(function(){i.remove();r.classList.remove('intro-on')},900)}"
+         "function end(){if(!i.parentNode||i.classList.contains('out'))return;i.classList.add('out');r.classList.add('intro-reveal');setTimeout(function(){i.remove();r.classList.remove('intro-on','intro-reveal')},1300)}"
          "i.addEventListener('click',end);v.addEventListener('ended',function(){setTimeout(end,250)});v.addEventListener('error',end,true);"
          "var go=setTimeout(end,4000);v.addEventListener('playing',function(){clearTimeout(go);i.classList.add('on');setTimeout(end,10500)});"
          "var p=v.play();if(p&&p.catch)p.catch(end)})();</script>\n")
@@ -152,7 +152,7 @@ def head(lang, path, key, title, desc, ld=None, robots=None):
 <link rel="preload" href="{p}assets/fonts/cormorant-garamond-500-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{p}assets/fonts/jost-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{p}assets/fonts.css">
-<link rel="stylesheet" href="{p}assets/site.css?v=15">
+<link rel="stylesheet" href="{p}assets/site.css?v=16">
 ''' + (INTRO_HEAD if key == 'home' else '') + ''.join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>\n' for x in (ld or [])) + '</head>\n<body>\n'
 
 

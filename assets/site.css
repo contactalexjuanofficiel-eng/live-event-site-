@@ -330,13 +330,19 @@ ol.steps{padding:0;margin:0}
 /* Home intro: a short 3D film of the AJ monogram (once per visit, tap to skip) */
 .intro{display:none}
 html.intro-on{overflow:hidden}
-html.intro-on .intro{display:flex;position:fixed;inset:0;z-index:100;background:#000;align-items:center;justify-content:center;cursor:pointer;transition:transform .9s cubic-bezier(.7,0,.2,1)}
-.intro video{width:min(100vw,100vh,720px);height:auto;aspect-ratio:1;display:block;transition:opacity .4s ease}
+html.intro-on .intro{display:flex;position:fixed;inset:0;z-index:100;background:#000;align-items:center;justify-content:center;cursor:pointer;transition:background-color 1.1s ease .15s}
+.intro video{width:min(100vw,100vh,720px);height:auto;aspect-ratio:1;display:block;transition:transform 1.2s cubic-bezier(.4,0,.2,1),opacity 1s ease .1s}
 .in-wait{position:absolute;z-index:1;width:64px;height:64px;opacity:0;animation:in-wait 1.6s ease-in-out .3s infinite alternate}
 .intro.on .in-wait{display:none}
 @keyframes in-wait{to{opacity:.45}}
-.intro.out{transform:translateY(-100%)}
-.intro.out video{opacity:0}
+/* Exit: the gold logo grows and fades while the homepage appears behind it with a gentle zoom-out */
+html.intro-on .intro.out{background-color:transparent;pointer-events:none}
+.intro.out video{transform:scale(1.35);opacity:0}
+html.intro-on.intro-reveal{overflow:auto}
+.hero video{transition:transform 2.2s cubic-bezier(.2,.7,.2,1)}
+html.intro-on:not(.intro-reveal) .hero video{transform:scale(1.12)}
+.hero .wrap{transition:opacity 1s ease .55s,transform 1.2s cubic-bezier(.2,.7,.2,1) .55s}
+html.intro-on:not(.intro-reveal) .hero .wrap{opacity:0;transform:translateY(18px)}
 @media(prefers-reduced-motion:reduce){.intro{display:none!important}}
 /* Contact page */
 .ct-who{display:flex;align-items:center;gap:18px;margin-bottom:var(--s4)}
