@@ -69,7 +69,8 @@ function open(raw,code,remember){return S.importKey('raw',raw,'AES-GCM',false,['
   return pre.then(function(){document.open();document.write(html);document.close()})})}
 function derive(code){return S.importKey('raw',te.encode('aj-pro-enc:'+code),'PBKDF2',false,['deriveBits']).then(function(k){return S.deriveBits({name:'PBKDF2',hash:'SHA-256',salt:b64(P.salt),iterations:P.it},k,256)})}
 var saved=null;try{saved=localStorage.getItem('aj-pro-k')}catch(e){}
-if(saved){open(b64(saved),null).catch(function(){try{localStorage.removeItem('aj-pro-k')}catch(e){}})}
+if(saved){document.documentElement.style.visibility='hidden';var go=function(){open(b64(saved),null).catch(function(){try{localStorage.removeItem('aj-pro-k')}catch(e){}document.documentElement.style.visibility=''})};
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(go,0)});else go()}
 $('c').focus();
 $('f').onsubmit=function(ev){ev.preventDefault();var code=norm($('c').value),keep=$('r').checked;if(!code)return;$('b').disabled=true;$('e').textContent='Ouverture…';
   derive(code).then(function(raw){return open(raw,code,keep?btoa(String.fromCharCode.apply(null,new Uint8Array(raw))):null)})
