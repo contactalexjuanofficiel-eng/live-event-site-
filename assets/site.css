@@ -139,7 +139,9 @@ html.no-scroll{overflow:hidden}
 
 /* Service cards (photo + text, no boxes) */
 .svc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s4)}
-.svc a{display:grid;align-content:start;gap:var(--s2);text-decoration:none;color:inherit}
+.svc a{display:flex;flex-direction:column;gap:var(--s2);text-decoration:none;color:inherit}
+.svc a .link{margin-top:auto}
+a[href^="tel:"]{white-space:nowrap}
 .svc figure{margin:0;aspect-ratio:4/5;overflow:hidden;background:var(--stone)}
 .svc img{width:100%;height:100%;object-fit:cover;object-position:50% 22%;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
 @media(hover:hover){.svc a:hover img{transform:scale(1.03)}}

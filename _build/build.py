@@ -12,7 +12,29 @@ import content as C
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+_SKIP = re.compile(r'(<script\b.*?</script>|<style\b.*?</style>|<[^>]+>)', re.S)
+_PHONE = re.compile(r'(?:\+33|\b0)\d(?: \d{2}){4}\b')
+
+
+def typo(html):
+    """French typography on visible text only: no line break before ; : ? ! » or inside phone numbers."""
+    fr = '<html lang="fr"' in html
+    out = []
+    for part in _SKIP.split(html):
+        if not part or part.startswith('<'):
+            out.append(part)
+            continue
+        part = _PHONE.sub(lambda m: m.group(0).replace(' ', '\u00a0'), part)
+        if fr:
+            part = re.sub(r' ([;?!»])', '\u202f\\1', part)
+            part = re.sub(r' :', '\u00a0:', part)
+            part = part.replace('« ', '«\u00a0').replace('jour J', 'jour\u00a0J').replace(' 24 h', ' 24\u00a0h')
+        out.append(part)
+    return ''.join(out)
+
+
 def write(rel, html):
+    html = typo(html)
     path = os.path.join(ROOT, rel)
     os.makedirs(os.path.dirname(path) or ROOT, exist_ok=True)
     with open(path, 'w') as f:
